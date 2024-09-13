@@ -1,0 +1,146 @@
+.postCard {
+  width: 30rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--margin-xs);
+}
+.postCard .postCardHeader {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--margin-xs);
+}
+.postCard .postCardHeader .postUserInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-xs);
+}
+.postCard .postCardHeader .postUserInfo .postUserAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  width: 2.5rem;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid transparent;
+}
+.postCard .postCardHeader .postUserInfo .postUserAvatar img {
+  width: 100%;
+  height: auto;
+}
+.postCard .postCardHeader .postUserInfo .postUserName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: var(--fs-p);
+}
+.postCard .postCardHeader .postMenuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.postCard .postCardHeader .postMenuBtn svg {
+  font-size: var(--fs-h5);
+}
+.postCard .postImages {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--margin-xs);
+}
+.postCard .postImages .postImagesWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 35rem;
+  width: 100%;
+  overflow: hidden;
+}
+.postCard .postImages .postImagesWrapper img {
+  width: 100%;
+}
+.postCard .postCaption .postUsername {
+  font-weight: 600;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.postCard .postToolBar {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-xs);
+}
+.postCard .postToolBar .postLikeBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h4);
+  cursor: pointer;
+}
+.postCard .postToolBar .postLikeBtn svg {
+  transition: var(--transition-out);
+}
+.postCard .postToolBar .postLikeBtn svg:hover {
+  color: var(--primary-color);
+}
+.postCard .postToolBar .postLikeBtn svg.liked {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.postCard .postToolBar .postLikeBtn svg g path {
+  stroke-width: 0.5px;
+}
+.postCard .postToolBar .postCommentBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h5);
+  cursor: pointer;
+}
+.postCard .postToolBar .postCommentBtn svg path {
+  stroke-width: 0.15px;
+}
+.postCard .postToolBar .postShareBtn {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  font-size: var(--fs-h5);
+  cursor: pointer;
+}
+.postCard .postToolBar .postShareBtn svg path {
+  stroke-width: 1px;
+}
+.postCard .likeInteractions {
+  display: flex;
+  height: -moz-fit-content;
+  height: fit-content;
+  padding-left: var(--margin-xxs);
+}
+.postCard .likeInteractions small {
+  font-size: var(--fs-small);
+}
+.postCard .postCaption {
+  display: flex;
+}
+.postCard .postCaption strong {
+  margin-right: var(--margin-xxs);
+}
+.postCard .commentInteractions {
+  display: flex;
+  font-size: var(--fs-p);
+  color: var(--grey30);
+  margin-block: var(--margin-xxs);
+}
+
+@keyframes likeAnimation {
+  0% {
+    font-size: var(--fs-h4);
+  }
+  25% {
+    font-size: var(--fs-h3);
+  }
+  75% {
+    font-size: var(--fs-h3);
+  }
+  100% {
+    font-size: var(--fs-h4);
+  }
+}/*# sourceMappingURL=postCard.css.map */

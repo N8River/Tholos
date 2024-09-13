@@ -1,0 +1,94 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  margin-inline: auto;
+  width: clamp(20rem, 50vw, 35rem);
+  padding-block: var(--margin-m);
+}
+.profile .profileInfo {
+  padding-bottom: var(--margin-m);
+  border-bottom: 1px solid var(--grey70);
+}
+.profile .profileInfo .profileDetails {
+  display: flex;
+  justify-content: space-between;
+}
+.profile .profileInfo .profileDetails .profilePic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+  width: 10rem;
+  border: 2px solid var(--grey50);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profile .profileInfo .profileDetails .profilePic img {
+  height: auto;
+  width: 100%;
+}
+.profile .profileInfo .profileDetails .profileDesc {
+  display: flex;
+  align-items: end;
+  flex-direction: column;
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--margin-xs);
+  width: 100%;
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescHeader h4 {
+  font-size: var(--fs-big);
+  font-weight: 400;
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescHeader .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: var(--margin-s);
+  padding-block: var(--margin-xxs);
+  background-color: var(--grey90);
+  border-radius: 0.5rem;
+  border: transparent;
+  padding-inline: var(--margin-s);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescHeader .btn big {
+  font-size: var(--fs-p);
+  color: var(--black);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescHeader .btn svg {
+  font-size: var(--fs-h5);
+  color: var(--black);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescSubHeader {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: var(--margin-s);
+  margin-block: var(--margin-xxs);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescSubHeader p {
+  display: flex;
+  font-size: var(--fs-p);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescBio {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-block: var(--margin-xs);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescBio big {
+  font-weight: 600;
+  font-size: var(--fs-p);
+}
+.profile .profileInfo .profileDetails .profileDesc .profileDescBio p {
+  font-weight: 400;
+  font-size: var(--fs-p);
+}
+.profile .profilePosts {
+  display: grid;
+  grid-template-columns: 3, 1fr;
+  margin-top: var(--margin-s);
+}/*# sourceMappingURL=profile.css.map */

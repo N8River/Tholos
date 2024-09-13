@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  // COLORS
+  --primary-color: #ff6f61;
+  // --secondary-color: hsl(200, 12%, 5%);
+  --accent-color: #2c3e50;
+  --grey10: hsl(0, 0%, 10%);
+  --grey30: hsl(0, 0%, 30%);
+  --grey50: hsl(0, 0%, 50%);
+  --grey70: hsl(0, 0%, 70%);
+  --grey90: hsl(0, 0%, 90%);
+  --white: hsl(0, 0%, 100%);
+  --black: hsl(0, 0%, 0%);
+
+  /* Margins */
+  --margin-xxs: 0.25rem;
+  --margin-xs: 0.5rem;
+  --margin-s: 0.75rem;
+  --margin-m: 1rem;
+  --margin-l: 1.25rem;
+  --margin-xl: 1.75rem;
+  --margin-xxl: 2.5rem;
+
+  // FONTS
+  --ff-logo: "Merriweather";
+  --ff: "Poppins";
+
+  // FONT SIZE
+  --fs-h1: 2.986rem;
+  --fs-h2: 2.488rem;
+  --fs-h3: 2.074rem;
+  --fs-h4: 1.728rem;
+  --fs-h5: 1.44rem;
+  --fs-big: 1.2rem;
+  --fs-p: 1rem;
+  --fs-small: 0.833rem;
+
+  --fs-h1-ui: 2.027rem;
+  --fs-h2-ui: 1.802rem;
+  --fs-h3-ui: 1.602rem;
+  --fs-h4-ui: 1.424rem;
+  --fs-h5-ui: 1.266rem;
+  --fs-big-ui: 1.125rem;
+  --fs-p-ui: 1rem;
+  --fs-small-ui: 0.889rem;
+
+  // TRANSITION
+  --transition-out: all 0.15s ease-out;
+  --transition-in: all 0.2s ease-in;
+}
+
+body {
+  font-family: var(--ff);
+  background-color: var(--white);
+}
+
+input {
+  font-family: var(--ff);
+  padding-inline: var(--margin-xxs);
+  border: 1px solid var(--grey50);
+  font-size: var(--fs-p);
+}
+
+h1 {
+  font-size: var(--fs-h1);
+}
+h2 {
+  font-size: var(--fs-h2);
+}
+h3 {
+  font-size: var(--fs-h3);
+}
+h4 {
+  font-size: var(--fs-h4);
+}
+h5 {
+  font-size: var(--fs-h5);
+}
+big {
+  font-size: var(--fs-big);
+}
+p {
+  font-size: var(--fs-p);
+}
+small {
+  font-size: var(--fs-small);
+}
+
+.btn {
+  background-color: var(--accent-color);
+  font-family: var(--ff);
+  color: var(--white);
+
+  border: 1px solid var(--accent-color);
+
+  cursor: pointer;
+  transition: var(--transition-out);
+
+  &:hover {
+    background-color: var(--black);
+    border: 1px solid var(--black);
+    transition: var(--transition-in);
+  }
+}

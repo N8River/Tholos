@@ -1,0 +1,26 @@
+.comment {
+  display: flex;
+  align-items: center;
+
+  margin-block: var(--margin-xs);
+  margin-inline: var(--margin-xs);
+
+  gap: var(--margin-xs);
+
+  .commentUserAvatar {
+    height: 2rem;
+    width: 2rem;
+
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 50%;
+    border: 1px solid var(--grey70);
+
+    img {
+      height: 100%;
+    }
+  }
+}

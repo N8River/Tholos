@@ -1,0 +1,62 @@
+.messagesPage {
+  display: flex;
+  flex-direction: column;
+
+  width: 50rem;
+  margin-inline: auto;
+
+  padding-block: var(--margin-m);
+
+  h2 {
+    font-size: var(--fs-h4);
+    margin-bottom: var(--margin-xxs);
+  }
+
+  .btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+
+    font-size: var(--fs-p);
+    border-radius: 0.5rem;
+  }
+
+  .conversationsList {
+    .conversationItem {
+      display: flex;
+      align-items: center;
+
+      gap: var(--margin-xs);
+
+      padding: var(--margin-xs);
+      padding-block: var(--margin-xs);
+      margin-block: var(--margin-xs);
+
+      border-radius: 0.5rem;
+
+      border: 1px solid var(--grey70);
+      transition: var(--transition-out);
+
+      cursor: pointer;
+
+      &:hover {
+        border: 1px solid var(--grey50);
+        transition: var(--transition-in);
+        background-color: var(--grey90);
+      }
+
+      img {
+        height: 2rem;
+        width: auto;
+      }
+
+      .conversationInfo {
+        h4 {
+          font-size: var(--fs-big);
+          font-weight: 400;
+        }
+      }
+    }
+  }
+}

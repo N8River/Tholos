@@ -1,0 +1,172 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+  opacity: 0;
+  animation: fadeIn 0.25s forwards;
+}
+.modalOverlay svg {
+  position: fixed;
+  top: 0;
+  right: 0;
+  color: var(--white);
+  font-size: var(--fs-h4);
+  margin-top: var(--margin-m);
+  margin-right: var(--margin-m);
+  cursor: pointer;
+}
+
+.postModal {
+  position: fixed;
+  z-index: 1002;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  width: clamp(20rem, 90vw, 100rem);
+  transform: translateX(-50%) translateY(-50%);
+}
+.postModal .postModalLeft {
+  display: flex;
+  justify-content: flex-end;
+  width: 60%;
+  height: 50rem;
+}
+.postModal .postModalLeft .postModalImgWrapper {
+  display: flex;
+  justify-content: flex-end;
+  height: 50rem;
+  overflow: hidden;
+}
+.postModal .postModalLeft .postModalImgWrapper img {
+  height: 100%;
+  width: auto;
+}
+.postModal .postModalRight {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  height: 50rem;
+  background-color: var(--white);
+}
+.postModal .postModalRight .postModalUserAndCaption {
+  margin-block: var(--margin-xs);
+  margin-inline: var(--margin-xs);
+  margin-bottom: 0rem;
+  padding-bottom: var(--margin-xs);
+  border-bottom: 1px solid var(--grey90);
+  gap: var(--margin-xs);
+  display: flex;
+  align-items: center;
+}
+.postModal .postModalRight .postModalUserAndCaption .postModalUserAvatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--primary-color);
+  height: 2.5rem;
+  width: 2.5rem;
+  overflow: hidden;
+}
+.postModal .postModalRight .postModalUserAndCaption .postModalUserAvatar img {
+  height: 100%;
+}
+.postModal .postModalRight .postModalCommentBox {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+.postModal .postModalRight .postModalFooter {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}
+.postModal .postModalRight .postModalFooter .postToolBar {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-xxs);
+  margin-inline: var(--margin-xxs);
+}
+.postModal .postModalRight .postModalFooter .postToolBar > * {
+  display: flex;
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postLikeBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h4);
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postLikeBtn svg {
+  transition: var(--transition-out);
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postLikeBtn svg.liked {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postLikeBtn svg g path {
+  stroke-width: 0.5px;
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postCommentBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h5);
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postCommentBtn svg path {
+  stroke-width: 0.15px;
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postShareBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-h5);
+  margin-left: auto;
+  margin-right: var(--margin-xs);
+}
+.postModal .postModalRight .postModalFooter .postToolBar .postShareBtn svg path {
+  stroke-width: 1px;
+}
+.postModal .postModalRight .likeInteractions {
+  padding-inline: var(--margin-xs);
+  display: flex;
+  margin-block: var(--margin-xxs);
+}
+.postModal .postModalRight .postModalCommentsInput {
+  display: flex;
+  border-top: 1px solid var(--grey90);
+  padding-block: var(--margin-xs);
+}
+.postModal .postModalRight .postModalCommentsInput input {
+  width: 100%;
+  border: none;
+  font-size: var(--fs-p);
+  padding-inline: var(--margin-xs);
+}
+.postModal .postModalRight .postModalCommentsInput input::-moz-placeholder {
+  font-size: var(--fs-small);
+}
+.postModal .postModalRight .postModalCommentsInput input::placeholder {
+  font-size: var(--fs-small);
+}
+.postModal .postModalRight .postModalCommentsInput button {
+  border: none;
+  margin-right: var(--margin-xs);
+  padding-inline: var(--margin-xxs);
+  font-size: var(--fs-small);
+  color: var(--primary-color);
+  font-weight: 600;
+  background-color: transparent;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}/*# sourceMappingURL=postModal.css.map */

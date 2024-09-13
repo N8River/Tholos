@@ -1,0 +1,89 @@
+.editProfileForm {
+  display: flex;
+  justify-content: center;
+
+  width: clamp(19rem, 100vw, 60rem);
+  padding-block: var(--margin-m);
+  margin: auto;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    gap: var(--margin-xxs);
+
+    .inputContainer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      // border: 1px solid var(--grey50);
+
+      .label {
+        width: 20%;
+      }
+
+      .avatarLabel {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: 15rem;
+        height: 15rem;
+        overflow: hidden;
+
+        border: 1px solid var(--grey70);
+        border-radius: 50%;
+
+        img {
+          width: auto;
+          height: 100%;
+        }
+      }
+
+      input {
+        max-width: 100%;
+        min-width: 50%;
+
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        text-wrap: wrap;
+      }
+    }
+
+    .changeVisibility {
+      display: flex;
+      flex-direction: column;
+
+      big {
+        font-size: var(--fs-p);
+      }
+
+      .profileVisibilityOption {
+        display: flex;
+        gap: var(--margin-xxs);
+
+        padding-left: var(--margin-xs);
+      }
+    }
+
+    .btn {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding-block: var(--margin-xxs);
+      padding-inline: var(--margin-s);
+      border-radius: 1rem;
+
+      margin-inline: auto;
+
+      width: fit-content;
+      font-size: var(--fs-p);
+    }
+  }
+}

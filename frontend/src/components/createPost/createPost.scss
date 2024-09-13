@@ -1,0 +1,129 @@
+.createPost {
+  position: absolute;
+  z-index: 1000;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translateX(-50%) translateY(-50%);
+  box-shadow: 0px 0px 10px var(--grey50);
+
+  border-radius: 1rem;
+
+  // padding: var(--margin-s);
+  padding-top: 0rem;
+
+  height: 40rem;
+  width: 50%;
+
+  display: none;
+  flex-direction: column;
+  background-color: var(--white);
+
+  &.show {
+    display: flex;
+  }
+
+  .createPostHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-block: var(--margin-xxs);
+    padding-inline: var(--margin-s);
+    border-bottom: 1px solid var(--grey70);
+
+    .btn {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      &.share {
+        background-color: transparent;
+        border: none;
+        color: var(--primary-color);
+
+        font-weight: 600;
+      }
+
+      &.close {
+        background-color: transparent;
+        border: none;
+        color: var(--accent-color);
+
+        font-size: var(--fs-h5);
+      }
+    }
+
+    p {
+      text-align: center;
+
+      font-weight: 600;
+    }
+  }
+
+  .createPostForm {
+    display: flex;
+    height: 100%;
+
+    padding-inline: var(--margin-m);
+
+    .createPostFormLeft {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      padding-block: var(--margin-xxl);
+
+      .imgPreviewWrapper {
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        width: 100%;
+
+        margin-bottom: var(--margin-s);
+        margin-bottom: auto;
+      }
+
+      svg {
+        font-size: 5rem;
+        margin-bottom: var(--margin-xxs);
+      }
+
+      big {
+        font-size: var(--fs-big);
+        margin-bottom: var(--margin-xxs);
+      }
+
+      input {
+        margin-block: var(--margin-xxs);
+        width: 50%;
+      }
+
+      .btn {
+        margin-block: var(--margin-xxs);
+        padding-block: var(--margin-xxs);
+        padding-inline: var(--margin-xs);
+        font-size: var(--fs-p);
+      }
+    }
+
+    .createPostFormRight {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+
+      padding-block: var(--margin-xs);
+
+      input {
+        font-size: var(--fs-p);
+        margin-bottom: var(--margin-xxs);
+      }
+
+      p {
+        text-align: right;
+        font-size: var(--fs-small);
+      }
+    }
+  }
+}

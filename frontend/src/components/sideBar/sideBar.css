@@ -1,0 +1,92 @@
+.sideBar {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: clamp(10rem, 50vw, 20rem);
+  padding-block: var(--margin-l);
+  padding-inline: var(--margin-l);
+  box-shadow: 1px 1px 5px var(--grey70);
+  height: 100vh;
+  z-index: 1000;
+  background-color: var(--white);
+  gap: var(--margin-l);
+}
+.sideBar .logo {
+  font-family: var(--ff-logo);
+  font-weight: 900;
+  color: var(--accent-color);
+  font-size: var(--fs-h2);
+  padding-bottom: var(--margin-s);
+  margin-bottom: var(--margin-s);
+  border-bottom: 1px solid var(--grey70);
+}
+.sideBar .sidebarBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-s);
+  cursor: pointer;
+}
+.sideBar .sidebarBtn:hover svg {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.sideBar .sidebarBtn:hover big {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.sideBar .sidebarBtn svg {
+  font-size: var(--fs-h4);
+  color: var(--grey10);
+  transition: var(--transition-out);
+}
+.sideBar .sidebarBtn big {
+  font-size: var(--fs-big);
+  color: var(--grey10);
+  transition: var(--transition-out);
+}
+.sideBar .notification {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+}
+.sideBar .notification div {
+  display: flex;
+  align-items: center;
+  gap: var(--margin-s);
+  cursor: pointer;
+  width: 100%;
+}
+.sideBar .notification div:hover svg {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.sideBar .notification div:hover big {
+  color: var(--primary-color);
+  transition: var(--transition-in);
+}
+.sideBar .notification div svg {
+  font-size: var(--fs-h4);
+  color: var(--grey10);
+  transition: var(--transition-out);
+}
+.sideBar .notification div big {
+  font-size: var(--fs-big);
+  color: var(--grey10);
+  transition: var(--transition-out);
+}
+.sideBar .profileBtn {
+  flex-direction: row;
+}
+.sideBar .profileBtn .imgWrapper {
+  display: flex;
+  justify-content: center;
+  height: var(--fs-h4);
+  width: var(--fs-h4);
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid var(--grey70);
+}
+.sideBar .profileBtn .imgWrapper img {
+  height: 100%;
+  width: auto;
+}/*# sourceMappingURL=sideBar.css.map */

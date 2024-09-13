@@ -1,0 +1,36 @@
+.signUpForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: clamp(19rem, 100vw, 50rem);
+  margin-inline: auto;
+}
+.signUpForm h2 {
+  text-align: center;
+  font-size: clamp(var(--fs-h5), 5vw, var(--fs-h2));
+  margin-bottom: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+}
+.signUpForm input {
+  width: 50%;
+  min-width: 19rem;
+  margin-bottom: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+  padding-block: var(--margin-xxs);
+  padding-inline: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+}
+.signUpForm button {
+  width: 50%;
+  min-width: 19rem;
+  padding-block: var(--margin-xxs);
+  padding-inline: clamp(var(--margin-xs), 2vw, var(--margin-m));
+  font-size: clamp(var(--fs-small), 2vw, var(--fs-big));
+}
+.signUpForm div {
+  display: flex;
+  gap: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+  margin-top: var(--margin-xxs);
+}
+.signUpForm div p {
+  margin-top: 0;
+  border-bottom: 1px solid var(--grey50);
+  font-weight: 600;
+}/*# sourceMappingURL=SignUpForm.css.map */

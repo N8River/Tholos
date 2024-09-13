@@ -1,0 +1,123 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  margin-inline: auto;
+  width: clamp(20rem, 50vw, 35rem);
+
+  padding-block: var(--margin-m);
+
+  .profileInfo {
+    padding-bottom: var(--margin-m);
+    border-bottom: 1px solid var(--grey70);
+
+    .profileDetails {
+      display: flex;
+      justify-content: space-between;
+
+      .profilePic {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        height: 10rem;
+        width: 10rem;
+
+        border: 2px solid var(--grey50);
+
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+          height: auto;
+          width: 100%;
+        }
+      }
+
+      .profileDesc {
+        display: flex;
+        align-items: end;
+        flex-direction: column;
+
+        // width: 60%;
+
+        .profileDescHeader {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: var(--margin-xs);
+          width: 100%;
+
+          h4 {
+            font-size: var(--fs-big);
+            font-weight: 400;
+          }
+
+          .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-inline: var(--margin-s);
+
+            padding-block: var(--margin-xxs);
+            background-color: var(--grey90);
+            border-radius: 0.5rem;
+            border: transparent;
+
+            padding-inline: var(--margin-s);
+
+            big {
+              font-size: var(--fs-p);
+              color: var(--black);
+            }
+
+            svg {
+              font-size: var(--fs-h5);
+              color: var(--black);
+            }
+          }
+        }
+
+        .profileDescSubHeader {
+          display: flex;
+          width: 100%;
+          justify-content: center;
+
+          gap: var(--margin-s);
+
+          margin-block: var(--margin-xxs);
+
+          p {
+            display: flex;
+            font-size: var(--fs-p);
+          }
+        }
+
+        .profileDescBio {
+          display: flex;
+          flex-direction: column;
+
+          width: 100%;
+
+          margin-block: var(--margin-xs);
+
+          big {
+            font-weight: 600;
+            font-size: var(--fs-p);
+          }
+
+          p {
+            font-weight: 400;
+            font-size: var(--fs-p);
+          }
+        }
+      }
+    }
+  }
+
+  .profilePosts {
+    display: grid;
+    grid-template-columns: (3, 1fr);
+
+    margin-top: var(--margin-s);
+  }
+}

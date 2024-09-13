@@ -1,0 +1,19 @@
+.userProfilePostCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+.userProfilePostCard .userProfilePostCardImgWrapper {
+  height: 20rem;
+  width: 15rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.userProfilePostCard .userProfilePostCardImgWrapper img {
+  height: 100%;
+  width: auto;
+}/*# sourceMappingURL=userProfilePostCard.css.map */
