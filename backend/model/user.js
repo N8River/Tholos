@@ -36,6 +36,7 @@ const UserSchema = new Schema(
     },
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    followRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );

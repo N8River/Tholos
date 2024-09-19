@@ -1,0 +1,49 @@
+.friendsHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  top: 0;
+  width: 35rem;
+  margin-inline: auto;
+  padding-block: var(--margin-xs);
+  gap: var(--margin-xxs);
+}
+.friendsHeader .followingUserIcon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.friendsHeader .followingUserIcon:hover .followingUserAvatar {
+  border: 1px solid var(--primary-color);
+  transition: var(--transition-in);
+}
+.friendsHeader .followingUserIcon:hover .followingUserUserName p {
+  color: var(--grey50);
+  transition: var(--transition-in);
+}
+.friendsHeader .followingUserIcon .followingUserAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 3rem;
+  width: 3rem;
+  overflow: hidden;
+  border: 1px solid var(--grey50);
+  transition: var(--transition-out);
+}
+.friendsHeader .followingUserIcon .followingUserAvatar img {
+  height: 100%;
+}
+.friendsHeader .followingUserIcon .followingUserUserName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.friendsHeader .followingUserIcon .followingUserUserName p {
+  font-size: var(--fs-small);
+  transition: var(--transition-out);
+}/*# sourceMappingURL=friendsHeader.css.map */

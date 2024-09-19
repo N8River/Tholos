@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../../config/config";
+import "./startChatModal.css";
 
 function StartChatModal({ onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -49,7 +50,8 @@ function StartChatModal({ onClose }) {
   };
 
   return (
-    <div className="modalOverlay">
+    <>
+      <div className="startChatModalOverlay"></div>
       <div className="modalContent">
         <h3>Start a New Chat</h3>
         <input
@@ -70,7 +72,7 @@ function StartChatModal({ onClose }) {
 
         <button onClick={onClose}>Close</button>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -29,6 +29,18 @@
     margin-bottom: var(--margin-s);
 
     border-bottom: 1px solid var(--grey70);
+    transition: var(--transition-in);
+  }
+
+  .logoIcon {
+    display: flex;
+    svg {
+      font-size: var(--fs-h4);
+      color: var(--accent-color);
+      transition: var(--transition-out);
+    }
+
+    transition: var(--transition-in);
   }
 
   .sidebarBtn {
@@ -36,7 +48,7 @@
 
     align-items: center;
 
-    gap: var(--margin-s);
+    gap: var(--margin-l);
 
     cursor: pointer;
 
@@ -76,7 +88,7 @@
 
       align-items: center;
 
-      gap: var(--margin-s);
+      gap: var(--margin-l);
 
       cursor: pointer;
       width: 100%;

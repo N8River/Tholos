@@ -1,0 +1,85 @@
+.followSuggestion {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  height: 30rem;
+  width: 20rem;
+  border: 1px solid var(--grey70);
+  margin-block: var(--margin-m);
+  margin-inline: var(--margin-xxl);
+  padding: var(--margin-m);
+  border-radius: 1rem;
+}
+.followSuggestion p {
+  display: flex;
+  font-size: var(--fs-p);
+  color: var(--grey30);
+  margin-bottom: var(--margin-xs);
+}
+.followSuggestion .followSuggestions {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--margin-xs);
+}
+.followSuggestion .followSuggestions .followSuggestionUser {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-block: var(--margin-xxs);
+  cursor: pointer;
+}
+.followSuggestion .followSuggestions .followSuggestionUser:hover .followSuggestionUserAvatar {
+  border: 1px solid var(--primary-color);
+  transition: var(--transition-in);
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionUserAvatar {
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 50%;
+  margin-right: var(--margin-xs);
+  border: 1px solid var(--grey50);
+  overflow: hidden;
+  transition: var(--transition-out);
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionUserAvatar img {
+  height: 100%;
+  width: auto;
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionUserName {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-p);
+  font-weight: 600;
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionUserName p {
+  margin: 0;
+  font-size: var(--fs-small);
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionUserName p.grey {
+  color: var(--grey50);
+  font-weight: 400;
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionBtn button {
+  border: none;
+  background-color: transparent;
+  font-size: var(--fs-small);
+  font-family: var(--ff);
+  padding-block: var(--margin-xxs);
+  padding-inline: var(--margin-xs);
+  font-weight: 600;
+  color: var(--primary-color);
+  transition: var(--transition-out);
+  cursor: pointer;
+}
+.followSuggestion .followSuggestions .followSuggestionUser .followSuggestionBtn button:hover {
+  color: var(--accent-color);
+  transition: var(--transition-in);
+}/*# sourceMappingURL=followSuggestion.css.map */

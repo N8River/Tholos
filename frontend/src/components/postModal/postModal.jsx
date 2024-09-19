@@ -8,6 +8,9 @@ import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 import Comment from "../comment/comment";
 
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 function PostModal({ post, isOpen, onClose }) {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState(post.comments || []);
@@ -123,7 +126,21 @@ function PostModal({ post, isOpen, onClose }) {
       <div className="postModal">
         <div className="postModalLeft">
           <div className="postModalImgWrapper">
-            <img src={post.image} alt={post.content} />
+            {post.images.length > 1 ? (
+              <Carousel
+                showThumbs={false}
+                infiniteLoop={true}
+                showStatus={false}
+              >
+                {post.images.map((image, index) => (
+                  <div key={index}>
+                    <img src={image} alt={`Post Image ${index + 1}`} />
+                  </div>
+                ))}
+              </Carousel>
+            ) : (
+              <img src={post.images[0]} alt={post.content} />
+            )}
           </div>
         </div>
         <div className="postModalRight">

@@ -6,4 +6,9 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+
+  .postLists {
+    display: flex;
+    justify-content: center;
+  }
 }

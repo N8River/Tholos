@@ -10,6 +10,7 @@ import EditProfilepage from "./pages/UserPage/EditProfilePage/EditProfilePage";
 import PostWithModal from "./components/postWithModal/postWithModal";
 import ChatPage from "./pages/ChatPage/ChatPage";
 import MessagesPage from "./pages/MessagesPage/MessagesPage";
+import ExplorePage from "./pages/ExplorePage/ExplorePage";
 
 function App() {
   return (
@@ -30,8 +31,7 @@ function App() {
           <Route path="/:username/p/:postId" element={<UserPage />} />
           <Route path="/messages/" element={<MessagesPage />} />
           <Route path="/messages/:otherpersonId" element={<ChatPage />} />
-          {/* <Route path="/:username/p/:postId" element={<PostWithModal />} /> */}
-          {/* <Route path="/:username/edit" element={<EditProfilepage />} /> */}
+          <Route path="/explore" element={<ExplorePage />} />
         </Routes>
       </Router>
     </>

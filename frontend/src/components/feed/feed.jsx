@@ -5,39 +5,39 @@ import PostModal from "../postModal/postModal";
 
 import "./feed.css";
 
-function Feed() {
-  const [posts, setPosts] = useState();
+function Feed({ posts }) {
+  // const [posts, setPosts] = useState();
   const [selectedPost, setSelectedPost] = useState(null);
 
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
 
-  const headers = {
-    ...JSON_HEADERS,
-    ...AUTH_HEADER(token),
-  };
+  // const headers = {
+  //   ...JSON_HEADERS,
+  //   ...AUTH_HEADER(token),
+  // };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/post/discover`, {
-          method: "GET",
-          headers: headers,
-        });
+  // useEffect(() => {
+  //   const fetchPosts = async () => {
+  //     try {
+  //       const response = await fetch(`${BACKEND_URL}/api/post/discover`, {
+  //         method: "GET",
+  //         headers: headers,
+  //       });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch posts");
-        }
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch posts");
+  //       }
 
-        const responseData = await response.json();
-        console.log(responseData);
-        setPosts(responseData);
-      } catch (error) {
-        console.log("Error fetching posts:", error);
-      }
-    };
+  //       const responseData = await response.json();
+  //       console.log(responseData);
+  //       setPosts(responseData);
+  //     } catch (error) {
+  //       console.log("Error fetching posts:", error);
+  //     }
+  //   };
 
-    fetchPosts();
-  }, []);
+  //   fetchPosts();
+  // }, []);
 
   const handleOpenModal = (post) => {
     setSelectedPost(post); // Set the selected post for the modal

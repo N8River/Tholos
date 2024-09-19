@@ -100,19 +100,49 @@ exports.searchUsers = async (req, res, next) => {
 
 exports.followUser = async (req, res, next) => {
   const { userId } = req.params;
+  console.log("🔴 userId:", userId);
 
-  const currentUserId = req.user.userId; // Get logged-in user's id
+  const currentUserId = req.user.userId; // logged-in user's id
   const user = await User.findOne({ _id: currentUserId });
 
-  // console.log("userId:", userId);
-  // console.log("currentUserId:", currentUserId);
+  console.log("🔴 currentUserId:", currentUserId);
 
   try {
-    // Find the target user to follow
+    const user = await User.findOne({ _id: currentUserId });
     const userToFollow = await User.findById(userId);
+
     if (!userToFollow) return res.status(404).json({ error: "User not found" });
 
-    // Update the current user's following list and the target user's followers list
+    // If profile is private, send a follow request instead
+    if (userToFollow.profileVisibility === "Private") {
+      // Check if a follow request is already sent
+      if (userToFollow.followRequests.includes(currentUserId)) {
+        return res.status(400).json({ error: "Follow request already sent" });
+      }
+
+      // Add follow request to the user's profile
+      await User.findByIdAndUpdate(userId, {
+        $addToSet: { followRequests: currentUserId },
+      });
+
+      const notification = new Notification({
+        user: userId, // The user being requested to follow
+        type: "follow-request",
+        sender: user,
+        message: `User ${user.userName} requested to follow you.`,
+      });
+
+      await notification.save();
+
+      const io = req.app.locals.io;
+      io.to(userId.toString()).emit("notification", notification);
+
+      return res
+        .status(200)
+        .json({ message: "Follow request sent successfully" });
+    }
+
+    // If profile is public, follow the user directly
     await User.findByIdAndUpdate(currentUserId, {
       $addToSet: { following: userId },
     });
@@ -121,16 +151,13 @@ exports.followUser = async (req, res, next) => {
     });
 
     const notification = new Notification({
-      user: userId, // The user being followed (who will receive the notification)
+      user: userId, // The user being followed
       type: "follow",
       sender: user,
       message: `User ${user.userName} started following you.`,
     });
 
     await notification.save();
-
-    // Emit a real-time notification to the followed user
-    const io = req.app.locals.io; // Access the socket.io instance
     io.to(userId.toString()).emit("notification", notification);
 
     res.status(200).json({ message: "Followed user successfully" });
@@ -171,9 +198,133 @@ exports.isFollowing = async (req, res, next) => {
     }
 
     const isFollowing = user.followers.includes(currentUserId);
+    const followRequestPending = user.followRequests.includes(currentUserId);
     // console.log("🔴 isFollowing", isFollowing);
-    res.status(200).json({ isFollowing });
+    res.status(200).json({ isFollowing, followRequestPending });
   } catch (error) {
     res.status(500).json({ error: "Error checking follow status" });
+  }
+};
+
+exports.approveFollowRequest = async (req, res, next) => {
+  const { userId } = req.params; // The user who sent the follow request
+  const currentUserId = req.user.userId; // The owner of the profile
+
+  try {
+    const user = await User.findById(currentUserId);
+
+    if (!user.followRequests.includes(userId)) {
+      return res
+        .status(400)
+        .json({ error: "No follow request from this user" });
+    }
+
+    // Remove from followRequests and add to followers
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { followRequests: userId },
+      $addToSet: { followers: userId },
+    });
+    await User.findByIdAndUpdate(userId, {
+      $addToSet: { following: currentUserId },
+    });
+
+    // Mark the follow request notification as read
+    await Notification.updateMany(
+      { user: currentUserId, sender: userId, type: "follow-request" },
+      { isRead: true }
+    );
+
+    // Notify the requester that the follow request was accepted
+    const notification = new Notification({
+      user: userId, // The user who requested to follow
+      type: "follow-accept",
+      sender: user,
+      message: `${user.userName} accepted your follow request.`,
+    });
+
+    await notification.save();
+    const io = req.app.locals.io;
+    io.to(userId.toString()).emit("notification", notification);
+
+    res.status(200).json({ message: "Follow request approved" });
+  } catch (error) {
+    res.status(500).json({ error: "Error approving follow request" });
+  }
+};
+
+exports.rejectFollowRequest = async (req, res, next) => {
+  const { userId } = req.params;
+  const currentUserId = req.user.userId;
+
+  try {
+    const user = await User.findById(currentUserId);
+
+    if (!user.followRequests.includes(userId)) {
+      return res
+        .status(400)
+        .json({ error: "No follow request from this user" });
+    }
+
+    // Remove from followRequests
+    await User.findByIdAndUpdate(currentUserId, {
+      $pull: { followRequests: userId },
+    });
+
+    // Mark the follow request notification as read
+    await Notification.updateMany(
+      { user: currentUserId, sender: userId, type: "follow-request" },
+      { isRead: true }
+    );
+
+    res.status(200).json({ message: "Follow request rejected" });
+  } catch (error) {
+    res.status(500).json({ error: "Error rejecting follow request" });
+  }
+};
+
+exports.fetchFollowing = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId).populate({
+      path: "following",
+      select: "userName fullName avatar",
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ following: user.following });
+  } catch (error) {
+    console.error("Error fetching following users:", error);
+    res.status(500).json({ message: "Failed to fetch following users" });
+  }
+};
+
+exports.suggestUsers = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+
+    const user = await User.findById(userId).select("following");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const suggestedUsers = await User.aggregate([
+      {
+        $match: {
+          _id: { $ne: user._id, $nin: user.following }, // Exclude the current user and already followed users
+          profileVisibility: { $ne: "Private" }, // Exclude private profiles
+        },
+      },
+      { $sample: { size: 5 } }, // Randomly select 5 users
+      { $project: { userName: 1, fullName: 1, avatar: 1 } },
+    ]);
+
+    res.status(200).json({ suggestions: suggestedUsers });
+  } catch (error) {
+    console.error("Error fetching user suggestions:", error);
+    res.status(500).json({ message: "Failed to fetch user suggestions" });
   }
 };

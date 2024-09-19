@@ -3,15 +3,23 @@ import { CiHeart } from "react-icons/ci";
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
 
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 import "./postCard.css";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
-import { useState } from "react";
-import PostModal from "../postModal/postModal";
+import { useEffect, useState } from "react";
+
+import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function PostCard({ post, onCommentClick }) {
-  console.log(post);
+  console.log("🔴 POST CARD POST:", post);
+
+  const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+  const decodedToken = jwtDecode(token);
 
   const headers = {
     ...JSON_HEADERS,
@@ -22,6 +30,10 @@ function PostCard({ post, onCommentClick }) {
   const [comments, setComments] = useState(post.comments.length);
   const [hasLiked, setHasLiked] = useState(post.likes.includes(token.userId));
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    checkHasLiked();
+  }, []);
 
   const handleToggleLike = async () => {
     try {
@@ -47,6 +59,14 @@ function PostCard({ post, onCommentClick }) {
     }
   };
 
+  const checkHasLiked = () => {
+    if (post.likes.includes(decodedToken.userId)) {
+      setHasLiked(true);
+    } else {
+      setHasLiked(false);
+    }
+  };
+
   const handleOpenComments = async () => {
     setIsModalOpen(true);
   };
@@ -55,7 +75,12 @@ function PostCard({ post, onCommentClick }) {
     <>
       <div className="postCard">
         <div className="postCardHeader">
-          <div className="postUserInfo">
+          <div
+            className="postUserInfo"
+            onClick={() => {
+              navigate(`/${post.user.userName}`);
+            }}
+          >
             <div className="postUserAvatar">
               <img src={post.user.avatar} alt="" />
             </div>
@@ -66,9 +91,19 @@ function PostCard({ post, onCommentClick }) {
           </div>
         </div>
         <div className="postImages">
-          <div className="postImagesWrapper">
-            <img src={post.image} alt="" />
-          </div>
+          {post.images.length > 1 ? (
+            <Carousel showThumbs={false} infiniteLoop={true} showStatus={false}>
+              {post.images.map((image, index) => (
+                <div key={index} className="postImagesWrapper">
+                  <img src={image} alt={`Post Image ${index + 1}`} />
+                </div>
+              ))}
+            </Carousel>
+          ) : (
+            <div className="postImagesWrapper">
+              <img src={post.images[0]} alt="Post Image" />
+            </div>
+          )}
         </div>
         <div className="postToolBar">
           <div className="postLikeBtn" onClick={handleToggleLike}>

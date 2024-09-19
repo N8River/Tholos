@@ -13,6 +13,18 @@
   display: flex;
   align-items: center;
   gap: var(--margin-xs);
+  cursor: pointer;
+}
+.postCard .postCardHeader .postUserInfo:hover .postUserAvatar {
+  border: 1px solid var(--grey10);
+  transition: var(--transition-out);
+}
+.postCard .postCardHeader .postUserInfo:hover .postUserAvatar img {
+  transition: var(--transition-out);
+}
+.postCard .postCardHeader .postUserInfo:hover .postUserName {
+  color: var(--grey50);
+  transition: var(--transition-out);
 }
 .postCard .postCardHeader .postUserInfo .postUserAvatar {
   display: flex;
@@ -23,10 +35,12 @@
   overflow: hidden;
   border-radius: 50%;
   border: 1px solid transparent;
+  transition: var(--transition-in);
 }
 .postCard .postCardHeader .postUserInfo .postUserAvatar img {
   width: 100%;
   height: auto;
+  transition: var(--transition-in);
 }
 .postCard .postCardHeader .postUserInfo .postUserName {
   display: flex;
@@ -34,6 +48,7 @@
   align-items: center;
   font-weight: 600;
   font-size: var(--fs-p);
+  transition: var(--transition-in);
 }
 .postCard .postCardHeader .postMenuBtn {
   display: flex;

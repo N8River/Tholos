@@ -1,0 +1,39 @@
+.notificationMessage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.notificationMessage p {
+  font-size: var(--fs-p);
+}
+.notificationMessage button {
+  border: none;
+  color: var(--primary-color);
+  background-color: transparent;
+  font-size: var(--fs-p);
+  font-family: var(--ff);
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.notificationMessage .followRequestButtons {
+  display: flex;
+  justify-content: space-evenly;
+}
+.notificationMessage .followRequestButtons .approveRequestBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--primary-color);
+  padding-inline: var(--margin-xxs);
+  font-weight: 400;
+}
+.notificationMessage .followRequestButtons .rejectRequestBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--accent-color);
+  font-weight: 400;
+}/*# sourceMappingURL=notificationMessage.css.map */

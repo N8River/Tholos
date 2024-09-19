@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to the user who created the post
   content: { type: String, required: true },
-  image: { type: String },
+  images: [{ type: String }], // Array to store multiple image URLs
   video: { type: String },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who habe liked the post
   comments: [

@@ -48,15 +48,26 @@
 
     .postModalImgWrapper {
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
       height: 50rem;
       // width: 50rem;
 
       overflow: hidden;
 
-      img {
-        height: 100%;
-        width: auto;
+      // .slide {
+      //   &.selected {
+
+      //   }
+      // }
+
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          height: 50rem;
+          width: auto;
+        }
       }
     }
   }

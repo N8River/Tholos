@@ -25,6 +25,24 @@
 
       gap: var(--margin-xs);
 
+      cursor: pointer;
+
+      &:hover {
+        .postUserAvatar {
+          border: 1px solid var(--grey10);
+          transition: var(--transition-out);
+
+          img {
+            transition: var(--transition-out);
+          }
+        }
+
+        .postUserName {
+          color: var(--grey50);
+          transition: var(--transition-out);
+        }
+      }
+
       .postUserAvatar {
         display: flex;
         justify-content: center;
@@ -36,9 +54,12 @@
         border-radius: 50%;
         border: 1px solid transparent;
 
+        transition: var(--transition-in);
+
         img {
           width: 100%;
           height: auto;
+          transition: var(--transition-in);
         }
       }
 
@@ -49,6 +70,8 @@
 
         font-weight: 600;
         font-size: var(--fs-p);
+
+        transition: var(--transition-in);
       }
     }
 

@@ -7,13 +7,13 @@ const middleware = require("../middleware/is-auth");
 router.post("/create", middleware.authMiddleware, postController.createPost);
 
 router.get(
-  "/discover",
+  "/explore",
   middleware.authMiddleware,
   postController.fetchPublicPosts
 );
 
 router.get(
-  "/feed",
+  "/following-feed",
   middleware.authMiddleware,
   postController.fetchPostsByFollowing
 );
@@ -39,5 +39,13 @@ router.get(
   middleware.authMiddleware,
   postController.fetchComments
 );
+
+router.delete(
+  "/:postId/delete",
+  middleware.authMiddleware,
+  postController.deletePost
+);
+
+router.put("/:postId/edit", middleware.authMiddleware, postController.editPost);
 
 module.exports = router;

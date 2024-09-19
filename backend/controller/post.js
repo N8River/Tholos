@@ -5,12 +5,12 @@ const Notification = require("../model/notification");
 
 exports.createPost = async (req, res, next) => {
   try {
-    const { content, image } = req.body;
+    const { content, images } = req.body; // Accept images array from the request
 
-    if (!content && !image) {
-      return res
-        .status(400)
-        .json({ message: "Post must have either content or an image" });
+    if (!content && (!images || images.length === 0)) {
+      return res.status(400).json({
+        message: "Post must have either content or at least one image",
+      });
     }
 
     const userId = req.user.userId;
@@ -18,7 +18,7 @@ exports.createPost = async (req, res, next) => {
     const newPost = new Post({
       user: userId,
       content,
-      image,
+      images, // Store the array of image URLs
     });
 
     const savedPost = await newPost.save();
@@ -63,9 +63,11 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
     const user = await User.findById(userId).select("following");
 
     // Fetch posts from the people the user follows
-    const posts = await Post.find({ user: { $in: user.following } }).sort({
-      createdAt: -1,
-    }); // Sort by newest first
+    const posts = await Post.find({ user: { $in: user.following } })
+      .populate({
+        path: "user",
+      })
+      .sort({ createdAt: -1 });
 
     res.status(200).json(posts);
   } catch (error) {
@@ -79,8 +81,8 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
 exports.fetchUserPosts = async (req, res, next) => {
   try {
     const { userName } = req.params;
-    console.log("🔴 userName", userName);
-    // const currentUserId = req.user.userId;
+    const isOwner = req.query.isOwner === "true" ? true : false;
+    const { currentUserId } = req.query;
 
     const user = await User.findOne({ userName });
 
@@ -88,13 +90,23 @@ exports.fetchUserPosts = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // If profile is private, check if the current user is following
-    // if (user.profileVisibility === "Private") {
-    //   const isFollowing = user.followers.includes(currentUserId);
-    //   if (!isFollowing) {
-    //     return res.status(403).json({ message: "This account is private." });
-    //   }
-    // }
+    if (isOwner === true) {
+      const userPosts = await Post.find({ user: user._id })
+        .populate("user", "userName avatar")
+        .sort({ createdAt: -1 });
+
+      return res.status(200).json(userPosts);
+    }
+
+    if (user.profileVisibility === "Private") {
+      const isFollowing = user.followers.some(
+        (followerId) => followerId.toString() === currentUserId
+      );
+
+      if (!isFollowing) {
+        return res.status(403).json({ message: "This account is private." });
+      }
+    }
 
     const userPosts = await Post.find({ user: user._id })
       .populate("user", "userName avatar")
@@ -291,5 +303,52 @@ exports.fetchComments = async (req, res, next) => {
     res
       .status(500)
       .json({ message: "Failed to fetch comments", error: error.message });
+  }
+};
+
+exports.deletePost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const userId = req.user.userId;
+
+    const postToDelete = await Post.findOneAndDelete({
+      _id: postId,
+      user: userId,
+    });
+
+    if (!postToDelete) {
+      return res.status(404).json({
+        message: "Post not found or you're not authorized to delete this post",
+      });
+    }
+
+    res.status(200).json({ message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.editPost = async (req, res, next) => {
+  const { postId } = req.params;
+  const { content } = req.body;
+
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { content },
+      { new: true } // Returns the updated document
+    );
+
+    if (!updatedPost) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Post updated successfully", post: updatedPost });
+  } catch (error) {
+    console.error("Error updating post:", error);
+    res.status(500).json({ error: "Error updating post" });
   }
 };

@@ -2,12 +2,13 @@
   display: flex;
   flex-direction: column;
   margin-inline: auto;
-  width: clamp(20rem, 50vw, 35rem);
+  width: clamp(20rem, 50vw, 50rem);
   padding-block: var(--margin-m);
 }
 .profile .profileInfo {
   padding-bottom: var(--margin-m);
   border-bottom: 1px solid var(--grey70);
+  padding-inline: var(--margin-l);
 }
 .profile .profileInfo .profileDetails {
   display: flex;
@@ -88,7 +89,10 @@
   font-size: var(--fs-p);
 }
 .profile .profilePosts {
-  display: grid;
-  grid-template-columns: 3, 1fr;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  gap: var(--margin-xxs);
   margin-top: var(--margin-s);
 }/*# sourceMappingURL=profile.css.map */

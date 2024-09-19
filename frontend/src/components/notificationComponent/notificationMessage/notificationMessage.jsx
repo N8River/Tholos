@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL, JSON_HEADERS } from "../../../config/config";
 
-function NotificationMessage({ notification }) {
+import "./notificationMessage.css";
+
+function NotificationMessage({
+  notification,
+  handleApproveRequest,
+  handleRejectRequest,
+}) {
   console.log("🔴 NOTIFICATION", notification);
   let link;
   let btnText;
@@ -49,6 +55,37 @@ function NotificationMessage({ notification }) {
     btnText = "View Post";
     link = `/${decodedToken.userName}/p/${notification.post}`;
   } else if (notification.type === "follow") {
+    btnText = `View their profile`;
+    link = `/${userInfo.userName}/`;
+  } else if (notification.type === "follow-request") {
+    // For follow request notification
+    return (
+      <div className="notificationMessage">
+        <p>{notification.message}</p>
+        <div className="followRequestButtons">
+          <button
+            onClick={() => {
+              navigate(`/${userInfo.userName}`);
+            }}
+          >
+            View Profile
+          </button>
+          <button
+            className="approveRequestBtn"
+            onClick={() => handleApproveRequest(notification.sender)}
+          >
+            Approve
+          </button>
+          <button
+            className="rejectRequestBtn"
+            onClick={() => handleRejectRequest(notification.sender)}
+          >
+            Reject
+          </button>
+        </div>
+      </div>
+    );
+  } else if (notification.type === "follow-accept") {
     btnText = `View their profile`;
     link = `/${userInfo.userName}/`;
   }

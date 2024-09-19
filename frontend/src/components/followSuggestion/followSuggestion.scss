@@ -1,0 +1,121 @@
+.followSuggestion {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  height: 30rem;
+  width: 20rem;
+
+  border: 1px solid var(--grey70);
+
+  margin-block: var(--margin-m);
+  margin-inline: var(--margin-xxl);
+
+  padding: var(--margin-m);
+
+  border-radius: 1rem;
+
+  p {
+    display: flex;
+
+    font-size: var(--fs-p);
+    color: var(--grey30);
+
+    margin-bottom: var(--margin-xs);
+  }
+
+  .followSuggestions {
+    display: flex;
+    flex-direction: column;
+    margin-top: var(--margin-xs);
+
+    .followSuggestionUser {
+      display: flex;
+      width: 100%;
+      align-items: center;
+
+      padding-block: var(--margin-xxs);
+
+      cursor: pointer;
+
+      &:hover {
+        .followSuggestionUserAvatar {
+          border: 1px solid var(--primary-color);
+          transition: var(--transition-in);
+        }
+
+        .followSuggestionUserName {
+        }
+      }
+
+      .followSuggestionUserAvatar {
+        height: 2.25rem;
+        width: 2.25rem;
+        border-radius: 50%;
+
+        margin-right: var(--margin-xs);
+
+        border: 1px solid var(--grey50);
+
+        overflow: hidden;
+        transition: var(--transition-out);
+        img {
+          height: 100%;
+          width: auto;
+        }
+      }
+
+      .followSuggestionUserName {
+        display: flex;
+        flex-direction: column;
+        font-size: var(--fs-p);
+        font-weight: 600;
+
+        p {
+          margin: 0;
+          font-size: var(--fs-small);
+
+          &.grey {
+            color: var(--grey50);
+            font-weight: 400;
+          }
+        }
+      }
+
+      .followSuggestionBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin-left: auto;
+
+        button {
+          border: none;
+          background-color: transparent;
+
+          font-size: var(--fs-small);
+          font-family: var(--ff);
+
+          padding-block: var(--margin-xxs);
+          padding-inline: var(--margin-xs);
+
+          font-weight: 600;
+
+          color: var(--primary-color);
+          transition: var(--transition-out);
+
+          cursor: pointer;
+
+          &:hover {
+            color: var(--accent-color);
+            transition: var(--transition-in);
+          }
+        }
+      }
+    }
+  }
+}

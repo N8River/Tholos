@@ -2,24 +2,45 @@
   display: flex;
   flex-direction: column;
 
-  width: 50rem;
+  width: 40rem;
   margin-inline: auto;
+
+  height: 100vh;
 
   padding-block: var(--margin-m);
 
-  h2 {
-    font-size: var(--fs-h4);
-    margin-bottom: var(--margin-xxs);
-  }
-
-  .btn {
+  .messagesPageHeader {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 20%;
+    justify-content: space-between;
 
-    font-size: var(--fs-p);
-    border-radius: 0.5rem;
+    margin-bottom: var(--margin-xs);
+
+    h2 {
+      font-size: var(--fs-h4);
+    }
+
+    .btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: fit-content;
+      height: fit-content;
+
+      gap: var(--margin-xs);
+
+      margin-block: auto;
+
+      font-size: var(--fs-p);
+      padding-block: var(--margin-xxs);
+      padding-inline: var(--margin-xs);
+      border-radius: 0.5rem;
+
+      svg {
+        margin: auto;
+        color: var(--white);
+        font-size: var(--fs-p);
+      }
+    }
   }
 
   .conversationsList {
@@ -27,7 +48,7 @@
       display: flex;
       align-items: center;
 
-      gap: var(--margin-xs);
+      gap: var(--margin-s);
 
       padding: var(--margin-xs);
       padding-block: var(--margin-xs);
@@ -36,25 +57,140 @@
       border-radius: 0.5rem;
 
       border: 1px solid var(--grey70);
-      transition: var(--transition-out);
 
       cursor: pointer;
+      transition: var(--transition-out);
 
       &:hover {
         border: 1px solid var(--grey50);
         transition: var(--transition-in);
         background-color: var(--grey90);
+
+        .conversationUserImgWrapper {
+          border: 1px solid var(--grey50);
+          transition: var(--transition-in);
+        }
       }
 
-      img {
-        height: 2rem;
-        width: auto;
+      .conversationUserImgWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 1px solid var(--grey70);
+        border-radius: 50%;
+        height: 3rem;
+        width: 3rem;
+
+        overflow: hidden;
+        transition: var(--transition-out);
+
+        img {
+          height: 100%;
+          width: auto;
+        }
       }
 
       .conversationInfo {
+        display: flex;
+        width: 100%;
+
+        .conversationTimestamp {
+          display: flex;
+          margin-left: auto;
+
+          small {
+            color: var(--grey50);
+          }
+        }
+
         h4 {
-          font-size: var(--fs-big);
+          display: flex;
+          font-size: var(--fs-p);
+          font-weight: 600;
+        }
+
+        p {
+          display: flex;
+          font-size: var(--fs-p);
           font-weight: 400;
+          color: var(--grey30);
+        }
+      }
+    }
+  }
+
+  .newConversationTab {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: auto;
+
+    big {
+      font-size: var(--fs-p);
+      font-weight: 600;
+
+      padding-bottom: var(--margin-xxs);
+
+      width: 100%;
+      text-align: center;
+    }
+
+    .newConversationList {
+      display: flex;
+      width: 100%;
+      gap: var(--margin-xs);
+
+      .newConversationUser {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        width: fit-content;
+
+        flex-direction: column;
+        cursor: pointer;
+
+        &:hover {
+          .newConversationUserAvatar {
+            border: 2px solid var(--primary-color);
+            transition: var(--transition-in);
+          }
+
+          .newConversationUserName {
+            p {
+              transition: var(--transition-in);
+              color: var(--grey30);
+            }
+          }
+        }
+
+        .newConversationUserAvatar {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+
+          height: 3rem;
+          width: 3rem;
+          overflow: hidden;
+
+          border-radius: 50%;
+          border: 2px solid var(--grey50);
+          transition: var(--transition-out);
+
+          img {
+            height: 100%;
+            width: auto;
+          }
+        }
+
+        .newConversationUserName {
+          p {
+            font-size: var(--fs-p);
+            transition: var(--transition-in);
+          }
         }
       }
     }

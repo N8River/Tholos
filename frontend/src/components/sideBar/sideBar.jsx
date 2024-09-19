@@ -3,6 +3,8 @@ import { MdOutlineMessage } from "react-icons/md";
 import { JSON_HEADERS, AUTH_HEADER, BACKEND_URL } from "../../config/config";
 import io from "socket.io-client";
 
+import { HiOutlineBuildingLibrary } from "react-icons/hi2";
+
 import { useEffect, useState } from "react";
 
 import "./SideBar.css";
@@ -10,9 +12,11 @@ import { useNavigate } from "react-router-dom";
 import CreatePost from "../createPost/createPost";
 import NotificationComponent from "../notificationComponent/notificationComponent";
 import { jwtDecode } from "jwt-decode";
+import { MdOutlineExplore } from "react-icons/md";
+import SearchSidebar from "../searchSidebar/searchSidebar";
 
 const token = localStorage.getItem("token");
-const userId = jwtDecode(token).userId;
+const userId = token ? jwtDecode(token).userId : null;
 const socket = io(BACKEND_URL, {
   query: { userId },
 });
@@ -23,6 +27,7 @@ function SideBar({ user }) {
   const [createPostVisible, setCreatePostVisible] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
+  const [showSearchSidebar, setShowSearchSidebar] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
   const headers = {
@@ -36,6 +41,10 @@ function SideBar({ user }) {
 
   const handleNotificationDropdown = () => {
     setShowNotificationDropdown(!showNotificationDropdown);
+  };
+
+  const handleSearchSidebarVisibility = () => {
+    setShowSearchSidebar(!showSearchSidebar);
   };
 
   useEffect(() => {
@@ -73,7 +82,13 @@ function SideBar({ user }) {
   return (
     <>
       <div className="sideBar">
-        <div className="logo">Tholos.</div>
+        {!showSearchSidebar ? (
+          <div className="logo">Tholos.</div>
+        ) : (
+          <div className="logoIcon">
+            <HiOutlineBuildingLibrary />
+          </div>
+        )}
         <div
           className="home sidebarBtn"
           onClick={() => {
@@ -83,7 +98,10 @@ function SideBar({ user }) {
           <GoHome />
           <big>Home</big>
         </div>
-        <div className="search sidebarBtn">
+        <div
+          className="search sidebarBtn"
+          onClick={handleSearchSidebarVisibility}
+        >
           <GoSearch />
           <big>Search</big>
         </div>
@@ -91,6 +109,17 @@ function SideBar({ user }) {
           <GoPlusCircle />
           <big>Create</big>
         </div>
+
+        <div
+          className="explore sidebarBtn"
+          onClick={() => {
+            navigate("/explore");
+          }}
+        >
+          <MdOutlineExplore />
+          <big>Explore</big>
+        </div>
+
         <div
           className="messages sidebarBtn"
           onClick={() => {
@@ -140,6 +169,7 @@ function SideBar({ user }) {
           <big>Profile</big>
         </div>
       </div>
+      <SearchSidebar isVisible={showSearchSidebar} />
       <CreatePost
         isVisible={createPostVisible}
         handleCreatePostVisibilty={handleCreatePostVisibilty}

@@ -6,9 +6,11 @@ import { jwtDecode } from "jwt-decode";
 import NotificationMessage from "./notificationMessage/notificationMessage";
 
 const token = localStorage.getItem("token");
-const socket = io(BACKEND_URL, {
-  query: { userId: jwtDecode(token).userId },
-});
+const socket = token
+  ? io(BACKEND_URL, {
+      query: { userId: jwtDecode(token).userId },
+    })
+  : null;
 
 function NotificationComponent({ setUnreadCount }) {
   // Take the setUnreadCount as a prop
@@ -50,8 +52,12 @@ function NotificationComponent({ setUnreadCount }) {
     };
   }, [setUnreadCount]); // Include setUnreadCount in the dependency array
 
-  const handleNotificationClick = async (notificationId) => {
+  const handleNotificationClick = async (notificationId, notificationType) => {
     try {
+      if (notificationType === "follow-request") {
+        return;
+      }
+
       const notification = notifications.find((n) => n._id === notificationId);
       if (notification.isRead) return; // Prevent multiple clicks
 
@@ -82,6 +88,40 @@ function NotificationComponent({ setUnreadCount }) {
     }
   };
 
+  const handleApproveRequest = async (senderId) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/user/${senderId}/approve-follow-request`,
+        {
+          method: "POST",
+          headers,
+        }
+      );
+      if (response.ok) {
+        alert("Follow request approved");
+      }
+    } catch (error) {
+      console.error("Error approving follow request:", error);
+    }
+  };
+
+  const handleRejectRequest = async (senderId) => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/user/${senderId}/reject-follow-request`,
+        {
+          method: "POST",
+          headers,
+        }
+      );
+      if (response.ok) {
+        alert("Follow request rejected");
+      }
+    } catch (error) {
+      console.error("Error rejecting follow request:", error);
+    }
+  };
+
   return (
     <div className="notificationDropdownComponent">
       {notifications.length > 0 ? (
@@ -91,26 +131,15 @@ function NotificationComponent({ setUnreadCount }) {
             className={`notificationItem ${
               notification.isRead ? "read" : "unread"
             }`}
-            onClick={() => handleNotificationClick(notification._id)} // Mark as read on click
+            onClick={() =>
+              handleNotificationClick(notification._id, notification.type)
+            } // Mark as read on click
           >
-            <NotificationMessage notification={notification} />
-            {/* {notification.message} */}
-            {/* Link to the post or user based on the notification type */}
-            {/* {notification.type === "like" && (
-              <a href={`/post/${notification.post}`} className="linkToPost">
-                View Post
-              </a>
-            )}
-            {notification.type === "comment" && (
-              <a href={`/post/${notification.post}`} className="linkToPost">
-                View Comment
-              </a>
-            )}
-            {notification.type === "follow" && (
-              <a href={`/${notification.user}`} className="linkToProfile">
-                View Profile
-              </a>
-            )} */}
+            <NotificationMessage
+              notification={notification}
+              handleApproveRequest={handleApproveRequest}
+              handleRejectRequest={handleRejectRequest}
+            />
           </div>
         ))
       ) : (

@@ -1,6 +1,6 @@
 .createPost {
   position: absolute;
-  z-index: 1000;
+  z-index: 1001;
 
   top: 50%;
   left: 50%;
@@ -114,6 +114,106 @@
       flex-direction: column;
 
       padding-block: var(--margin-xs);
+
+      input {
+        font-size: var(--fs-p);
+        margin-bottom: var(--margin-xxs);
+      }
+
+      p {
+        text-align: right;
+        font-size: var(--fs-small);
+      }
+    }
+  }
+}
+
+.createPostOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 1000;
+  background-color: hsla(0, 0%, 10%, 0.5);
+
+  display: none;
+
+  &.show {
+    display: flex;
+  }
+}
+
+.createPost {
+  // Existing styles...
+
+  .createPostForm {
+    display: flex;
+    height: 100%;
+    padding-inline: var(--margin-m);
+
+    .createPostFormLeft {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-block: var(--margin-xxl);
+
+      .imgPreviewWrapper {
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: auto;
+
+        img {
+          max-height: 100%;
+          max-width: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .createPostFormRight {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      padding-block: var(--margin-xs);
+
+      .imageList {
+        display: flex;
+        flex-direction: column;
+        gap: var(--margin-xxs);
+
+        .imageItem {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: var(--margin-xxs);
+
+          img {
+            width: 4rem;
+            height: 4rem;
+            object-fit: cover;
+            cursor: pointer;
+            margin-bottom: var(--margin-xxs);
+          }
+
+          input {
+            width: 100%;
+          }
+        }
+
+        button {
+          font-size: 2rem;
+          color: var(--primary-color);
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          width: 100%;
+        }
+      }
 
       input {
         font-size: var(--fs-p);

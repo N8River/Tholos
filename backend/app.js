@@ -15,6 +15,7 @@ const postRoutes = require("./routes/post");
 const conversationRoutes = require("./routes/conversation");
 const messageRoutes = require("./routes/message");
 const notificationRoutes = require("./routes/notification");
+const searchRoutes = require("./routes/search");
 
 const Message = require("./model/message");
 const Conversation = require("./model/conversation");
@@ -40,6 +41,7 @@ app.use("/api/post", postRoutes);
 app.use("/api/conversation", conversationRoutes);
 app.use("/api/message", messageRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use("/api/search", searchRoutes);
 
 app.get("/", (req, res, next) => {
   res.send("Hello World! ~ Tholos");

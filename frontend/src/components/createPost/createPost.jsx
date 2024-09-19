@@ -5,10 +5,11 @@ import { IoCloseOutline } from "react-icons/io5";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 
 function CreatePost({ isVisible, handleCreatePostVisibilty }) {
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrls, setImageUrls] = useState([""]); // Array to store multiple image URLs
   const [caption, setCaption] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0); // For image preview selection
   const token = localStorage.getItem("token");
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
 
   const headers = {
     ...JSON_HEADERS,
@@ -25,7 +26,7 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
         headers: headers,
         body: JSON.stringify({
           content: caption,
-          image: imageUrl,
+          images: imageUrls, // Send array of image URLs
         }),
       });
 
@@ -37,13 +38,29 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
       console.log("Post created:", responseData);
 
       setCaption("");
-      setImageUrl("");
+      setImageUrls([""]);
       handleCreatePostVisibilty();
     } catch (error) {
       console.error("Error creating post:", error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const addImageUrlInput = () => {
+    setImageUrls([...imageUrls, ""]);
+  };
+
+  // Update a specific image URL in the array
+  const handleImageUrlChange = (index, value) => {
+    const newImageUrls = [...imageUrls];
+    newImageUrls[index] = value;
+    setImageUrls(newImageUrls);
+  };
+
+  // Handle image selection for the preview
+  const handleImageSelection = (index) => {
+    setSelectedImageIndex(index);
   };
 
   return (
@@ -65,9 +82,9 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
         <div className="createPostForm">
           <div className="createPostFormLeft">
             <div className="imgPreviewWrapper">
-              {imageUrl ? (
+              {imageUrls[selectedImageIndex] ? (
                 <img
-                  src={imageUrl}
+                  src={imageUrls[selectedImageIndex]}
                   alt="Preview"
                   onError={(e) => (e.target.style.display = "none")}
                 />
@@ -75,21 +92,30 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
                 <BsImage />
               )}
             </div>
-
-            <big>Use image url or upload from your device</big>
-            <input
-              type="text"
-              placeholder="IMAGE URL"
-              name="imageUrl"
-              value={imageUrl}
-              onChange={(e) => {
-                setImageUrl(e.target.value);
-              }}
-            />
-            <button className="btn">Upload from device</button>
           </div>
 
           <div className="createPostFormRight">
+            <div className="imageList">
+              {imageUrls.map((url, index) => (
+                <div key={index} className="imageItem">
+                  <img
+                    src={url}
+                    alt={`Thumbnail ${index + 1}`}
+                    onClick={() => handleImageSelection(index)}
+                    onError={(e) => (e.target.style.display = "none")}
+                  />
+                  <input
+                    type="text"
+                    placeholder={`IMAGE URL ${index + 1}`}
+                    value={url}
+                    onChange={(e) =>
+                      handleImageUrlChange(index, e.target.value)
+                    }
+                  />
+                </div>
+              ))}
+              <button onClick={addImageUrlInput}>+</button>
+            </div>
             <input
               type="text"
               placeholder="CAPTION"
@@ -104,6 +130,10 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
           </div>
         </div>
       </div>
+      <div
+        className={`createPostOverlay ${isVisible ? "show" : ""}`}
+        onClick={handleCreatePostVisibilty}
+      ></div>
     </>
   );
 }

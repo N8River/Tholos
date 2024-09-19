@@ -1,6 +1,6 @@
 .createPost {
   position: absolute;
-  z-index: 1000;
+  z-index: 1001;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
@@ -88,6 +88,90 @@
   display: flex;
   flex-direction: column;
   padding-block: var(--margin-xs);
+}
+.createPost .createPostForm .createPostFormRight input {
+  font-size: var(--fs-p);
+  margin-bottom: var(--margin-xxs);
+}
+.createPost .createPostForm .createPostFormRight p {
+  text-align: right;
+  font-size: var(--fs-small);
+}
+
+.createPostOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: hsla(0, 0%, 10%, 0.5);
+  display: none;
+}
+.createPostOverlay.show {
+  display: flex;
+}
+
+.createPost .createPostForm {
+  display: flex;
+  height: 100%;
+  padding-inline: var(--margin-m);
+}
+.createPost .createPostForm .createPostFormLeft {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: var(--margin-xxl);
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewWrapper {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: auto;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewWrapper img {
+  max-height: 100%;
+  max-width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.createPost .createPostForm .createPostFormRight {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--margin-xs);
+}
+.createPost .createPostForm .createPostFormRight .imageList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-xxs);
+}
+.createPost .createPostForm .createPostFormRight .imageList .imageItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--margin-xxs);
+}
+.createPost .createPostForm .createPostFormRight .imageList .imageItem img {
+  width: 4rem;
+  height: 4rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+  cursor: pointer;
+  margin-bottom: var(--margin-xxs);
+}
+.createPost .createPostForm .createPostFormRight .imageList .imageItem input {
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormRight .imageList button {
+  font-size: 2rem;
+  color: var(--primary-color);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
 }
 .createPost .createPostForm .createPostFormRight input {
   font-size: var(--fs-p);

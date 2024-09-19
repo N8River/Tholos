@@ -2,12 +2,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: -moz-fit-content;
-  width: fit-content;
+  position: relative;
+  flex: 1;
+  flex-grow: 1;
+  max-width: 30%;
+}
+.userProfilePostCard:hover .userProfilePostCardImgWrapper img {
+  filter: brightness(75%);
+  transition: var(--transition-in);
+}
+.userProfilePostCard:hover .viewPostBtn {
+  opacity: 1;
+  transition: var(--transition-in);
+}
+.userProfilePostCard:hover .userPostOptionsBtn {
+  opacity: 1;
+  transition: var(--transition-in);
 }
 .userProfilePostCard .userProfilePostCardImgWrapper {
   height: 20rem;
-  width: 15rem;
+  width: 20rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -16,4 +30,137 @@
 .userProfilePostCard .userProfilePostCardImgWrapper img {
   height: 100%;
   width: auto;
+  transition: var(--transition-out);
+}
+.userProfilePostCard .viewPostBtn {
+  position: absolute;
+  background-color: var(--white);
+  font-size: var(--fs-p);
+  padding-block: var(--margin-xxs);
+  padding-inline: var(--margin-xs);
+  font-weight: 600;
+  opacity: 0;
+  transition: var(--transition-out);
+  cursor: pointer;
+}
+.userProfilePostCard .userPostOptionsBtn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: var(--margin-xs);
+  opacity: 0;
+  transition: var(--transition-out);
+  display: flex;
+  cursor: pointer;
+}
+.userProfilePostCard .userPostOptionsBtn svg {
+  color: var(--white);
+  font-size: var(--fs-h4);
+}
+.userProfilePostCard .userPostOptionsDropdown {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: var(--white);
+  display: none;
+  flex-direction: column;
+  border-radius: 0.25rem 0 0.25rem 0.25rem;
+  opacity: 0;
+  transition: var(--transition-out);
+}
+.userProfilePostCard .userPostOptionsDropdown.show {
+  display: flex;
+  opacity: 1;
+  transition: var(--transition-in);
+}
+.userProfilePostCard .userPostOptionsDropdown .editPostBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-small);
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  border-bottom: 1px solid var(--grey90);
+  cursor: pointer;
+  transition: var(--transition-out);
+}
+.userProfilePostCard .userPostOptionsDropdown .editPostBtn:hover {
+  background-color: var(--grey90);
+  transition: var(--transition-in);
+}
+.userProfilePostCard .userPostOptionsDropdown .deletePostBtn {
+  display: flex;
+  align-items: center;
+  font-size: var(--fs-small);
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  color: red;
+  cursor: pointer;
+  transition: var(--transition-out);
+}
+.userProfilePostCard .userPostOptionsDropdown .deletePostBtn:hover {
+  background-color: var(--grey90);
+  transition: var(--transition-in);
+}
+
+.deletePostConfirmation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: var(--white);
+  padding-block: var(--margin-s);
+  padding-inline: var(--margin-m);
+  border-radius: 0.5rem;
+  z-index: 1006;
+  box-shadow: 0px 0px 5px var(--grey10);
+  display: none;
+}
+.deletePostConfirmation.show {
+  display: flex;
+  flex-direction: column;
+}
+.deletePostConfirmation p {
+  display: flex;
+  font-size: var(--fs-p);
+}
+.deletePostConfirmation .deletePostBtns {
+  display: flex;
+  justify-content: center;
+  gap: var(--margin-l);
+  margin-top: var(--margin-xxs);
+}
+.deletePostConfirmation .deletePostBtns button {
+  font-family: var(--ff);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  border-radius: 0.5rem;
+  font-size: var(--fs-p);
+}
+.deletePostConfirmation .deletePostBtns button:hover {
+  background-color: var(--grey90);
+}
+.deletePostConfirmation .deletePostBtns button:nth-child(1) {
+  color: red;
+  font-weight: 600;
+}
+.deletePostConfirmation .deletePostBtns button:nth-child(2) {
+  font-weight: 600;
+  color: var(--grey30);
+}
+
+.postDeleteOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1005;
+  background-color: hsla(0, 0%, 10%, 0.5);
+  display: none;
+}
+.postDeleteOverlay.show {
+  display: block;
 }/*# sourceMappingURL=userProfilePostCard.css.map */

@@ -1,4 +1,5 @@
 const Conversation = require("../model/conversation");
+const Message = require("../model/message");
 
 exports.startConversation = async (req, res) => {
   try {
@@ -31,14 +32,30 @@ exports.startConversation = async (req, res) => {
 
 exports.getConversations = async (req, res, next) => {
   try {
-    const userId = req.user.userId; // Assuming user ID is stored in the JWT token
+    const userId = req.user.userId;
 
-    // Find all conversations where the user is a participant
     const conversations = await Conversation.find({
       participants: { $in: [userId] },
-    }).populate("participants", "userName avatar"); // Populate with user info
+    }).populate("participants", "userName avatar");
 
-    res.status(200).json(conversations);
+    // Fetch the last message for each conversation
+    const conversationsWithLastMessage = await Promise.all(
+      conversations.map(async (conversation) => {
+        const lastMessage = await Message.findOne({
+          conversationId: conversation._id,
+        })
+          .sort({ createdAt: -1 })
+          .select("text createdAt"); // Select the text and createdAt fields
+
+        return {
+          ...conversation.toObject(),
+          lastMessage: lastMessage ? lastMessage.text : "",
+          lastMessageTimestamp: lastMessage ? lastMessage.createdAt : null, // Include the timestamp
+        };
+      })
+    );
+
+    res.status(200).json(conversationsWithLastMessage);
   } catch (error) {
     console.error("Error fetching conversations:", error);
     res.status(500).json({ message: "Failed to fetch conversations" });

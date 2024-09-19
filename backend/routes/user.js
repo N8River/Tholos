@@ -8,6 +8,18 @@ const middleware = require("../middleware/is-auth");
 // router.get("/profile", middleware.authMiddleware, userController.fetchUserInfo);
 // router.get("/profile", userController.fetchUserInfo);
 
+router.get(
+  "/following",
+  middleware.authMiddleware,
+  userController.fetchFollowing
+);
+
+router.get(
+  "/follow-suggestions",
+  middleware.authMiddleware,
+  userController.suggestUsers
+);
+
 router.get("/:userId", userController.fetchUserProfileByUserId);
 
 router.put(
@@ -36,6 +48,18 @@ router.get(
   "/:userId/is-following",
   middleware.authMiddleware,
   userController.isFollowing
+);
+
+router.post(
+  "/:userId/approve-follow-request",
+  middleware.authMiddleware,
+  userController.approveFollowRequest
+);
+
+router.post(
+  "/:userId/reject-follow-request",
+  middleware.authMiddleware,
+  userController.rejectFollowRequest
 );
 
 module.exports = router;
