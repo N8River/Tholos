@@ -3,10 +3,12 @@
   flex-direction: column;
   justify-content: center;
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-inline: auto;
+  width: 100%;
 }
-.feed .postLists {
+.feed .postList {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }/*# sourceMappingURL=feed.css.map */

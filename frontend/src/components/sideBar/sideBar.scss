@@ -13,7 +13,7 @@
 
   z-index: 1000;
 
-  background-color: var(--white);
+  background-color: var(--background-color);
 
   gap: var(--margin-l);
 
@@ -30,10 +30,21 @@
 
     border-bottom: 1px solid var(--grey70);
     transition: var(--transition-in);
+
+    body.dark-mode & {
+      color: var(--black);
+    }
   }
 
   .logoIcon {
     display: flex;
+
+    body.dark-mode & {
+      svg {
+        color: var(--black);
+      }
+    }
+
     svg {
       font-size: var(--fs-h4);
       color: var(--accent-color);
@@ -121,6 +132,7 @@
 
   .profileBtn {
     flex-direction: row;
+
     .imgWrapper {
       display: flex;
       justify-content: center;
@@ -129,7 +141,7 @@
       overflow: hidden;
 
       border-radius: 50%;
-      border: 1px solid var(--grey70);
+      border: 1px solid var(--grey10);
 
       img {
         height: 100%;

@@ -11,9 +11,18 @@ import Comment from "../comment/comment";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
+import { getAspectRatioClass } from "../../utils/utils";
+import LoginModal from "../loginModal/loginModal";
+import { jwtDecode } from "jwt-decode";
+
+import { useRef } from "react";
+
 function PostModal({ post, isOpen, onClose }) {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState(post.comments || []);
+  const [showPostModal, setShowPostModal] = useState(false);
+
+  const commentInputRef = useRef(null);
 
   const location = useLocation();
 
@@ -22,14 +31,34 @@ function PostModal({ post, isOpen, onClose }) {
   if (!isOpen) return null; // If the modal is not open, return nothing
 
   const token = localStorage.getItem("token");
+  const decodedToken = token && jwtDecode(token);
+
   const [likes, setLikes] = useState(post.likes.length);
-  const [hasLiked, setHasLiked] = useState(post.likes.includes(token.userId));
-  const headers = {
-    ...JSON_HEADERS,
-    ...AUTH_HEADER(token),
-  };
+  const [hasLiked, setHasLiked] = useState(
+    token ? post.likes.includes(decodedToken.userId) : false
+  );
+
+  // console.log(
+  //   "🔴 HAS LIKED",
+  //   hasLiked,
+  //   post.likes.includes(decodedToken.userId)
+  // );
+
+  const headers = token
+    ? {
+        ...JSON_HEADERS,
+        ...AUTH_HEADER(token),
+      }
+    : {
+        ...JSON_HEADERS,
+      };
 
   const handleCommentSubmit = async () => {
+    if (!token) {
+      setShowPostModal(true);
+      return;
+    }
+
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/post/${post._id}/comment`,
@@ -58,6 +87,11 @@ function PostModal({ post, isOpen, onClose }) {
   };
 
   const handleToggleLike = async () => {
+    if (!token) {
+      setShowPostModal(true);
+      return;
+    }
+
     try {
       const response = await fetch(`${BACKEND_URL}/api/post/${post._id}/like`, {
         method: "POST",
@@ -112,6 +146,10 @@ function PostModal({ post, isOpen, onClose }) {
     }
   };
 
+  const focusCommentInput = () => {
+    commentInputRef.current?.focus();
+  };
+
   useEffect(() => {
     if (isOpen) {
       fetchComments();
@@ -133,13 +171,36 @@ function PostModal({ post, isOpen, onClose }) {
                 showStatus={false}
               >
                 {post.images.map((image, index) => (
-                  <div key={index}>
-                    <img src={image} alt={`Post Image ${index + 1}`} />
+                  <div key={index} className="postImagesWrapper">
+                    <img
+                      src={image}
+                      alt={`Post Image ${index + 1}`}
+                      onLoad={(e) => {
+                        const width = e.target.naturalWidth;
+                        const height = e.target.naturalHeight;
+                        const aspectRatioClass = getAspectRatioClass(
+                          width,
+                          height
+                        );
+                        e.target.parentNode.classList.add(aspectRatioClass); // Add class based on aspect ratio
+                      }}
+                    />
                   </div>
                 ))}
               </Carousel>
             ) : (
-              <img src={post.images[0]} alt={post.content} />
+              <div className="postImagesWrapper">
+                <img
+                  src={post.images[0]}
+                  alt={post.content}
+                  onLoad={(e) => {
+                    const width = e.target.naturalWidth;
+                    const height = e.target.naturalHeight;
+                    const aspectRatioClass = getAspectRatioClass(width, height);
+                    e.target.parentNode.classList.add(aspectRatioClass); // Add class based on aspect ratio
+                  }}
+                />
+              </div>
             )}
           </div>
         </div>
@@ -152,28 +213,24 @@ function PostModal({ post, isOpen, onClose }) {
             <p>{post.content}</p>
           </div>
           <div className="postModalCommentBox">
-            <div className="postModalCommentsList">
-              {comments.length > 0 ? (
-                comments.map((c, index) => {
-                  // return console.log("🔴 C", c);
-                  return <Comment comment={c} key={c._id} />;
-                })
-              ) : (
-                <p>No comments on this post yet</p>
-              )}
-            </div>
+            {comments.length > 0 ? (
+              <div className="postModalCommentsList">
+                {comments.length > 0 &&
+                  comments.map((c, index) => {
+                    // return console.log("🔴 C", c);
+                    return <Comment comment={c} key={c._id} />;
+                  })}
+              </div>
+            ) : (
+              <p className="noCommentsYet">No comments on this post yet</p>
+            )}
           </div>
           <div className="postModalFooter">
             <div className="postToolBar">
               <div className="postLikeBtn" onClick={handleToggleLike}>
                 <CiHeart className={hasLiked ? "liked" : ""} />
               </div>
-              <div
-                className="postCommentBtn"
-                onClick={() => {
-                  onCommentClick(post);
-                }}
-              >
+              <div className="postCommentBtn" onClick={focusCommentInput}>
                 <VscComment />
               </div>
               <div className="postShareBtn" onClick={handleShare}>
@@ -191,6 +248,7 @@ function PostModal({ post, isOpen, onClose }) {
             </div>
             <div className="postModalCommentsInput">
               <input
+                ref={commentInputRef}
                 type="text"
                 placeholder="Add a comment..."
                 value={commentInput}
@@ -201,6 +259,8 @@ function PostModal({ post, isOpen, onClose }) {
           </div>
         </div>
       </div>
+
+      {showPostModal && <LoginModal />}
     </>
   );
 }

@@ -305,6 +305,7 @@ exports.fetchFollowing = async (req, res, next) => {
 exports.suggestUsers = async (req, res, next) => {
   try {
     const userId = req.user.userId;
+    const { numberOfSuggestions } = req.query;
 
     const user = await User.findById(userId).select("following");
     if (!user) {
@@ -318,7 +319,7 @@ exports.suggestUsers = async (req, res, next) => {
           profileVisibility: { $ne: "Private" }, // Exclude private profiles
         },
       },
-      { $sample: { size: 5 } }, // Randomly select 5 users
+      { $sample: { size: +numberOfSuggestions } }, // Randomly select 5 users
       { $project: { userName: 1, fullName: 1, avatar: 1 } },
     ]);
 

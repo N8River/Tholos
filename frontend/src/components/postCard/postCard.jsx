@@ -13,29 +13,60 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
-function PostCard({ post, onCommentClick }) {
-  console.log("🔴 POST CARD POST:", post);
+import { getAspectRatioClass } from "../../utils/utils";
+import LoginModal from "../loginModal/loginModal";
+import PostModal from "../postModal/postModal";
 
+function PostCard({ post }) {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
+  const decodedToken = token && jwtDecode(token);
 
-  const headers = {
-    ...JSON_HEADERS,
-    ...AUTH_HEADER(token),
-  };
+  const headers = token
+    ? {
+        ...JSON_HEADERS,
+        ...AUTH_HEADER(token),
+      }
+    : {
+        ...JSON_HEADERS,
+      };
 
   const [likes, setLikes] = useState(post.likes.length);
   const [comments, setComments] = useState(post.comments.length);
-  const [hasLiked, setHasLiked] = useState(post.likes.includes(token.userId));
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasLiked, setHasLiked] = useState(
+    token ? post.likes.includes(token.userId) : false
+  );
+  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     checkHasLiked();
   }, []);
 
+  useEffect(() => {
+    if (showLoginModal) {
+      // Disable scrolling when modal is open
+      document.body.style.overflow = "hidden";
+    } else {
+      // Enable scrolling when modal is closed
+      document.body.style.overflow = "auto";
+    }
+
+    // Clean up when the component unmounts
+    return () => {
+      document.body.style.overflow = "auto"; // Enable scrolling again
+    };
+  }, [showLoginModal]);
+
   const handleToggleLike = async () => {
+    if (!token) {
+      setShowLoginModal(true);
+      console.log("☄️☄️☄️☄️☄️☄️");
+
+      return;
+    }
+
     try {
       const response = await fetch(`${BACKEND_URL}/api/post/${post._id}/like`, {
         method: "POST",
@@ -60,15 +91,24 @@ function PostCard({ post, onCommentClick }) {
   };
 
   const checkHasLiked = () => {
-    if (post.likes.includes(decodedToken.userId)) {
+    if (token && post.likes.includes(decodedToken.userId)) {
       setHasLiked(true);
     } else {
       setHasLiked(false);
     }
   };
 
-  const handleOpenComments = async () => {
-    setIsModalOpen(true);
+  const handleOpenPostModal = () => {
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    setIsPostModalOpen(true);
+  };
+
+  const handleClosePostModal = () => {
+    setIsPostModalOpen(false);
   };
 
   return (
@@ -90,31 +130,53 @@ function PostCard({ post, onCommentClick }) {
             <RxDotsVertical />
           </div>
         </div>
+
         <div className="postImages">
           {post.images.length > 1 ? (
             <Carousel showThumbs={false} infiniteLoop={true} showStatus={false}>
               {post.images.map((image, index) => (
                 <div key={index} className="postImagesWrapper">
-                  <img src={image} alt={`Post Image ${index + 1}`} />
+                  <img
+                    src={image}
+                    alt={`Post Image ${index + 1}`}
+                    onLoad={(e) => {
+                      const width = e.target.naturalWidth;
+                      const height = e.target.naturalHeight;
+                      console.log(`Image ${index + 1}:`, width, height);
+                      const aspectRatioClass = getAspectRatioClass(
+                        width,
+                        height
+                      );
+                      console.log("Aspect ratio class:", aspectRatioClass);
+                      e.target.parentNode.classList.add(aspectRatioClass);
+                    }}
+                  />
                 </div>
               ))}
             </Carousel>
           ) : (
             <div className="postImagesWrapper">
-              <img src={post.images[0]} alt="Post Image" />
+              <img
+                src={post.images[0]}
+                alt="Post Image"
+                onLoad={(e) => {
+                  const width = e.target.naturalWidth;
+                  const height = e.target.naturalHeight;
+                  console.log(`Single Image:`, width, height);
+                  const aspectRatioClass = getAspectRatioClass(width, height);
+                  console.log("Aspect ratio class:", aspectRatioClass);
+                  e.target.parentNode.classList.add(aspectRatioClass);
+                }}
+              />
             </div>
           )}
         </div>
+
         <div className="postToolBar">
           <div className="postLikeBtn" onClick={handleToggleLike}>
             <CiHeart className={hasLiked ? "liked" : ""} />
           </div>
-          <div
-            className="postCommentBtn"
-            onClick={() => {
-              onCommentClick(post);
-            }}
-          >
+          <div className="postCommentBtn" onClick={handleOpenPostModal}>
             <VscComment />
           </div>
           <div className="postShareBtn">
@@ -134,12 +196,7 @@ function PostCard({ post, onCommentClick }) {
           <strong className="postUsername">{post.user.userName}</strong>
           <span> {post.content}</span>
         </div>
-        <div
-          className="commentInteractions"
-          onClick={() => {
-            onCommentClick(post);
-          }}
-        >
+        <div className="commentInteractions" onClick={handleOpenPostModal}>
           {comments === 0 ? (
             <small>Be the first one to comment</small>
           ) : comments === 1 ? (
@@ -149,6 +206,18 @@ function PostCard({ post, onCommentClick }) {
           )}
         </div>
       </div>
+
+      {isPostModalOpen && (
+        <PostModal
+          post={post}
+          isOpen={isPostModalOpen}
+          onClose={handleClosePostModal}
+        />
+      )}
+
+      {showLoginModal && (
+        <LoginModal user={post.user} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }

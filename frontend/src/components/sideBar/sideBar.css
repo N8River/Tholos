@@ -8,7 +8,7 @@
   box-shadow: 1px 1px 5px var(--grey70);
   height: 100vh;
   z-index: 1000;
-  background-color: var(--white);
+  background-color: var(--background-color);
   gap: var(--margin-l);
 }
 .sideBar .logo {
@@ -21,9 +21,15 @@
   border-bottom: 1px solid var(--grey70);
   transition: var(--transition-in);
 }
+body.dark-mode .sideBar .logo {
+  color: var(--black);
+}
 .sideBar .logoIcon {
   display: flex;
   transition: var(--transition-in);
+}
+body.dark-mode .sideBar .logoIcon svg {
+  color: var(--black);
 }
 .sideBar .logoIcon svg {
   font-size: var(--fs-h4);
@@ -94,7 +100,7 @@
   width: var(--fs-h4);
   overflow: hidden;
   border-radius: 50%;
-  border: 1px solid var(--grey70);
+  border: 1px solid var(--grey10);
 }
 .sideBar .profileBtn .imgWrapper img {
   height: 100%;

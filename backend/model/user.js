@@ -37,6 +37,7 @@ const UserSchema = new Schema(
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     followRequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    isMock: { type: Boolean, default: false }, // Temporary Field
   },
   { timestamps: true }
 );

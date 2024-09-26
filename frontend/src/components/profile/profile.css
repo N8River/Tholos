@@ -55,6 +55,9 @@
   border: transparent;
   padding-inline: var(--margin-s);
 }
+body.dark-mode .profile .profileInfo .profileDetails .profileDesc .profileDescHeader .btn {
+  background-color: var(--grey70);
+}
 .profile .profileInfo .profileDetails .profileDesc .profileDescHeader .btn big {
   font-size: var(--fs-p);
   color: var(--black);

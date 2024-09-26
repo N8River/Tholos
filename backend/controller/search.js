@@ -3,6 +3,7 @@ const Post = require("../model/post");
 
 exports.search = async (req, res, next) => {
   const { query, currentUserId } = req.query;
+  const limit = 10;
 
   try {
     // Search for users
@@ -17,9 +18,9 @@ exports.search = async (req, res, next) => {
       usersQuery._id = { $ne: currentUserId };
     }
 
-    const users = await User.find(usersQuery).select(
-      "userName avatar fullName bio"
-    );
+    const users = await User.find(usersQuery)
+      .select("userName avatar fullName bio")
+      .limit(limit);
 
     // Search for posts
     let postsQuery = { content: { $regex: query, $options: "i" } };
@@ -30,23 +31,27 @@ exports.search = async (req, res, next) => {
       const followingIds = user.following.map((f) => f._id);
 
       // Find posts by users with 'Public' profileVisibility or private posts by followed users
-      posts = await Post.find(postsQuery).populate({
-        path: "user",
-        select: "userName avatar profileVisibility",
-        match: {
-          $or: [
-            { profileVisibility: "Public" },
-            { _id: { $in: followingIds }, profileVisibility: "Private" },
-          ],
-        },
-      });
+      posts = await Post.find(postsQuery)
+        .populate({
+          path: "user",
+          select: "userName avatar profileVisibility",
+          match: {
+            $or: [
+              { profileVisibility: "Public" },
+              { _id: { $in: followingIds }, profileVisibility: "Private" },
+            ],
+          },
+        })
+        .limit(limit);
     } else {
       // Only public posts for non-logged-in users
-      posts = await Post.find(postsQuery).populate({
-        path: "user",
-        select: "userName avatar profileVisibility",
-        match: { profileVisibility: "Public" },
-      });
+      posts = await Post.find(postsQuery)
+        .populate({
+          path: "user",
+          select: "userName avatar profileVisibility",
+          match: { profileVisibility: "Public" },
+        })
+        .limit(limit);
     }
 
     // Filter out posts that didn't match the population criteria

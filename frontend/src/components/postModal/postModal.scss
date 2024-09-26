@@ -17,7 +17,7 @@
     top: 0;
     right: 0;
 
-    color: var(--white);
+    color: white;
     font-size: var(--fs-h4);
 
     margin-top: var(--margin-m);
@@ -49,25 +49,37 @@
     .postModalImgWrapper {
       display: flex;
       justify-content: center;
-      height: 50rem;
-      // width: 50rem;
-
+      align-items: center;
+      width: 100%;
+      position: relative;
       overflow: hidden;
 
-      // .slide {
-      //   &.selected {
+      background-color: var(--white);
 
-      //   }
-      // }
+      .carousel-root {
+        width: 100%;
 
-      div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        img {
-          height: 50rem;
-          width: auto;
+        .slide.selected {
+          display: flex;
+          justify-content: center;
+          align-items: center;
         }
+
+        .slide.previous {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+      }
+
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
   }
@@ -79,7 +91,7 @@
     width: 40%;
     height: 50rem;
 
-    background-color: var(--white);
+    background-color: var(--background-color);
 
     .postModalUserAndCaption {
       margin-block: var(--margin-xs);
@@ -101,7 +113,7 @@
 
         border-radius: 50%;
 
-        border: 1px solid var(--primary-color);
+        border: 1px solid var(--grey50);
 
         height: 2.5rem;
         width: 2.5rem;
@@ -119,6 +131,19 @@
 
       height: 100%;
       overflow-y: auto;
+
+      .noCommentsYet {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+
+      .postModalCommentsList {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
     }
 
     .postModalFooter {
@@ -227,45 +252,6 @@
       }
     }
   }
-
-  // .modalContent {
-  //   background-color: var(--white);
-  //   padding: var(--margin-m);
-  //   padding-top: var(--margin-s);
-
-  //   border-radius: 0.5rem;
-
-  //   .modalHeader {
-  //     display: flex;
-  //     justify-content: end;
-
-  //     padding-bottom: var(--margin-s);
-
-  //     button {
-  //       border: none;
-  //       background-color: transparent;
-
-  //       svg {
-  //         font-size: var(--fs-big);
-  //       }
-  //     }
-  //   }
-
-  //   .modalBody {
-  //     img {
-  //       max-width: 30rem;
-  //       max-width: 20rem;
-  //     }
-  //   }
-  // }
-
-  // .modalCommentSidebar {
-  //   background-color: var(--white);
-  //   padding: var(--margin-m);
-  //   padding-top: var(--margin-s);
-
-  //   border-radius: 0.5rem;
-  // }
 }
 
 @keyframes fadeIn {

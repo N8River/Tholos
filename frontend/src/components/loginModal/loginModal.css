@@ -1,0 +1,115 @@
+.loginModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1005;
+  background-color: var(--background-color);
+  padding: var(--margin-m);
+  border-radius: 1rem;
+}
+.loginModal .closeLoginModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: var(--margin-m);
+}
+.loginModal .closeLoginModal svg {
+  font-size: var(--fs-big);
+}
+.loginModal .loginModalHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--margin-m);
+}
+.loginModal .loginModalHeader .loginModalUserAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  border: 1px solid var(--grey70);
+  overflow: hidden;
+}
+.loginModal .loginModalHeader .loginModalUserAvatar img {
+  width: 100%;
+  height: auto;
+}
+.loginModal .loginModalHeader big {
+  font-size: var(--fs-big);
+}
+.loginModal .loginModalHeader p {
+  font-size: var(--fs-p);
+}
+.loginModal .loginModalForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--margin-xxs);
+  margin-bottom: var(--margin-xxs);
+}
+.loginModal .loginModalForm input {
+  font-size: var(--fs-p);
+}
+.loginModal .loginModalForm .loginModalFormSubmitBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: var(--margin-s);
+  padding-block: var(--margin-xxs);
+}
+.loginModal .loginModalFooter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--margin-xxs);
+}
+.loginModal .loginModalFooter .peePoo {
+  color: var(--primary-color);
+}
+
+.loginModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1004;
+}
+
+.loginModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8); /* Proper overlay */
+  z-index: 1004;
+}
+
+.loginModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the modal */
+  z-index: 1005;
+  background-color: var(--background-color);
+  padding: var(--margin-m);
+  border-radius: 1rem;
+  max-width: 90%; /* Ensure modal does not exceed screen width */
+  width: 30rem; /* Set a reasonable width for modal */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* For pop-up effect */
+}
+
+.closeLoginModal {
+  position: absolute;
+  right: var(--margin-m);
+  top: var(--margin-m);
+  cursor: pointer;
+}/*# sourceMappingURL=loginModal.css.map */

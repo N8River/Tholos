@@ -8,7 +8,7 @@ router.post("/create", middleware.authMiddleware, postController.createPost);
 
 router.get(
   "/explore",
-  middleware.authMiddleware,
+  middleware.optionalAuthMiddleware,
   postController.fetchPublicPosts
 );
 
@@ -20,7 +20,11 @@ router.get(
 
 router.get("/user-posts/:userName", postController.fetchUserPosts);
 
-router.get("/:postId", postController.fetchPostById);
+router.get(
+  "/:postId",
+  middleware.optionalAuthMiddleware,
+  postController.fetchPostById
+);
 
 router.post(
   "/:postId/like",
@@ -34,11 +38,7 @@ router.post(
   postController.addComment
 );
 
-router.get(
-  "/:postId/comment",
-  middleware.authMiddleware,
-  postController.fetchComments
-);
+router.get("/:postId/comment", postController.fetchComments);
 
 router.delete(
   "/:postId/delete",

@@ -1,4 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+  useRouteError,
+  useRouteLoaderData,
+} from "react-router-dom";
 import useUserInfo from "../../hooks/useUserInfo";
 import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -14,16 +18,8 @@ function HeaderSidebarSwitch() {
   const username = decodedToken ? decodedToken.userName : null;
 
   const isLoggedIn = !!username;
-  // console.log(isLoggedIn);
 
-  const userInfo = useUserInfo(username);
-  const [user, setUser] = useState(userInfo || {});
-
-  useEffect(() => {
-    if (userInfo) {
-      setUser(userInfo);
-    }
-  }, [userInfo]);
+  const { user, error, loading } = useUserInfo(username);
 
   return <>{isLoggedIn ? <SideBar user={user} /> : <Header />}</>;
 }

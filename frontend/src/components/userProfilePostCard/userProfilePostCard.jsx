@@ -1,15 +1,23 @@
 import "./userProfilePostCard.css";
 import { useNavigate } from "react-router-dom";
 import { RxDotsVertical } from "react-icons/rx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 import EditPost from "../editPost/editPost";
+import { jwtDecode } from "jwt-decode";
+import LoginModal from "../loginModal/loginModal";
 
 const token = localStorage.getItem("token");
-const headers = {
-  ...JSON_HEADERS,
-  ...AUTH_HEADER(token),
-};
+const headers = token
+  ? {
+      ...JSON_HEADERS,
+      ...AUTH_HEADER(token),
+    }
+  : {
+      ...JSON_HEADERS,
+    };
+
+const decodedToken = token && jwtDecode(token);
 
 function UserProfilePostCard({ post }) {
   const navigate = useNavigate();
@@ -18,6 +26,22 @@ function UserProfilePostCard({ post }) {
     useState(false);
   const [postEditVisible, setPostEditVisible] = useState(false);
   const [updatedPostContent, setUpdatedPostContent] = useState(post.content); // New state for post content
+  const [isOwner, setIsOwner] = useState(false);
+  const [showPostModal, setShowPostModal] = useState(false);
+
+  useEffect(() => {
+    if (token) {
+      try {
+        if (decodedToken.userName === post.user.userName) {
+          setIsOwner(true);
+        } else {
+          setIsOwner(false);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
 
   const handlePostOptionsVisibility = () => {
     setPostOptionsVisible(true);
@@ -86,37 +110,54 @@ function UserProfilePostCard({ post }) {
         <div className="userProfilePostCardImgWrapper">
           <img src={post.images[0]} alt={post.content} />
         </div>
-        <div
-          className="userPostOptionsBtn"
-          onClick={() => {
-            handlePostOptionsVisibility();
-          }}
-        >
-          <RxDotsVertical />
-        </div>
-        <div
-          className={`userPostOptionsDropdown ${
-            postOptionsVisible ? "show" : ""
-          }`}
-        >
-          <div className="editPostBtn" onClick={handleEditPostVisibility}>
-            Edit Post
-          </div>
+        {isOwner ? (
+          <>
+            <div
+              className="userPostOptionsBtn"
+              onClick={() => {
+                handlePostOptionsVisibility();
+              }}
+            >
+              <RxDotsVertical />
+            </div>
+            <div
+              className={`userPostOptionsDropdown ${
+                postOptionsVisible ? "show" : ""
+              }`}
+            >
+              <div className="editPostBtn" onClick={handleEditPostVisibility}>
+                Edit Post
+              </div>
+              <div
+                className="deletePostBtn"
+                onClick={handlePostDeleteConfirmationVisibility}
+              >
+                Delete Post
+              </div>
+            </div>
+            <div
+              className="viewPostBtn"
+              onClick={() => {
+                navigate(`/${post.user.userName}/p/${post._id}`);
+              }}
+            >
+              VIEW POST
+            </div>
+          </>
+        ) : (
           <div
-            className="deletePostBtn"
-            onClick={handlePostDeleteConfirmationVisibility}
+            className="viewPostBtn"
+            onClick={() => {
+              if (token) {
+                navigate(`/${post.user.userName}/p/${post._id}`);
+              } else {
+                setShowPostModal(true);
+              }
+            }}
           >
-            Delete Post
+            VIEW POST
           </div>
-        </div>
-        <div
-          className="viewPostBtn"
-          onClick={() => {
-            navigate(`/${post.user.userName}/p/${post._id}`);
-          }}
-        >
-          VIEW POST
-        </div>
+        )}
       </div>
 
       <div
@@ -147,6 +188,8 @@ function UserProfilePostCard({ post }) {
         handleEditPost={handleEditPost} // Pass the handler
         handleEditPostVisibility={handleEditPostVisibility}
       />
+
+      {showPostModal && <LoginModal user={post.user} />}
     </>
   );
 }

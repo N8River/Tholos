@@ -7,7 +7,9 @@ function PrivateRoute({ element: Component, ...rest }) {
     return <Navigate to="/login" />;
   }
 
-  return <Component />;
+  // Pass props like params, state, or any additional props
+  const params = useParams();
+  return <Component {...rest} params={params} />;
 }
 
 export default PrivateRoute;

@@ -36,14 +36,23 @@ exports.createPost = async (req, res, next) => {
 
 exports.fetchPublicPosts = async (req, res, next) => {
   try {
-    const loggedInUserId = req.user.userId;
+    const loggedInUserId = req.user ? req.user.userId : null;
 
-    const publicPosts = await Post.find({ user: { $ne: loggedInUserId } })
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const query = loggedInUserId ? { user: { $ne: loggedInUserId } } : {};
+
+    const publicPosts = await Post.find(query)
       .populate({
         path: "user",
         match: { profileVisibility: "Public" },
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip) // Skip documents for pagination
+      .limit(limit); // Limit the number of posts
 
     const filteredPosts = publicPosts.filter((post) => post.user !== null);
 
@@ -60,6 +69,11 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const user = await User.findById(userId).select("following");
 
     // Fetch posts from the people the user follows
@@ -67,7 +81,9 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
       .populate({
         path: "user",
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip) // Skip documents for pagination
+      .limit(limit); // Limit the number of posts
 
     res.status(200).json(posts);
   } catch (error) {
@@ -81,8 +97,13 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
 exports.fetchUserPosts = async (req, res, next) => {
   try {
     const { userName } = req.params;
-    const isOwner = req.query.isOwner === "true" ? true : false;
+    const isOwner = req.query.isOwner === "true";
     const { currentUserId } = req.query;
+
+    // Pagination parameters
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
     const user = await User.findOne({ userName });
 
@@ -90,10 +111,12 @@ exports.fetchUserPosts = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    if (isOwner === true) {
+    if (isOwner) {
       const userPosts = await Post.find({ user: user._id })
         .populate("user", "userName avatar")
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip) // Skip documents for pagination
+        .limit(limit); // Limit the number of posts
 
       return res.status(200).json(userPosts);
     }
@@ -110,7 +133,9 @@ exports.fetchUserPosts = async (req, res, next) => {
 
     const userPosts = await Post.find({ user: user._id })
       .populate("user", "userName avatar")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip) // Skip documents for pagination
+      .limit(limit); // Limit the number of posts
 
     res.status(200).json(userPosts);
   } catch (error) {
@@ -124,6 +149,7 @@ exports.fetchUserPosts = async (req, res, next) => {
 exports.fetchPostById = async (req, res, next) => {
   try {
     const { postId } = req.params;
+    const loggedInUserId = req.user?.userId; // This will be available if the user is authenticated
 
     const post = await Post.findById(postId).populate(
       "user",
@@ -132,6 +158,15 @@ exports.fetchPostById = async (req, res, next) => {
 
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
+    }
+
+    const postOwner = await User.findById(post.user._id);
+    console.log("🔴 postOwner", postOwner);
+    if (postOwner.profileVisibility === "Private") {
+      // If the user is not logged in or not following
+      if (!loggedInUserId || !postOwner.followers.includes(loggedInUserId)) {
+        return res.status(403).json({ message: "This post is private." });
+      }
     }
 
     res.status(200).json(post);

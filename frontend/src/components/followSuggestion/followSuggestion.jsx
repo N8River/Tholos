@@ -3,6 +3,7 @@ import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 import "./followSuggestion.css";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import Loader from "../loader/loader";
 
 const token = localStorage.getItem("token");
 const decodedToken = token ? jwtDecode(token) : null;
@@ -16,6 +17,7 @@ function FollowSuggestion() {
   const [followSuggestions, setFollowSuggestions] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [isVisible, setVisible] = useState(!!token);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -45,7 +47,8 @@ function FollowSuggestion() {
   };
 
   useEffect(() => {
-    const fetchSuggestions = async () => {
+    const fetchSuggestions = async (numberOfSuggestions) => {
+      setIsLoading(true);
       const token = localStorage.getItem("token");
       const headers = {
         ...JSON_HEADERS,
@@ -54,7 +57,7 @@ function FollowSuggestion() {
 
       try {
         const response = await fetch(
-          `${BACKEND_URL}/api/user/follow-suggestions`,
+          `${BACKEND_URL}/api/user/follow-suggestions?numberOfSuggestions=${numberOfSuggestions}`,
           {
             method: "GET",
             headers: headers,
@@ -69,10 +72,12 @@ function FollowSuggestion() {
         setFollowSuggestions(data.suggestions);
       } catch (error) {
         console.error("Error fetching follow suggestions:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchSuggestions();
+    fetchSuggestions(5);
   }, []);
 
   return (
@@ -80,32 +85,36 @@ function FollowSuggestion() {
       {isVisible ? (
         <div className="followSuggestion">
           <p>Suggested for you</p>
-          <div className="followSuggestions">
-            {followSuggestions.map((user) => (
-              <div className="followSuggestionUser" key={user._id}>
-                <div
-                  className="followSuggestionUserAvatar"
-                  onClick={() => {
-                    navigate(`/${user.userName}`);
-                  }}
-                >
-                  <img src={user.avatar} alt={user.userName} />
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <div className="followSuggestions">
+              {followSuggestions.map((user) => (
+                <div className="followSuggestionUser" key={user._id}>
+                  <div
+                    className="followSuggestionUserAvatar"
+                    onClick={() => {
+                      navigate(`/${user.userName}`);
+                    }}
+                  >
+                    <img src={user.avatar} alt={user.userName} />
+                  </div>
+                  <div
+                    className="followSuggestionUserName"
+                    onClick={() => {
+                      navigate(`/${user.userName}`);
+                    }}
+                  >
+                    <p>{user.userName}</p>
+                    <p className="grey">{user.fullName}</p>
+                  </div>
+                  <div className="followSuggestionBtn">
+                    <button>Follow</button>
+                  </div>
                 </div>
-                <div
-                  className="followSuggestionUserName"
-                  onClick={() => {
-                    navigate(`/${user.userName}`);
-                  }}
-                >
-                  <p>{user.userName}</p>
-                  <p className="grey">{user.fullName}</p>
-                </div>
-                <div className="followSuggestionBtn">
-                  <button>Follow</button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       ) : (
         ""

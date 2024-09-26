@@ -2,50 +2,38 @@ import { useEffect, useState } from "react";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 import PostCard from "../postCard/postCard";
 import PostModal from "../postModal/postModal";
+import LoginModal from "../loginModal/loginModal";
 
 import "./feed.css";
 
-function Feed({ posts }) {
-  // const [posts, setPosts] = useState();
-  const [selectedPost, setSelectedPost] = useState(null);
+function Feed({ posts, loadMorePosts }) {
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const token = localStorage.getItem("token");
 
-  // const token = localStorage.getItem("token");
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 1
+    ) {
+      if (!token && !showLoginModal) {
+        setShowLoginModal(true);
+        document.body.style.overflow = "hidden"; // Disable scrolling when modal is shown
+        return; // Stop further execution for anonymous users
+      }
 
-  // const headers = {
-  //   ...JSON_HEADERS,
-  //   ...AUTH_HEADER(token),
-  // };
-
-  // useEffect(() => {
-  //   const fetchPosts = async () => {
-  //     try {
-  //       const response = await fetch(`${BACKEND_URL}/api/post/discover`, {
-  //         method: "GET",
-  //         headers: headers,
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch posts");
-  //       }
-
-  //       const responseData = await response.json();
-  //       console.log(responseData);
-  //       setPosts(responseData);
-  //     } catch (error) {
-  //       console.log("Error fetching posts:", error);
-  //     }
-  //   };
-
-  //   fetchPosts();
-  // }, []);
-
-  const handleOpenModal = (post) => {
-    setSelectedPost(post); // Set the selected post for the modal
+      // If the user is logged in, continue loading more posts
+      if (token) {
+        loadMorePosts();
+      }
+    }
   };
 
-  const handleCloseModal = () => {
-    setSelectedPost(null); // Close the modal by resetting the selected post
-  };
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [showLoginModal]);
 
   return (
     <>
@@ -53,24 +41,12 @@ function Feed({ posts }) {
         <div className="postList">
           {posts &&
             posts.map((post, index) => {
-              return (
-                <PostCard
-                  post={post}
-                  key={post._id}
-                  onCommentClick={handleOpenModal}
-                />
-              );
+              return <PostCard post={post} key={post._id} />;
             })}
         </div>
       </div>
 
-      {selectedPost && (
-        <PostModal
-          post={selectedPost}
-          isOpen={!!selectedPost}
-          onClose={handleCloseModal}
-        />
-      )}
+      {showLoginModal && <LoginModal />}
     </>
   );
 }

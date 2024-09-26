@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AUTH_HEADER, JSON_HEADERS, BACKEND_URL } from "../../config/config";
 import { jwtDecode } from "jwt-decode";
 import { RiChatNewFill } from "react-icons/ri";
+import Loader from "../../components/loader/loader";
 
 const formatTimestamp = (timestamp) => {
   const now = new Date();
@@ -48,24 +49,33 @@ const formatTimestamp = (timestamp) => {
 };
 
 function MessagesPage() {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [conversations, setConversations] = useState([]);
   const [following, setFollowing] = useState([]);
   const navigate = useNavigate();
-
-  // const openModal = () => setIsModalOpen(true);
-  // const closeModal = () => setIsModalOpen(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingFollowing, setIsLoadingFollowing] = useState(false);
 
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
-  const userId = decodedToken.userId;
-  const headers = {
-    ...JSON_HEADERS,
-    ...AUTH_HEADER(token),
-  };
+  const decodedToken = token && jwtDecode(token);
+  const userId = token && decodedToken.userId;
+  const headers = token
+    ? {
+        ...JSON_HEADERS,
+        ...AUTH_HEADER(token),
+      }
+    : {
+        JSON_HEADERS,
+      };
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/explore");
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const fetchConversations = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch(
           `${BACKEND_URL}/api/conversation/conversations`,
@@ -83,10 +93,13 @@ function MessagesPage() {
         setConversations(responseData);
       } catch (error) {
         console.log("Error fetching conversations:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     const fetchFollowing = async () => {
+      setIsLoadingFollowing(true);
       try {
         const response = await fetch(`${BACKEND_URL}/api/user/following`, {
           method: "GET",
@@ -101,6 +114,8 @@ function MessagesPage() {
         setFollowing(responseData.following);
       } catch (error) {
         console.log("Error fetching following users:", error);
+      } finally {
+        setIsLoadingFollowing(false);
       }
     };
 
@@ -166,83 +181,84 @@ function MessagesPage() {
       <div className="messagesPage">
         <div className="messagesPageHeader">
           <h2>Your Conversations</h2>
-          {/* <button className="btn" onClick={openModal}>
-            Start New Chat
-            <RiChatNewFill />
-          </button> */}
         </div>
-
-        {/* Modal to start a chat */}
-        {/* {isModalOpen && <StartChatModal onClose={closeModal} />} */}
 
         {/* Render list of conversations here */}
-        <div className="conversationsList">
-          {conversations.length > 0 ? (
-            conversations.map((conversation) => {
-              const otherParticipant = conversation.participants.find(
-                (participant) => participant._id !== userId
-              );
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="conversationsList">
+            {conversations.length > 0 ? (
+              conversations.map((conversation) => {
+                const otherParticipant = conversation.participants.find(
+                  (participant) => participant._id !== userId
+                );
 
-              const lastMessage = conversation.lastMessage || "";
-              const lastMessageTimestamp = conversation.lastMessageTimestamp
-                ? formatTimestamp(conversation.lastMessageTimestamp)
-                : "";
+                const lastMessage = conversation.lastMessage || "";
+                const lastMessageTimestamp = conversation.lastMessageTimestamp
+                  ? formatTimestamp(conversation.lastMessageTimestamp)
+                  : "";
 
-              // console.log("🔴 Conversation", conversation);
+                // console.log("🔴 Conversation", conversation);
 
-              return (
-                <div
-                  key={conversation._id}
-                  className="conversationItem"
-                  onClick={() =>
-                    handleConversationClick(
-                      conversation._id,
-                      otherParticipant._id
-                    )
-                  }
-                >
-                  <div className="conversationUserImgWrapper">
-                    <img src={otherParticipant.avatar} alt="avatar" />
-                  </div>
-                  <div className="conversationInfo">
-                    <div className="conversationUserInfo">
-                      <h4>{otherParticipant.userName}</h4>
-                      <p className="lastMessage">{lastMessage}</p>
+                return (
+                  <div
+                    key={conversation._id}
+                    className="conversationItem"
+                    onClick={() =>
+                      handleConversationClick(
+                        conversation._id,
+                        otherParticipant._id
+                      )
+                    }
+                  >
+                    <div className="conversationUserImgWrapper">
+                      <img src={otherParticipant.avatar} alt="avatar" />
                     </div>
-                    <div className="conversationTimestamp">
-                      <small className="lastMessageTimestamp">
-                        {lastMessageTimestamp}
-                      </small>
+                    <div className="conversationInfo">
+                      <div className="conversationUserInfo">
+                        <h4>{otherParticipant.userName}</h4>
+                        <p className="lastMessage">{lastMessage}</p>
+                      </div>
+                      <div className="conversationTimestamp">
+                        <small className="lastMessageTimestamp">
+                          {lastMessageTimestamp}
+                        </small>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })
-          ) : (
-            <p>No conversations yet.</p>
-          )}
-        </div>
+                );
+              })
+            ) : (
+              <p>No conversations yet.</p>
+            )}
+          </div>
+        )}
 
         <div className="newConversationTab">
           <big>Start new conversation</big>
-          <div className="newConversationList">
-            {newConversationUsers.length > 0
-              ? newConversationUsers.map((user) => (
-                  <div
-                    key={user._id}
-                    className="newConversationUser"
-                    onClick={() => handleStartConversation(user._id)}
-                  >
-                    <div className="newConversationUserAvatar">
-                      <img src={user.avatar} alt="" />
+          {isLoadingFollowing ? (
+            <Loader />
+          ) : (
+            <div className="newConversationList">
+              {newConversationUsers.length > 0
+                ? newConversationUsers.map((user) => (
+                    <div
+                      key={user._id}
+                      className="newConversationUser"
+                      onClick={() => handleStartConversation(user._id)}
+                    >
+                      <div className="newConversationUserAvatar">
+                        <img src={user.avatar} alt="" />
+                      </div>
+                      <div className="newConversationUserName">
+                        <p>{user.userName}</p>
+                      </div>
                     </div>
-                    <div className="newConversationUserName">
-                      <p>{user.userName}</p>
-                    </div>
-                  </div>
-                ))
-              : "Follow some people to start a conversation with them!"}
-          </div>
+                  ))
+                : "Follow some people to start a conversation with them!"}
+            </div>
+          )}
         </div>
       </div>
     </>

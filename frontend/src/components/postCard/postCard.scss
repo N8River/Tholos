@@ -52,7 +52,7 @@
         overflow: hidden;
 
         border-radius: 50%;
-        border: 1px solid transparent;
+        border: 1px solid var(--grey50);
 
         transition: var(--transition-in);
 
@@ -92,19 +92,45 @@
     align-items: center;
 
     margin-bottom: var(--margin-xs);
+    background-color: var(--background-color);
+
+    .carousel-root {
+      width: 100%;
+
+      .slide.selected {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .slide.previous {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
 
     .postImagesWrapper {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+
       display: flex;
       justify-content: center;
       align-items: center;
 
-      max-height: 35rem;
-      width: 100%;
-      overflow: hidden;
+      // border: 1px solid red; /* Debugging */
 
       img {
-        // max-height: 35vw;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+        transition: var(--transition-out);
       }
     }
   }

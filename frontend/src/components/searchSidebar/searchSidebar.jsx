@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import SearchResult from "./searchResult/searchResult";
 import { BACKEND_URL } from "../../config/config";
+import Loader from "../loader/loader";
 
 const token = localStorage.getItem("token");
 const decodedToken = token ? jwtDecode(token) : null;
@@ -11,8 +12,11 @@ const decodedToken = token ? jwtDecode(token) : null;
 function SearchSidebar({ isVisible }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({ users: [], posts: [] });
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSearch = async () => {
+    setIsLoading(true);
+
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/search/search?query=${query}&currentUserId=${decodedToken.userId}`
@@ -24,6 +28,8 @@ function SearchSidebar({ isVisible }) {
       console.log(results);
     } catch (error) {
       console.error("Error searching:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,16 +59,21 @@ function SearchSidebar({ isVisible }) {
             />
           </div>
         </div>
-        <div className="searchResultsWrapper">
-          {results.users.length > 0 && <big>Users</big>}
-          {results.users.map((u) => {
-            return <SearchResult user={u} key={u._id} post={null} />;
-          })}
-          {results.posts.length > 0 && <big>Posts</big>}
-          {results.posts.map((p) => {
-            return <SearchResult post={p} key={p._id} user={null} />;
-          })}
-        </div>
+        {/* Show loader while searching */}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <div className="searchResultsWrapper">
+            {results.users.length > 0 && <big>Users</big>}
+            {results.users.map((u) => {
+              return <SearchResult user={u} key={u._id} post={null} />;
+            })}
+            {results.posts.length > 0 && <big>Posts</big>}
+            {results.posts.map((p) => {
+              return <SearchResult post={p} key={p._id} user={null} />;
+            })}
+          </div>
+        )}
       </div>
     </>
   );

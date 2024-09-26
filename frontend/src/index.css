@@ -16,6 +16,15 @@
   --grey90: hsl(0, 0%, 90%);
   --white: hsl(0, 0%, 100%);
   --black: hsl(0, 0%, 0%);
+  --background-color: hsl(0, 0%, 100%);
+  --info-text: hsl(207, 100%, 30%);
+  --info-background: hsl(195, 100%, 87%);
+  --success-text: hsl(103, 100%, 23%);
+  --success-background: hsl(81, 66%, 85%);
+  --warning-text: hsl(36, 100%, 31%);
+  --warning-background: hsl(48, 97%, 85%);
+  --error-text: hsl(357, 100%, 42%);
+  --error-background: hsl(0, 100%, 86%);
   /* Margins */
   --margin-xxs: 0.25rem;
   --margin-xs: 0.5rem;
@@ -49,6 +58,12 @@
 body {
   font-family: var(--ff);
   background-color: var(--white);
+  color: var(--black);
+}
+
+body.dark-mode {
+  background-color: var(--background-color);
+  color: var(--black);
 }
 
 input {
@@ -56,6 +71,60 @@ input {
   padding-inline: var(--margin-xxs);
   border: 1px solid var(--grey50);
   font-size: var(--fs-p);
+}
+
+.dark-mode {
+  --primary-color: hsl(5, 100%, 69%);
+  --accent-color: hsl(210, 30%, 24%);
+  --background-color: hsl(0, 0%, 11%);
+  --grey10: hsl(0, 0%, 90%);
+  --grey30: hsl(0, 0%, 70%);
+  --grey50: hsl(0, 0%, 50%);
+  --grey70: hsl(0, 0%, 30%);
+  --grey90: hsl(0, 0%, 10%);
+  --black: hsl(0, 0%, 100%);
+  --white: hsl(0, 0%, 0%);
+}
+
+.aspect-ratio-1-1 {
+  width: 100%;
+  padding-bottom: 100%; /* 1:1 square */
+  position: relative;
+}
+
+.aspect-ratio-16-9 {
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  position: relative;
+}
+
+.aspect-ratio-4-3 {
+  width: 100%;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+  position: relative;
+}
+
+.aspect-ratio-3-4 {
+  width: 100%;
+  padding-bottom: 133.33%; /* 3:4 portrait */
+  position: relative;
+}
+
+.aspect-ratio-9-16 {
+  width: 100%;
+  padding-bottom: 177.78%; /* 9:16 portrait */
+  position: relative;
+}
+
+.aspect-ratio-container img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 h1 {

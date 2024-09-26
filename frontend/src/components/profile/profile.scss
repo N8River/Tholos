@@ -67,6 +67,10 @@
 
             padding-inline: var(--margin-s);
 
+            body.dark-mode & {
+              background-color: var(--grey70);
+            }
+
             big {
               font-size: var(--fs-p);
               color: var(--black);

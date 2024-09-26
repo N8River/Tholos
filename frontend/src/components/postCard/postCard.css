@@ -34,7 +34,7 @@
   width: 2.5rem;
   overflow: hidden;
   border-radius: 50%;
-  border: 1px solid transparent;
+  border: 1px solid var(--grey50);
   transition: var(--transition-in);
 }
 .postCard .postCardHeader .postUserInfo .postUserAvatar img {
@@ -63,17 +63,39 @@
   justify-content: center;
   align-items: center;
   margin-bottom: var(--margin-xs);
+  background-color: var(--background-color);
 }
-.postCard .postImages .postImagesWrapper {
+.postCard .postImages .carousel-root {
+  width: 100%;
+}
+.postCard .postImages .carousel-root .slide.selected {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-height: 35rem;
+}
+.postCard .postImages .carousel-root .slide.previous {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.postCard .postImages .postImagesWrapper {
   width: 100%;
+  position: relative;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .postCard .postImages .postImagesWrapper img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  transition: var(--transition-out);
 }
 .postCard .postCaption .postUsername {
   font-weight: 600;

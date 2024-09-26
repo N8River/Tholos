@@ -3,9 +3,8 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  flex: 1;
-  flex-grow: 1;
-  max-width: 30%;
+  flex-basis: calc(33.33% - var(--margin-xxs));
+  max-width: calc(33.33% - var(--margin-xxs));
 }
 .userProfilePostCard:hover .userProfilePostCardImgWrapper img {
   filter: brightness(75%);
@@ -20,16 +19,23 @@
   transition: var(--transition-in);
 }
 .userProfilePostCard .userProfilePostCardImgWrapper {
-  height: 20rem;
-  width: 20rem;
+  width: 100%; /* Take full width */
+  padding-bottom: 100%; /* Square aspect ratio */
+  position: relative;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .userProfilePostCard .userProfilePostCardImgWrapper img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   height: 100%;
-  width: auto;
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover; /* Ensures the image covers the entire square without distortion */
   transition: var(--transition-out);
 }
 .userProfilePostCard .viewPostBtn {
@@ -54,7 +60,7 @@
   cursor: pointer;
 }
 .userProfilePostCard .userPostOptionsBtn svg {
-  color: var(--white);
+  color: white;
   font-size: var(--fs-h4);
 }
 .userProfilePostCard .userPostOptionsDropdown {

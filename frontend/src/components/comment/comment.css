@@ -4,6 +4,8 @@
   margin-block: var(--margin-xs);
   margin-inline: var(--margin-xs);
   gap: var(--margin-xs);
+  height: -moz-fit-content;
+  height: fit-content;
 }
 .comment .commentUserAvatar {
   height: 2rem;

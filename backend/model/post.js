@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // Link to the user who created the post
+  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   content: { type: String, required: true },
   images: [{ type: String }], // Array to store multiple image URLs
   video: { type: String },
-  likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who habe liked the post
+  likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who have liked the post
   comments: [
     {
       user: { type: Schema.Types.ObjectId, ref: "User", required: true }, // user who commented
@@ -16,6 +16,8 @@ const postSchema = new Schema({
   ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
+  isMock: { type: Boolean, default: false }, // Temporary Field
+
   // views: { type: Number, default: 0 }, // Count of views (will add later)
 });
 

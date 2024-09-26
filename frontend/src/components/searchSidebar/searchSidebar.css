@@ -1,9 +1,9 @@
 .searchSidebar {
   display: none;
-  position: absolute;
+  position: fixed;
   left: 4.22rem;
   z-index: 1003;
-  background-color: var(--white);
+  background-color: var(--background-color);
   height: 100%;
   box-shadow: 1px 0px 3px var(--grey50);
   transition: var(--transition-out);
@@ -45,6 +45,20 @@
   border: none;
   border-radius: 0.5rem;
   background-color: var(--grey90);
+}
+body.dark-mode .searchSidebar .searchSidebarHeader .searchInput input {
+  background-color: var(--grey70);
+  color: var(--grey10);
+}
+body.dark-mode .searchSidebar .searchSidebarHeader .searchInput input::-moz-placeholder {
+  font-size: var(--fs-p);
+  font-weight: 300;
+  color: var(--grey30);
+}
+body.dark-mode .searchSidebar .searchSidebarHeader .searchInput input::placeholder {
+  font-size: var(--fs-p);
+  font-weight: 300;
+  color: var(--grey30);
 }
 .searchSidebar .searchSidebarHeader .searchInput input::-moz-placeholder {
   font-size: var(--fs-p);

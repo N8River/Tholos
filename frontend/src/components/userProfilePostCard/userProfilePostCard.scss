@@ -5,11 +5,9 @@
 
   position: relative;
 
-  // width: fit-content;
-  flex: 1;
-  flex-grow: 1;
+  flex-basis: calc(33.33% - var(--margin-xxs));
 
-  max-width: 30%;
+  max-width: calc(33.33% - var(--margin-xxs));
 
   &:hover {
     .userProfilePostCardImgWrapper {
@@ -32,17 +30,22 @@
   }
 
   .userProfilePostCardImgWrapper {
-    height: 20rem;
-    width: 20rem;
-
+    width: 100%; /* Take full width */
+    padding-bottom: 100%; /* Square aspect ratio */
+    position: relative;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 
     img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       height: 100%;
-      width: auto;
+      width: 100%;
+      object-fit: cover; /* Ensures the image covers the entire square without distortion */
       transition: var(--transition-out);
     }
   }
@@ -76,7 +79,7 @@
     cursor: pointer;
 
     svg {
-      color: var(--white);
+      color: white;
 
       font-size: var(--fs-h4);
     }

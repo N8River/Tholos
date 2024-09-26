@@ -1,6 +1,6 @@
 import "./EditProfileForm.css";
 import useUserInfo from "../../../../hooks/useUserInfo";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   AUTH_HEADER,
@@ -10,6 +10,7 @@ import {
 
 function EditProfileForm() {
   const { username } = useParams();
+  const navigate = useNavigate();
 
   const userInfo = useUserInfo(username);
   const [user, setUser] = useState({});
@@ -64,6 +65,7 @@ function EditProfileForm() {
 
       const responseData = await response.json();
       console.log("Profile updated successfully:", responseData);
+      navigate(`/${userName}`);
     } catch (error) {
       console.log("Error updating account info:", error);
     }

@@ -3,6 +3,7 @@ import "./createPost.css";
 import { BsImage } from "react-icons/bs";
 import { IoCloseOutline } from "react-icons/io5";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
+import Loader from "../loader/loader";
 
 function CreatePost({ isVisible, handleCreatePostVisibilty }) {
   const [imageUrls, setImageUrls] = useState([""]); // Array to store multiple image URLs
@@ -72,7 +73,13 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? "Sharing..." : "Share"}
+            {loading ? (
+              <>
+                <p>"Sharing..."</p> <Loader />
+              </>
+            ) : (
+              "Share"
+            )}
           </button>
           <p>Create New Post</p>
           <button className="btn close" onClick={handleCreatePostVisibilty}>

@@ -1,5 +1,9 @@
 import { GoHome, GoPlusCircle, GoSearch, GoBell } from "react-icons/go";
-import { MdOutlineMessage } from "react-icons/md";
+import {
+  MdOutlineMessage,
+  MdDarkMode,
+  MdOutlineLightMode,
+} from "react-icons/md";
 import { JSON_HEADERS, AUTH_HEADER, BACKEND_URL } from "../../config/config";
 import io from "socket.io-client";
 
@@ -14,6 +18,7 @@ import NotificationComponent from "../notificationComponent/notificationComponen
 import { jwtDecode } from "jwt-decode";
 import { MdOutlineExplore } from "react-icons/md";
 import SearchSidebar from "../searchSidebar/searchSidebar";
+import { useFeedback } from "../../context/feedbackContext";
 
 const token = localStorage.getItem("token");
 const userId = token ? jwtDecode(token).userId : null;
@@ -22,7 +27,11 @@ const socket = io(BACKEND_URL, {
 });
 
 function SideBar({ user }) {
+  console.log("💀💀💀💀💀", user);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
   const navigate = useNavigate();
+  const { showFeedback } = useFeedback();
 
   const [createPostVisible, setCreatePostVisible] = useState(false);
   const [showNotificationDropdown, setShowNotificationDropdown] =
@@ -47,8 +56,12 @@ function SideBar({ user }) {
     setShowSearchSidebar(!showSearchSidebar);
   };
 
+  const triggerFeedbackAlert = () => {
+    showFeedback("This is a test alert!", "success"); // You can change the message and type
+  };
+
   useEffect(() => {
-    const userId = user._id;
+    const userId = user && user._id;
 
     // Connect to socket with userId
     socket.emit("joinRoom", { userId });
@@ -77,7 +90,24 @@ function SideBar({ user }) {
     return () => {
       socket.off("notification");
     };
-  }, [user._id]); // Include userId as dependency
+  }, [user && user._id]); // Include userId as dependency
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark-mode") {
+      document.body.classList.add("dark-mode");
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    const body = document.body;
+    body.classList.toggle("dark-mode");
+    const isDarkModeEnabled = body.classList.contains("dark-mode");
+    setIsDarkMode(isDarkModeEnabled);
+    const theme = isDarkModeEnabled ? "dark-mode" : "light-mode";
+    localStorage.setItem("theme", theme);
+  };
 
   return (
     <>
@@ -158,15 +188,24 @@ function SideBar({ user }) {
         </div>
 
         <div
-          className="profileBtn sidebarBtn"
+          className="profileBtn sidebarBtn "
           onClick={() => {
-            navigate(`/${user.userName}`);
+            navigate(`/${user && user.userName}`);
           }}
         >
-          <div className="imgWrapper">
-            <img src={user.avatar} alt="" />
+          <div className="imgWrapper ">
+            <img src={user && user.avatar} alt="" />
           </div>
           <big>Profile</big>
+        </div>
+
+        <div className="feedbackBtn sidebarBtn" onClick={triggerFeedbackAlert}>
+          <big>Trigger Feedback</big>
+        </div>
+
+        <div className="darkModeToggle sidebarBtn" onClick={toggleDarkMode}>
+          {isDarkMode ? <MdOutlineLightMode /> : <MdDarkMode />}{" "}
+          <big>{isDarkMode ? "Light Mode" : "Dark Mode"}</big>
         </div>
       </div>
       <SearchSidebar isVisible={showSearchSidebar} />

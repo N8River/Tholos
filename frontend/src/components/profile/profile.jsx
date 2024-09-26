@@ -5,31 +5,43 @@ import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../../config/config";
 import { useEffect, useState } from "react";
 import UserProfilePostCard from "../userProfilePostCard/userProfilePostCard";
 import { jwtDecode } from "jwt-decode";
-import useUserInfo from "../../hooks/useUserInfo";
 
-const token = localStorage.getItem("token");
-const headers = {
-  ...JSON_HEADERS,
-  ...AUTH_HEADER(token),
-};
+import Loader from "../loader/loader";
+import LoginModal from "../loginModal/loginModal";
 
 function Profile({ isOwner, user, handleLogOut }) {
+  console.log("🔴 User", user);
+
+  const token = localStorage.getItem("token");
+  const headers = token
+    ? {
+        ...JSON_HEADERS,
+        ...AUTH_HEADER(token),
+      }
+    : {
+        ...JSON_HEADERS,
+      };
+
   const navigate = useNavigate();
 
   const [userPosts, setUserPosts] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
-  const [currentUser, setCurrentUser] = useState(user);
   const [followRequestPending, setFollowRequestPending] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFollowingLoading, setIsFollowingLoading] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false); // Modal state
 
-  const decodedToken = jwtDecode(token);
-  console.log("🔴 decodedToken", decodedToken);
+  const decodedToken = token && jwtDecode(token);
+  // console.log("🔴 decodedToken", decodedToken);
 
-  const loggedInUserId = decodedToken.userId;
+  const loggedInUserId = token && decodedToken.userId;
   const [profilePrivateError, setProfilePrivateError] = useState(false); // State for handling private profile error
 
   useEffect(() => {
-    if (user.userName) {
+    if (user && user.userName) {
       const fetchUserPosts = async () => {
+        setIsLoading(true);
+
         try {
           const response = await fetch(
             `${BACKEND_URL}/api/post/user-posts/${user.userName}?isOwner=${isOwner}&currentUserId=${loggedInUserId}`,
@@ -55,10 +67,19 @@ function Profile({ isOwner, user, handleLogOut }) {
           setProfilePrivateError(false); // Reset if posts are fetched successfully
         } catch (error) {
           console.log("Error fetching user's post:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
       const checkFollowStatus = async () => {
+        if (!token) {
+          setIsFollowing(false);
+          setIsFollowingLoading(false);
+          return;
+        }
+        setIsFollowingLoading(true);
+
         try {
           const response = await fetch(
             `${BACKEND_URL}/api/user/${user._id}/is-following`,
@@ -76,17 +97,29 @@ function Profile({ isOwner, user, handleLogOut }) {
           setFollowRequestPending(followRequestPending);
         } catch (error) {
           console.log("Error checking follow status:", error);
+        } finally {
+          setIsFollowingLoading(false);
         }
       };
 
       fetchUserPosts();
       checkFollowStatus();
     }
-  }, [user.userName]);
+  }, [user, token, isOwner, loggedInUserId]);
 
-  console.log("🧑🏽‍🦱 USER", user);
+  // Check if user data is still loading
+  if (!user || !user.userName) {
+    return <Loader />; // Display a loader while user data is being fetched
+  }
+
+  // console.log("🧑🏽‍🦱 USER", user);
 
   const handleFollow = async () => {
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/user/${user._id}/follow`,
@@ -141,80 +174,106 @@ function Profile({ isOwner, user, handleLogOut }) {
     }
   };
 
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 1
+    ) {
+      if (!token && !loginModalShown) {
+        setShowLoginModal(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="profile">
-      <div className="profileInfo">
-        <div className="profileDetails">
-          <div className="profilePic">
-            <img src={user.avatar} alt="" />{" "}
-          </div>
-          <div className="profileDesc">
-            <div className="profileDescHeader">
-              <h4>{user.userName}</h4>
+    <>
+      <div className="profile">
+        <div className="profileInfo">
+          <div className="profileDetails">
+            <div className="profilePic">
+              <img src={user.avatar} alt="" />{" "}
+            </div>
+            <div className="profileDesc">
+              <div className="profileDescHeader">
+                <h4>{user.userName}</h4>
 
-              <button
-                className="btn"
-                onClick={() => {
-                  if (isOwner) {
-                    navigate(`/${user.userName}/edit`);
-                  } else {
-                    if (isFollowing) {
-                      handleUnfollow();
-                    } else if (followRequestPending) {
-                      // Do nothing, or show a message
-                      console.log("Follow request already sent");
-                    } else {
-                      handleFollow();
-                    }
-                  }
-                }}
-              >
-                {isOwner ? (
-                  <big>EDIT PROFILE</big>
-                ) : isFollowing ? (
-                  <big>UNFOLLOW</big>
-                ) : followRequestPending ? (
-                  <big>REQUESTED</big>
+                {isFollowingLoading ? (
+                  <Loader />
                 ) : (
-                  <big>FOLLOW</big>
+                  <button
+                    className="btn"
+                    onClick={() => {
+                      if (isOwner) {
+                        navigate(`/${user.userName}/edit`);
+                      } else {
+                        if (isFollowing) {
+                          handleUnfollow();
+                        } else if (followRequestPending) {
+                          console.log("Follow request already sent");
+                        } else {
+                          handleFollow();
+                        }
+                      }
+                    }}
+                  >
+                    {isOwner ? (
+                      <big>EDIT PROFILE</big>
+                    ) : isFollowing ? (
+                      <big>UNFOLLOW</big>
+                    ) : followRequestPending ? (
+                      <big>REQUESTED</big>
+                    ) : (
+                      <big>FOLLOW</big>
+                    )}
+                  </button>
                 )}
-              </button>
 
-              {isOwner ? (
-                <button className="btn" onClick={handleLogOut}>
-                  <IoIosSettings />
-                </button>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="profileDescSubHeader">
-              <p>Followers: {user.followers ? user.followers.length : 0}</p>
-              <p>Following: {user.following ? user.following.length : 0}</p>
-            </div>
+                {isOwner ? (
+                  <button className="btn" onClick={handleLogOut}>
+                    <IoIosSettings />
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="profileDescSubHeader">
+                <p>Followers: {user.followers ? user.followers.length : 0}</p>
+                <p>Following: {user.following ? user.following.length : 0}</p>
+              </div>
 
-            <div className="profileDescBio">
-              <big>{user.fullName}</big>
-              <p>{user.bio}</p>{" "}
+              <div className="profileDescBio">
+                <big>{user.fullName}</big>
+                <p>{user.bio}</p>{" "}
+              </div>
             </div>
           </div>
+          <div className="profileHighlights"></div>
         </div>
-        <div className="profileHighlights"></div>
+        <div className="profilePosts">
+          {isLoading ? (
+            <Loader />
+          ) : profilePrivateError ? (
+            <p className="privateErrorMessage">
+              This account is private. Follow to see the posts.
+            </p>
+          ) : (
+            userPosts &&
+            userPosts.map((post) => (
+              <UserProfilePostCard post={post} key={post._id} />
+            ))
+          )}
+        </div>
       </div>
-      <div className="profilePosts">
-        {/* Check if the profile is private and not following */}
-        {profilePrivateError ? (
-          <p className="privateErrorMessage">
-            This account is private. Follow to see the posts.
-          </p>
-        ) : (
-          userPosts &&
-          userPosts.map((post) => {
-            return <UserProfilePostCard post={post} key={post._id} />;
-          })
-        )}
-      </div>
-    </div>
+
+      {showLoginModal && <LoginModal user={user} />}
+    </>
   );
 }
 

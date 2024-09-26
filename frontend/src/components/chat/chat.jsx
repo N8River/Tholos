@@ -5,6 +5,7 @@ import "./chat.css";
 import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../../config/config";
 import { jwtDecode } from "jwt-decode";
 import { useRef } from "react";
+import Loader from "../loader/loader";
 
 const socket = io(BACKEND_URL);
 
@@ -16,8 +17,9 @@ function Chat() {
   const [isTyping, setIsTyping] = useState(false);
   const [typingUser, setTypingUser] = useState(""); // Tracking who is typing
   const token = localStorage.getItem("token");
-  const userId = jwtDecode(token).userId;
-  console.log(userId);
+  const userId = token && jwtDecode(token).userId;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const headers = {
     ...JSON_HEADERS,
@@ -35,6 +37,7 @@ function Chat() {
 
   useEffect(() => {
     const fetchConversationAndMessages = async () => {
+      setIsLoading(true);
       try {
         // Fetch the conversationId
         const conversationResponse = await fetch(
@@ -58,6 +61,8 @@ function Chat() {
         setMessages(messageData);
       } catch (error) {
         console.log("Error fetching conversation/messages:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -120,19 +125,23 @@ function Chat() {
 
   return (
     <div className="chatContainer">
-      <div className="chatMessages">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${
-              msg.sender._id === userId ? "sent" : "received"
-            } ${msg.read ? "read" : "unread"}`} // Use "sent" for current user, "received" for other user
-          >
-            {console.log(msg)}
-            {msg.text}
-          </div>
-        ))}
-      </div>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="chatMessages">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${
+                msg.sender._id === userId ? "sent" : "received"
+              } ${msg.read ? "read" : "unread"}`} // Use "sent" for current user, "received" for other user
+            >
+              {console.log(msg)}
+              {msg.text}
+            </div>
+          ))}
+        </div>
+      )}
 
       {typingUser && <div className="typingIndicator">{typingUser}</div>}
 
