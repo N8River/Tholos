@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./loginForm.css";
+import "./LoginForm.css";
 import { BACKEND_URL, JSON_HEADERS } from "../../../config/config";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaGooglePlay, FaApple } from "react-icons/fa";
