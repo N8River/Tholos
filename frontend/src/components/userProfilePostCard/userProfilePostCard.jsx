@@ -6,21 +6,32 @@ import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 import EditPost from "../editPost/editPost";
 import { jwtDecode } from "jwt-decode";
 import LoginModal from "../loginModal/loginModal";
+import { MdDelete } from "react-icons/md";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
-const token = localStorage.getItem("token");
-const headers = token
-  ? {
-      ...JSON_HEADERS,
-      ...AUTH_HEADER(token),
-    }
-  : {
-      ...JSON_HEADERS,
-    };
-
-const decodedToken = token && jwtDecode(token);
-
-function UserProfilePostCard({ post }) {
+function UserProfilePostCard({ post, onDelete }) {
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
+
+  const { isValid, loading: tokenLoading } = useTokenValidation(token);
+
+  useEffect(() => {
+    if (token && !isValid && !tokenLoading) {
+      navigate("/explore");
+      localStorage.removeItem("token");
+    }
+  }, [navigate, isValid, tokenLoading]);
+
+  const headers = token
+    ? {
+        ...JSON_HEADERS,
+        ...AUTH_HEADER(token),
+      }
+    : {
+        ...JSON_HEADERS,
+      };
+
   const [postOptionsVisible, setPostOptionsVisible] = useState(false);
   const [postDeleteConfirmationVisible, setPostDeleteConfirmationVisible] =
     useState(false);
@@ -32,7 +43,7 @@ function UserProfilePostCard({ post }) {
   useEffect(() => {
     if (token) {
       try {
-        if (decodedToken.userName === post.user.userName) {
+        if (jwtDecode(token).userName === post.user.userName) {
           setIsOwner(true);
         } else {
           setIsOwner(false);
@@ -48,7 +59,7 @@ function UserProfilePostCard({ post }) {
 
     setTimeout(() => {
       setPostOptionsVisible(false);
-    }, 5000);
+    }, 100000);
   };
 
   const handlePostDeleteConfirmationVisibility = () => {
@@ -71,6 +82,7 @@ function UserProfilePostCard({ post }) {
 
       if (response.ok) {
         // Handle UI update after deletion, e.g., remove the post from the list
+        onDelete(post._id);
         alert("Post deleted successfully");
         handlePostDeleteConfirmationVisibility();
       } else {
@@ -125,13 +137,11 @@ function UserProfilePostCard({ post }) {
                 postOptionsVisible ? "show" : ""
               }`}
             >
-              <div className="editPostBtn" onClick={handleEditPostVisibility}>
-                Edit Post
-              </div>
               <div
                 className="deletePostBtn"
                 onClick={handlePostDeleteConfirmationVisibility}
               >
+                <MdDelete />
                 Delete Post
               </div>
             </div>
@@ -160,25 +170,29 @@ function UserProfilePostCard({ post }) {
         )}
       </div>
 
-      <div
-        className={`deletePostConfirmation ${
-          postDeleteConfirmationVisible ? "show" : ""
-        }`}
-      >
-        <p>Are you sure you want to delete this post?</p>
-        <div className="deletePostBtns">
-          <button onClick={handleDeletePost}>Delete</button>
-          <button onClick={handlePostDeleteConfirmationVisibility}>
-            Go back
-          </button>
-        </div>
-      </div>
-      <div
-        onClick={handlePostDeleteConfirmationVisibility}
-        className={`postDeleteOverlay ${
-          postDeleteConfirmationVisible ? "show" : ""
-        }`}
-      ></div>
+      {postDeleteConfirmationVisible && (
+        <>
+          <div
+            className={`deletePostConfirmation ${
+              postDeleteConfirmationVisible ? "show" : ""
+            }`}
+          >
+            <p>Are you sure you want to delete this post?</p>
+            <div className="deletePostBtns">
+              <button onClick={handleDeletePost}>Delete</button>
+              <button onClick={handlePostDeleteConfirmationVisibility}>
+                Go back
+              </button>
+            </div>
+          </div>
+          <div
+            onClick={handlePostDeleteConfirmationVisibility}
+            className={`postDeleteOverlay ${
+              postDeleteConfirmationVisible ? "show" : ""
+            }`}
+          ></div>
+        </>
+      )}
 
       <EditPost
         isVisible={postEditVisible}

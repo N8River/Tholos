@@ -1,13 +1,115 @@
 .notificationMessage {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  flex-direction: row;
+  // justify-content: center;
+  // align-items: center;
 
   width: 100%;
 
-  p {
-    font-size: var(--fs-p);
+  cursor: pointer;
+
+  padding-block: var(--margin-s);
+  // padding-inline: var(--margin-xs);
+
+  border-radius: 0.75rem;
+  transition: var(--transition-out);
+
+  // &:hover {
+  //   background-color: var(--grey90);
+  //   transition: var(--transition-in);
+  // }
+
+  &:hover {
+    .notificationUser {
+      .notificationUserAvatar {
+        border: 1px solid var(--grey10);
+        transition: var(--transition-in);
+      }
+    }
+  }
+
+  body.dark-mode & {
+    &:hover {
+      background-color: var(--grey70);
+      transition: var(--transition-in);
+    }
+  }
+
+  .notificationUser {
+    display: flex;
+    align-items: center;
+
+    width: fit-content;
+
+    margin-right: var(--margin-xs);
+
+    .notificationUserAvatar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 2.5rem;
+      width: 2.5rem;
+
+      aspect-ratio: 1 /1;
+      overflow: hidden;
+
+      border-radius: 50%;
+      border: 1px solid var(--grey50);
+
+      img {
+        height: 100%;
+        width: auto;
+      }
+    }
+  }
+
+  .notificationMessageText {
+    display: flex;
+    margin-right: var(--margin-xs);
+
+    p {
+      // display: flex;
+      // justify-content: center;
+      // align-items: center;
+      font-size: var(--fs-small-ui);
+      color: var(--grey30);
+      text-overflow: ellipsis;
+
+      strong {
+        color: var(--black);
+      }
+    }
+  }
+
+  .notiActionBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: fit-content;
+
+    background-color: var(--primary-color);
+    padding-inline: var(--margin-xs);
+    padding-block: var(--margin-xxs);
+
+    color: var(--background-color);
+
+    font-weight: 600;
+
+    font-size: var(--fs-small-ui);
+
+    text-wrap: wrap;
+
+    margin-block: auto;
+    min-width: 6rem;
+
+    transition: var(--transition-out);
+    border-radius: 0.33rem;
+
+    &:hover {
+      background-color: var(--black);
+      transition: var(--transition-in);
+    }
   }
 
   button {
@@ -21,24 +123,38 @@
     border-radius: 0.5rem;
 
     cursor: pointer;
-
-    &:hover {
-    }
   }
 
   .followRequestButtons {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: var(--margin-s);
 
     .approveRequestBtn {
       display: flex;
       justify-content: center;
       align-items: center;
 
-      border: 1px solid var(--primary-color);
-      padding-inline: var(--margin-xxs);
+      height: fit-content;
 
-      font-weight: 400;
+      background-color: var(--primary-color);
+      padding-inline: var(--margin-xs);
+      padding-block: var(--margin-xxs);
+
+      color: var(--background-color);
+
+      font-weight: 600;
+
+      font-size: var(--fs-small-ui);
+      border-radius: 0.33rem;
+      transition: var(--transition-out);
+
+      &:hover {
+        background-color: var(--black);
+        transition: var(--transition-in);
+      }
     }
 
     .rejectRequestBtn {
@@ -46,9 +162,54 @@
       justify-content: center;
       align-items: center;
 
-      color: var(--accent-color);
+      height: fit-content;
 
-      font-weight: 400;
+      color: var(--black);
+
+      padding-inline: var(--margin-xs);
+      padding-block: var(--margin-xxs);
+
+      background-color: var(--grey90);
+
+      font-weight: 600;
+
+      font-size: var(--fs-small-ui);
+      border-radius: 0.33rem;
+
+      transition: var(--transition-out);
+
+      &:hover {
+        background-color: var(--grey70);
+        transition: var(--transition-in);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .notificationMessage {
+    padding-block: var(--margin-xs);
+
+    .notificationUser {
+      .notificationUserAvatar {
+        height: 3rem;
+        min-width: 3rem;
+        max-width: 3rem;
+      }
+    }
+
+    .notificationMessageText {
+      align-items: center;
+
+      p {
+        strong {
+          margin-right: var(--margin-xxs);
+        }
+      }
+    }
+
+    .notiActionBtn {
+      margin-left: auto;
     }
   }
 }

@@ -3,21 +3,23 @@ const JWT = require("jsonwebtoken");
 exports.authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
-  if (!token) return res.status(401).json({ message: "Access Denied" });
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized: Token missing" });
+  }
 
   try {
     const decodedToken = JWT.verify(token, process.env.JWT_SECRET);
-    // console.log("🔴", decodedToken);
-
-    req.user = decodedToken;
-
+    req.user = decodedToken; // Attach decoded token to the request object
     next();
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to authorize", error: error.message });
+    if (error.name === "TokenExpiredError") {
+      res.status(401).json({ message: "Unauthorized: Token expired" });
+    } else {
+      res.status(401).json({ message: "Unauthorized: Invalid token" });
+    }
   }
 };
+
 
 exports.optionalAuthMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];

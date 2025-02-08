@@ -9,10 +9,24 @@
 
   max-width: calc(33.33% - var(--margin-xxs));
 
+  body.dark-mode & {
+    &:hover {
+      .userProfilePostCardImgWrapper {
+        img {
+          filter: brightness(65%) saturate(90%) blur(0.5px);
+        }
+      }
+    }
+
+    .viewPostBtn {
+      background-color: var(--white);
+    }
+  }
+
   &:hover {
     .userProfilePostCardImgWrapper {
       img {
-        filter: brightness(75%);
+        filter: brightness(75%) saturate(90%) blur(0.5px);
 
         transition: var(--transition-in);
       }
@@ -31,22 +45,28 @@
 
   .userProfilePostCardImgWrapper {
     width: 100%; /* Take full width */
-    padding-bottom: 100%; /* Square aspect ratio */
-    position: relative;
+    // padding-bottom: 100%; /* Square aspect ratio */
+    // position: relative;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
 
+    aspect-ratio: 1/1;
+
     img {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       height: 100%;
       width: 100%;
-      object-fit: cover; /* Ensures the image covers the entire square without distortion */
-      transition: var(--transition-out);
+      // transform: scale(1.1);
+      object-fit: cover;
+      // position: absolute;
+      // top: 50%;
+      // left: 50%;
+      // transform: translate(-50%, -50%);
+      // height: 100%;
+      // width: 100%;
+      // object-fit: cover; /* Ensures the image covers the entire square without distortion */
+      // transition: var(--transition-out);
     }
   }
 
@@ -54,8 +74,10 @@
     position: absolute;
     background-color: var(--white);
     font-size: var(--fs-p);
-    padding-block: var(--margin-xxs);
-    padding-inline: var(--margin-xs);
+    padding-block: var(--margin-xs);
+    padding-inline: var(--margin-s);
+
+    border-radius: 0.5rem;
     font-weight: 600;
 
     opacity: 0;
@@ -94,9 +116,12 @@
     display: none;
     flex-direction: column;
 
-    border-radius: 0.25rem 0 0.25rem 0.25rem;
+    // border-radius: 0.33rem 0 0.33rem 0.33rem;
+    border-radius: 0.33rem;
     opacity: 0;
     transition: var(--transition-out);
+
+    box-shadow: 0px 0px 5px var(--grey10);
 
     &.show {
       display: flex;
@@ -107,7 +132,8 @@
     .editPostBtn {
       display: flex;
       align-items: center;
-      font-size: var(--fs-small);
+
+      font-size: var(--fs-small-ui);
 
       padding-inline: var(--margin-xs);
       padding-block: var(--margin-xxs);
@@ -126,19 +152,25 @@
     .deletePostBtn {
       display: flex;
       align-items: center;
-      font-size: var(--fs-small);
+      justify-content: center;
+      font-size: var(--fs-small-ui);
 
-      padding-inline: var(--margin-xs);
+      padding-inline: var(--margin-xs) var(--margin-s);
       padding-block: var(--margin-xxs);
 
-      color: red;
+      color: var(--grey10);
 
       cursor: pointer;
       transition: var(--transition-out);
 
+      svg {
+        margin-right: var(--margin-xxs);
+        font-size: var(--fs-p-ui);
+      }
+
       &:hover {
-        background-color: var(--grey90);
         transition: var(--transition-in);
+        color: var(--error-text);
       }
     }
   }
@@ -153,14 +185,48 @@
 
   background-color: var(--white);
 
-  padding-block: var(--margin-s);
-  padding-inline: var(--margin-m);
+  padding-block: var(--margin-m);
+  padding-inline: var(--margin-l);
 
   border-radius: 0.5rem;
   z-index: 1006;
 
-  box-shadow: 0px 0px 5px var(--grey10);
+  box-shadow: 0px 0px 10px var(--grey10);
   display: none;
+  animation: fadeIn 0.25s forwards;
+  opacity: 0;
+
+  body.dark-mode & {
+    box-shadow: 2px 2px 10px var(--white);
+    background-color: var(--grey90);
+
+    p {
+      color: var(--black);
+    }
+
+    .deletePostBtns {
+      button:nth-child(1) {
+        color: var(--error-background);
+        font-weight: 600;
+        transition: var(--transition-out);
+
+        &:hover {
+          background-color: transparent;
+          color: var(--error-text);
+          transition: var(--transition-in);
+        }
+      }
+
+      button:nth-child(2) {
+        font-weight: 400;
+        color: var(--black);
+
+        &:hover {
+          color: var(--black);
+        }
+      }
+    }
+  }
 
   &.show {
     display: flex;
@@ -169,7 +235,7 @@
 
   p {
     display: flex;
-    font-size: var(--fs-p);
+    font-size: var(--fs-small-ui);
   }
 
   .deletePostBtns {
@@ -177,7 +243,7 @@
     justify-content: center;
     gap: var(--margin-l);
 
-    margin-top: var(--margin-xxs);
+    margin-top: var(--margin-xs);
 
     button {
       font-family: var(--ff);
@@ -191,16 +257,23 @@
 
       border-radius: 0.5rem;
 
-      font-size: var(--fs-p);
+      font-size: var(--fs-p-ui);
+      font-weight: 600;
 
       &:hover {
         background-color: var(--grey90);
+        transition: var(--transition-in);
       }
     }
 
     button:nth-child(1) {
       color: red;
       font-weight: 600;
+
+      &:hover {
+        background-color: var(--error-background);
+        transition: var(--transition-in);
+      }
     }
 
     button:nth-child(2) {
@@ -218,11 +291,43 @@
   height: 100vh;
 
   z-index: 1005;
-  background-color: hsla(0, 0%, 10%, 0.5);
+  background-color: hsla(0, 0%, 0%, 0.6);
 
   display: none;
 
+  body.dark-mode & {
+    background-color: hsla(0, 0%, 0%, 0.8);
+  }
+
   &.show {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .userProfilePostCard {
+    flex-basis: calc(50% - var(--margin-xxs));
+
+    max-width: calc(50% - var(--margin-xxs));
+
+    .userPostOptionsBtn {
+      opacity: 1;
+      transition: var(--transition-in);
+    }
+
+    .userPostOptionsBtn {
+      padding: 0;
+      padding-block: var(--margin-xs);
+
+      svg {
+        color: white;
+
+        font-size: clamp(var(--fs-big), 4.5vw, var(--fs-h4));
+      }
+    }
+  }
+
+  .deletePostConfirmation {
+    width: clamp(15rem, 90vw, 22rem);
   }
 }

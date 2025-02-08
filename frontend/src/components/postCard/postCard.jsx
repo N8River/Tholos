@@ -2,6 +2,11 @@ import { RxDotsVertical } from "react-icons/rx";
 import { CiHeart } from "react-icons/ci";
 import { VscComment } from "react-icons/vsc";
 import { PiShareFatLight } from "react-icons/pi";
+import { SlSizeFullscreen } from "react-icons/sl";
+import { RiArrowLeftWideLine, RiArrowRightWideLine } from "react-icons/ri";
+import { LuDot } from "react-icons/lu";
+import { LiaHeart, LiaHeartSolid } from "react-icons/lia";
+// import { LiaHeartSolid } from "react-icons/lia";
 
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -13,15 +18,32 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
-import { getAspectRatioClass } from "../../utils/utils";
+import { getAspectRatioClass, getRelativeTime } from "../../utils/utils";
 import LoginModal from "../loginModal/loginModal";
 import PostModal from "../postModal/postModal";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
 function PostCard({ post }) {
   const navigate = useNavigate();
+  console.log(post);
 
   const token = localStorage.getItem("token");
-  const decodedToken = token && jwtDecode(token);
+
+  const {
+    decodedToken,
+    isValid,
+    loading: tokenLoading,
+  } = useTokenValidation(token);
+
+  useEffect(() => {
+    if (!tokenLoading) {
+      if (!isValid) {
+        localStorage.removeItem("token");
+        navigate("/explore");
+      }
+    }
+  }, [navigate, isValid, decodedToken, tokenLoading]);
 
   const headers = token
     ? {
@@ -32,17 +54,27 @@ function PostCard({ post }) {
         ...JSON_HEADERS,
       };
 
-  const [likes, setLikes] = useState(post.likes.length);
   const [comments, setComments] = useState(post.comments.length);
+
+  const [likes, setLikes] = useState(post.likes.length);
   const [hasLiked, setHasLiked] = useState(
-    token ? post.likes.includes(token.userId) : false
+    post.likes.includes(decodedToken?.userId)
   );
+
+  useEffect(() => {
+    if (!tokenLoading && decodedToken) {
+      setHasLiked(post.likes.includes(decodedToken.userId));
+    }
+  }, [decodedToken, tokenLoading, post.likes]);
+
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
-    checkHasLiked();
-  }, []);
+    if (!tokenLoading && decodedToken) {
+      checkHasLiked();
+    }
+  }, [tokenLoading, decodedToken]);
 
   useEffect(() => {
     if (showLoginModal) {
@@ -59,11 +91,40 @@ function PostCard({ post }) {
     };
   }, [showLoginModal]);
 
+  // const handleToggleLike = async () => {
+  //   if (!token) {
+  //     setShowLoginModal(true);
+  //     console.log("☄️☄️☄️☄️☄️☄️");
+
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${BACKEND_URL}/api/post/${post._id}/like`, {
+  //       method: "POST",
+  //       headers: headers,
+  //       body: JSON.stringify({
+  //         postId: post._id,
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error("Failed to like/dislike the post");
+  //     }
+
+  //     const responseData = await response.json();
+  //     console.log(responseData);
+
+  //     setHasLiked(!hasLiked);
+  //     setLikes(responseData.likes);
+  //   } catch (error) {
+  //     console.log("Error liking/disliking the post:", error);
+  //   }
+  // };
+
   const handleToggleLike = async () => {
     if (!token) {
-      setShowLoginModal(true);
-      console.log("☄️☄️☄️☄️☄️☄️");
-
+      setShowPostModal(true);
       return;
     }
 
@@ -71,18 +132,12 @@ function PostCard({ post }) {
       const response = await fetch(`${BACKEND_URL}/api/post/${post._id}/like`, {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({
-          postId: post._id,
-        }),
+        body: JSON.stringify({ postId: post._id }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to like/dislike the post");
-      }
+      if (!response.ok) throw new Error("Failed to like/dislike the post");
 
       const responseData = await response.json();
-      console.log(responseData);
-
       setHasLiked(!hasLiked);
       setLikes(responseData.likes);
     } catch (error) {
@@ -91,7 +146,13 @@ function PostCard({ post }) {
   };
 
   const checkHasLiked = () => {
-    if (token && post.likes.includes(decodedToken.userId)) {
+    // Ensure decodedToken and token are valid before checking
+    if (
+      !tokenLoading &&
+      token &&
+      decodedToken &&
+      post.likes.includes(decodedToken.userId)
+    ) {
       setHasLiked(true);
     } else {
       setHasLiked(false);
@@ -125,15 +186,53 @@ function PostCard({ post }) {
               <img src={post.user.avatar} alt="" />
             </div>
             <div className="postUserName">{post.user.userName}</div>
+            <LuDot />
+            <small className="postCardTimestamp">
+              {getRelativeTime(post.createdAt)}
+            </small>
           </div>
-          <div className="postMenuBtn">
-            <RxDotsVertical />
+          {/* <div className="postCardTimestamp">
+            <small>{getRelativeTime(post.createdAt)}</small>
+          </div> */}
+          <div
+            className="postMenuBtn"
+            onClick={() => {
+              handleOpenPostModal();
+            }}
+          >
+            <SlSizeFullscreen />
           </div>
         </div>
 
         <div className="postImages">
           {post.images.length > 1 ? (
-            <Carousel showThumbs={false} infiniteLoop={true} showStatus={false}>
+            <Carousel
+              showThumbs={false}
+              infiniteLoop={true}
+              showStatus={false}
+              renderArrowPrev={(clickHandler, hasPrev, label) =>
+                hasPrev && (
+                  <button
+                    type="button"
+                    onClick={clickHandler}
+                    className="custom-prev-arrow"
+                  >
+                    <RiArrowLeftWideLine />
+                  </button>
+                )
+              }
+              renderArrowNext={(clickHandler, hasNext, label) =>
+                hasNext && (
+                  <button
+                    type="button"
+                    onClick={clickHandler}
+                    className="custom-next-arrow"
+                  >
+                    <RiArrowRightWideLine />
+                  </button>
+                )
+              }
+            >
               {post.images.map((image, index) => (
                 <div key={index} className="postImagesWrapper">
                   <img
@@ -142,7 +241,7 @@ function PostCard({ post }) {
                     onLoad={(e) => {
                       const width = e.target.naturalWidth;
                       const height = e.target.naturalHeight;
-                      console.log(`Image ${index + 1}:`, width, height);
+                      console.log(`Image:`, width, height);
                       const aspectRatioClass = getAspectRatioClass(
                         width,
                         height
@@ -162,9 +261,9 @@ function PostCard({ post }) {
                 onLoad={(e) => {
                   const width = e.target.naturalWidth;
                   const height = e.target.naturalHeight;
-                  console.log(`Single Image:`, width, height);
+                  // console.log(`Single Image:`, width, height);
                   const aspectRatioClass = getAspectRatioClass(width, height);
-                  console.log("Aspect ratio class:", aspectRatioClass);
+                  // console.log("Aspect ratio class:", aspectRatioClass);
                   e.target.parentNode.classList.add(aspectRatioClass);
                 }}
               />
@@ -174,7 +273,11 @@ function PostCard({ post }) {
 
         <div className="postToolBar">
           <div className="postLikeBtn" onClick={handleToggleLike}>
-            <CiHeart className={hasLiked ? "liked" : ""} />
+            {hasLiked ? (
+              <LiaHeartSolid className="liked" key="liked" />
+            ) : (
+              <LiaHeart className="unliked" key="unliked" />
+            )}
           </div>
           <div className="postCommentBtn" onClick={handleOpenPostModal}>
             <VscComment />
@@ -194,7 +297,7 @@ function PostCard({ post }) {
         </div>
         <div className="postCaption">
           <strong className="postUsername">{post.user.userName}</strong>
-          <span> {post.content}</span>
+          {post.content}
         </div>
         <div className="commentInteractions" onClick={handleOpenPostModal}>
           {comments === 0 ? (
@@ -212,6 +315,10 @@ function PostCard({ post }) {
           post={post}
           isOpen={isPostModalOpen}
           onClose={handleClosePostModal}
+          likes={likes}
+          setLikes={setLikes} // Only from feed
+          hasLiked={hasLiked}
+          setHasLiked={setHasLiked}
         />
       )}
 

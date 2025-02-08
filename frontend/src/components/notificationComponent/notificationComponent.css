@@ -1,34 +1,46 @@
-.notificationCount {
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 0px 6px;
-  font-size: 0.75rem;
-  position: fixed;
-  top: 357px;
-  left: 33px;
-  z-index: 1000;
+.notificationSidebarComponent {
+  padding-inline: var(--margin-m);
+  overflow-y: auto;
+  padding-right: var(--margin-s);
+}
+.notificationSidebarComponent::-webkit-scrollbar {
+  width: 0.15rem;
+  height: 0.15rem;
+}
+.notificationSidebarComponent::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.notificationSidebarComponent::-webkit-scrollbar-thumb {
+  background: linear-gradient(0deg, transparent 0%, var(--grey90) 10%, var(--grey70) 50%, var(--grey90) 90%, transparent 100%);
+}
+.notificationSidebarComponent::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, transparent 0%, var(--grey70) 10%, var(--grey70) 50%, var(--grey70) 90%, transparent 100%);
+}
+.notificationSidebarComponent .noNewNoti {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-inline: auto;
+  margin-block: var(--margin-l);
+  color: var(--grey10);
+  font-size: var(--fs-p);
+  font-weight: 300;
+}
+.notificationSidebarComponent .noNewNoti svg {
+  font-size: var(--fs-big);
+  margin-right: var(--margin-s);
+  color: var(--grey30);
+}
+.notificationSidebarComponent .noNewNoti svg path {
+  stroke-width: 0.1px;
 }
 
-.notificationDropdown {
-  position: static;
-  background-color: transparent;
-  width: 100%;
-  max-height: 0;
-  overflow-x: auto;
-  transition: var(--transition-out);
-}
-.notificationDropdown.show {
-  max-height: 30rem;
-  transition: var(--transition-in);
-  margin-top: var(--margin-xxs);
-}
-
-.notificationItem {
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.notificationItem:hover {
-  background-color: #f9f9f9;
+@media (max-width: 768px) {
+  .notificationSidebarComponent {
+    padding-block: var(--margin-m);
+    padding-inline: var(--margin-l);
+    height: 100%;
+  }
 }/*# sourceMappingURL=notificationComponent.css.map */

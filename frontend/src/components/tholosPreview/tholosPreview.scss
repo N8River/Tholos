@@ -1,0 +1,86 @@
+.tholosPreview {
+  display: flex;
+  justify-content: flex-end;
+  margin-inline: var(--margin-xl);
+
+  position: relative;
+  width: 22.5rem;
+
+  .tholosPreviewImgWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: 35rem;
+    width: 17.5rem;
+
+    overflow: hidden;
+    position: absolute;
+    // left: 0;
+    transform: translateX(-30%) translateY(-2%);
+
+    .staticImageTholosPreview {
+      height: 100%;
+    }
+  }
+
+  .tholosPreviewSlideshowWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+    height: 35rem;
+    width: 17.5rem;
+
+    overflow: hidden;
+    position: relative;
+
+    transition: all 0.15s ease-in-out;
+
+    .slideshowTholosPreview {
+      height: 100%;
+      opacity: 0;
+      position: absolute;
+      transition: opacity 1s ease-in-out; /* Smooth crossfade */
+    }
+
+    // .fade-in {
+    //   opacity: 1; /* Fully visible */
+    // }
+
+    // .fade-out {
+    //   opacity: 0; /* Hidden */
+    // }
+
+    /* Stack the slideshow images on top of each other */
+    // .slideshowTholosPreview {
+    //   height: 100%;
+    //   position: absolute; /* Stack on top of each other */
+    //   top: 0;
+    //   left: 0;
+    //   right: 0;
+    //   bottom: 0;
+
+    //   opacity: 0; /* Start with hidden images */
+    //   transition: opacity 1s ease-in-out; /* Smooth crossfade */
+    // }
+
+    /* Fading in the current image */
+    .fade-in {
+      opacity: 1;
+      z-index: 1;
+    }
+
+    /* Fading out the previous image */
+    .fade-out {
+      opacity: 0;
+      z-index: 0;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .tholosPreview {
+    display: none;
+  }
+}

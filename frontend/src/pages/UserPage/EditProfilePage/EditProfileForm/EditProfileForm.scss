@@ -1,89 +1,497 @@
+@import "../../../../styles/mixins";
+
 .editProfileForm {
   display: flex;
   justify-content: center;
+  flex-direction: column;
 
-  width: clamp(19rem, 100vw, 60rem);
+  width: clamp(19rem, 100vw, 40rem);
   padding-block: var(--margin-m);
+  padding-top: var(--margin-xs);
   margin: auto;
+  gap: var(--margin-m);
 
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  body.dark-mode & {
+    .label {
+      color: var(--grey10);
+    }
 
-    gap: var(--margin-xxs);
+    .inputWrapper {
+      input {
+        background-color: var(--grey70);
+        border: 1px solid var(--grey70);
 
-    .inputContainer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      // border: 1px solid var(--grey50);
-
-      .label {
-        width: 20%;
+        color: var(--black);
       }
 
-      .avatarLabel {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      p {
+        color: var(--grey30);
+      }
+    }
 
-        width: 15rem;
-        height: 15rem;
-        overflow: hidden;
+    input {
+      background-color: var(--grey70);
+      border: 1px solid var(--grey70);
 
-        border: 1px solid var(--grey70);
-        border-radius: 50%;
+      color: var(--black);
+    }
 
-        img {
-          width: auto;
-          height: 100%;
+    .profileVisibilityOptionWrapper {
+      .profileVisibilityOptions {
+        .profileVisibilityOption {
+          p {
+            color: var(--grey10);
+          }
         }
       }
 
-      input {
-        max-width: 100%;
-        min-width: 50%;
-
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        text-wrap: wrap;
+      p {
+        span {
+        }
       }
     }
 
-    .changeVisibility {
-      display: flex;
-      flex-direction: column;
+    .inputContainer {
+      .profileVisibilityOptionWrapper {
+        .profileVisibilityOptions {
+          .profileVisibilityOption {
+            input[type="radio"] {
+              @include gradient-border(
+                var(--background-color),
+                135deg,
+                2px,
+                var(--grey30),
+                var(--grey30),
+                var(--grey30)
+              );
 
-      big {
-        font-size: var(--fs-p);
-      }
-
-      .profileVisibilityOption {
-        display: flex;
-        gap: var(--margin-xxs);
-
-        padding-left: var(--margin-xs);
+              &:checked {
+                @include gradient-border(
+                  transparent,
+                  135deg,
+                  2px,
+                  var(--secondary-color1),
+                  // var(--primary-color),
+                  var(--secondary-color2)
+                );
+                // box-shadow: 0 0 0 3px var(--primary-light-color); // Add a focus effect
+              }
+            }
+          }
+        }
       }
     }
+  }
 
-    .btn {
-      text-align: center;
+  .editProfileUserHeader {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--margin-m);
+
+    .editProfileAvatar {
       display: flex;
       justify-content: center;
       align-items: center;
 
-      padding-block: var(--margin-xxs);
-      padding-inline: var(--margin-s);
-      border-radius: 1rem;
+      height: 3.5rem;
+      width: 3.5rem;
 
-      margin-inline: auto;
+      aspect-ratio: 1 /1;
+      overflow: hidden;
 
-      width: fit-content;
-      font-size: var(--fs-p);
+      @include gradient-border(
+        var(--background-color),
+        45deg,
+        2px,
+        var(--secondary-color1),
+        var(--primary-color),
+        var(--secondary-color2)
+      );
+
+      border-radius: 50%;
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .editProfileUserName {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+
+      width: 75%;
+
+      p {
+        display: flex;
+        font-weight: 600;
+
+        &.changeProfilePhotoBtn {
+          color: var(--primary-color);
+          cursor: pointer;
+
+          transition: var(--transition-out);
+          &:hover {
+            color: var(--black);
+            transition: var(--transition-in);
+          }
+        }
+      }
     }
   }
+
+  .inputContainer {
+    display: flex;
+    justify-content: flex-end;
+    // align-items: center;
+    // border: 1px solid var(--grey50);
+
+    gap: var(--margin-m);
+
+    input {
+      width: 75%;
+      // background-color: var(--grey90);
+      border: 1px solid var(--grey50);
+      border-radius: 0.33rem;
+      color: var(--grey30);
+
+      padding-inline: var(--margin-xs);
+      padding-block: 2px;
+
+      &::placeholder {
+        color: var(--grey30);
+      }
+    }
+
+    .label {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-weight: 600;
+    }
+
+    .inputWrapper {
+      width: 75%;
+
+      input {
+        width: 100%;
+        border: 1px solid var(--grey50);
+        color: var(--grey30);
+
+        &::placeholder {
+          color: var(--grey30);
+        }
+      }
+
+      p {
+        margin-top: var(--margin-xs);
+        color: var(--grey30);
+        font-size: var(--fs-small);
+      }
+    }
+
+    .profileVisibilityOptionWrapper {
+      width: 75%;
+      display: flex;
+      flex-direction: column;
+
+      .profileVisibilityOptions {
+        display: flex;
+        gap: var(--margin-s);
+
+        .profileVisibilityOption {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: var(--margin-xxs);
+
+          input[type="radio"] {
+            display: flex;
+            justify-self: center;
+            align-self: center;
+
+            appearance: none; // Remove default appearance
+            height: 1rem;
+            width: 1rem;
+            // accent-color: var(
+            //   --primary-color
+            // ); // Customize the color for selected state
+            // border: 2px solid var(--grey50); // Add custom border
+
+            padding: 0;
+            @include gradient-border(
+              var(--background-color),
+              135deg,
+              2px,
+              var(--grey50),
+              var(--grey50),
+              var(--grey50)
+            );
+            border-radius: 50%; // Make it circular
+            outline: none;
+
+            &:checked {
+              @include gradient-border(
+                transparent,
+                135deg,
+                2px,
+                var(--secondary-color1),
+                // var(--primary-color),
+                var(--secondary-color2)
+              );
+              // box-shadow: 0 0 0 3px var(--primary-light-color); // Add a focus effect
+            }
+          }
+
+          svg {
+            display: flex;
+            height: fit-content;
+            font-size: var(--fs-h3);
+          }
+
+          p {
+            margin-top: 0;
+            color: var(--grey30);
+            font-size: var(--fs-p);
+          }
+        }
+      }
+
+      p {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: var(--margin-xs);
+        color: var(--grey30);
+        font-size: var(--fs-small);
+
+        span {
+          display: flex;
+          align-items: center;
+
+          svg {
+            font-size: var(--fs-small);
+            margin-right: var(--margin-xxs);
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-block: var(--margin-xxs);
+    padding-inline: var(--margin-s);
+
+    margin-block: var(--margin-xxl);
+    border-radius: 1rem;
+
+    margin-inline: auto;
+
+    width: fit-content;
+    font-size: var(--fs-p);
+
+    border: none;
+
+    background-color: var(--primary-color);
+    font-weight: 600;
+
+    &:hover {
+      border: none;
+    }
+  }
+}
+
+.editProfileHeader {
+  text-align: center;
+  width: clamp(19rem, 100vw, 40rem);
+
+  padding-block: var(--margin-m);
+
+  margin-inline: auto;
+}
+
+.avatarInputModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 1005;
+
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+
+  width: clamp(19rem, 95vw, 30rem);
+
+  padding-block: var(--margin-xs);
+  border-radius: 1rem;
+
+  animation: fadeIn 0.3s ease-in-out;
+  opacity: 1;
+
+  body.dark-mode & {
+    box-shadow: 0px 0px 15px var(--white);
+
+    .avatarInputModalHeader {
+      border-bottom: 1px solid var(--grey70);
+
+      button {
+        &.submitAvatar {
+          color: var(--primary-color);
+          font-weight: 600;
+        }
+
+        svg {
+          display: flex;
+          color: var(--black);
+          font-size: var(--fs-h5);
+        }
+      }
+    }
+
+    .avatarInputWrapper {
+      .avatarInput {
+        input {
+          background-color: var(--grey70);
+          border: 1px solid var(--grey70);
+
+          color: var(--black);
+        }
+      }
+      small {
+        color: var(--grey30);
+      }
+    }
+  }
+
+  .avatarInputModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-inline: var(--margin-m);
+    padding-bottom: var(--margin-xs);
+
+    border-bottom: 1px solid var(--grey70);
+
+    button {
+      border: none;
+      background-color: transparent;
+
+      font-family: var(--ff);
+      font-size: var(--fs-p);
+
+      cursor: pointer;
+
+      &.submitAvatar {
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+
+      svg {
+        display: flex;
+        font-size: var(--fs-h5);
+      }
+    }
+
+    p {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: 600;
+    }
+  }
+
+  .avatarInputWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    padding-top: var(--margin-m);
+
+    .avatarInputImgPreview {
+      width: 25rem;
+      height: 25rem;
+      overflow: hidden;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 50%;
+      // border: 4px solid var(--grey30);
+
+      aspect-ratio: 1 /1;
+
+      margin-bottom: var(--margin-s);
+
+      @include gradient-border(
+        var(--background-color),
+        45deg,
+        4px,
+        var(--secondary-color1),
+        var(--primary-color),
+        var(--secondary-color2)
+      );
+
+      img {
+        height: 100%;
+      }
+    }
+
+    .avatarInput {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+
+      padding-inline: var(--margin-m);
+
+      input {
+        width: 100%;
+        border-radius: 0.33rem;
+
+        font-size: var(--fs-p);
+        padding-inline: var(--margin-xs);
+        padding-block: 2px;
+
+        border: 1px solid var(--grey50);
+        color: var(--grey30);
+
+        &::placeholder {
+        }
+      }
+    }
+
+    small {
+      font-size: var(--fs-small);
+      margin-top: var(--margin-xxs);
+
+      color: var(--grey10);
+    }
+  }
+}
+
+.avatarInputModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 100vw;
+
+  background-color: hsla(0, 0%, 0%, 0.8);
+  z-index: 1004;
+
+  animation: fadeIn 0.3s ease-in-out;
+  opacity: 1;
 }

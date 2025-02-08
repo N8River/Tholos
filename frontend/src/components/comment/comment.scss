@@ -1,17 +1,17 @@
 .comment {
   display: flex;
-  align-items: center;
+  // align-items: center;
 
-  margin-block: var(--margin-xs);
-  margin-inline: var(--margin-xs);
+  margin-block: var(--margin-s);
+  margin-inline: var(--margin-m);
 
-  gap: var(--margin-xs);
+  gap: var(--margin-m);
   height: fit-content;
   // width: 100%;
 
   .commentUserAvatar {
-    height: 2rem;
-    width: 2rem;
+    height: 2.2rem;
+    min-width: 2.2rem;
 
     overflow: hidden;
     display: flex;
@@ -19,10 +19,33 @@
     align-items: center;
 
     border-radius: 50%;
-    border: 1px solid var(--grey70);
+    border: 2px solid var(--grey30);
+    // box-shadow: 0px 0px 2px var(--grey10);
+    cursor: pointer;
+    transition: var(--transition-out);
+
+    &:hover {
+      border: 2px solid var(--primary-color);
+      transition: var(--transition-in);
+    }
 
     img {
       height: 100%;
+    }
+  }
+
+  .inline-block {
+    font-size: var(--fs-small-ui);
+    // color: var(--grey30);
+    // padding-top: var(--margin-xxs);
+    line-height: 1.6;
+
+    strong {
+      display: inline-block;
+      margin-right: var(--margin-xs);
+      color: var(--grey10);
+
+      cursor: pointer;
     }
   }
 }

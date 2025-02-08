@@ -1,37 +1,64 @@
-.notificationCount {
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 0px 6px;
-  font-size: 0.75rem;
-  position: fixed;
-  top: 357px;
-  left: 33px;
-  z-index: 1000;
-}
+@import "../../styles/mixins";
 
-.notificationDropdown {
-  position: static;
+.notificationSidebarComponent {
+  padding-inline: var(--margin-m);
+  overflow-y: auto;
 
-  background-color: transparent;
-  // box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-height: 0;
-  overflow-x: auto;
-  transition: var(--transition-out);
+  padding-right: var(--margin-s);
+  // margin-right: var(--margin-xxs);
 
-  &.show {
-    max-height: 30rem;
-    transition: var(--transition-in);
-    margin-top: var(--margin-xxs);
+  @include custom-scrollbar(
+    linear-gradient(
+      0deg,
+      transparent 0%,
+      var(--grey90) 10%,
+      var(--grey70) 50%,
+      var(--grey90) 90%,
+      transparent 100%
+    ),
+    var(--background-color),
+    linear-gradient(
+      0deg,
+      transparent 0%,
+      var(--grey70) 10%,
+      var(--grey70) 50%,
+      var(--grey70) 90%,
+      transparent 100%
+    ),
+    0.15rem,
+    0.15rem
+  );
+
+  .noNewNoti {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-inline: auto;
+    margin-block: var(--margin-l);
+    color: var(--grey10);
+
+    font-size: var(--fs-p);
+    font-weight: 300;
+
+    svg {
+      font-size: var(--fs-big);
+      margin-right: var(--margin-s);
+      color: var(--grey30);
+
+      path {
+        stroke-width: 0.1px;
+      }
+    }
   }
 }
 
-.notificationItem {
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
-}
 
-.notificationItem:hover {
-  background-color: #f9f9f9;
+@media (max-width: 768px) {
+  .notificationSidebarComponent {
+    padding-block: var(--margin-m);
+    padding-inline: var(--margin-l);
+
+    height: 100%;
+  }
 }

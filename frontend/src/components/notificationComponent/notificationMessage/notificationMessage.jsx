@@ -4,11 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { BACKEND_URL, JSON_HEADERS } from "../../../config/config";
 
 import "./notificationMessage.css";
+import useTokenVerification from "../../../hooks/useTokenVerification";
+import useTokenValidation from "../../../hooks/useTokenVerification";
 
 function NotificationMessage({
   notification,
   handleApproveRequest,
   handleRejectRequest,
+  handleNotificationClick,
+  isRead,
 }) {
   console.log("🔴 NOTIFICATION", notification);
   let link;
@@ -16,7 +20,21 @@ function NotificationMessage({
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  const decodedToken = jwtDecode(token);
+
+  const {
+    decodedToken,
+    isValid,
+    loading: tokenLoading,
+  } = useTokenValidation(token);
+
+  useEffect(() => {
+    if (!tokenLoading) {
+      if (!isValid) {
+        localStorage.removeItem("token");
+        navigate("/explore");
+      }
+    }
+  }, [navigate, isValid, tokenLoading, decodedToken]);
 
   const [userInfo, setUserInfo] = useState({});
 
@@ -46,30 +64,38 @@ function NotificationMessage({
   }, []);
 
   if (notification.type === "message") {
-    btnText = "View Message";
-    link = `/messages/${notification.conversation}`;
+    btnText = "Reply";
+    link = `/messages/${notification.sender}`;
   } else if (notification.type === "like") {
     btnText = "View Post";
-    link = `/${decodedToken.userName}/p/${notification.post}`;
+    link = `/${jwtDecode(token).userName}/p/${notification.post}`;
   } else if (notification.type === "comment") {
     btnText = "View Post";
-    link = `/${decodedToken.userName}/p/${notification.post}`;
+    link = `/${jwtDecode(token).userName}/p/${notification.post}`;
   } else if (notification.type === "follow") {
-    btnText = `View their profile`;
+    btnText = `View Profile`;
     link = `/${userInfo.userName}/`;
   } else if (notification.type === "follow-request") {
     // For follow request notification
+
     return (
-      <div className="notificationMessage">
-        <p>{notification.message}</p>
+      <div
+        className={`notificationMessage ${isRead ? "read" : "unread"} `}
+        onClick={() => {
+          handleNotificationClick(notification._id, notification.type);
+        }}
+      >
+        <div className="notificationUser">
+          <div className="notificationUserAvatar">
+            <img src={userInfo.avatar} alt="" />
+          </div>
+        </div>
+        <div className="notificationMessageText">
+          <p>
+            <strong>{userInfo.userName}</strong> {notification.message}
+          </p>
+        </div>
         <div className="followRequestButtons">
-          <button
-            onClick={() => {
-              navigate(`/${userInfo.userName}`);
-            }}
-          >
-            View Profile
-          </button>
           <button
             className="approveRequestBtn"
             onClick={() => handleApproveRequest(notification.sender)}
@@ -92,9 +118,24 @@ function NotificationMessage({
 
   return (
     <>
-      <div className="notificationMessage">
-        <p>{notification.message}</p>
+      <div
+        className={`notificationMessage ${isRead ? "read" : "unread"} `}
+        onClick={() => {
+          handleNotificationClick(notification._id, notification.type);
+        }}
+      >
+        <div className="notificationUser">
+          <div className="notificationUserAvatar">
+            <img src={userInfo.avatar} alt="" />
+          </div>
+        </div>
+        <div className="notificationMessageText">
+          <p>
+            <strong>{userInfo.userName}</strong> {notification.message}
+          </p>
+        </div>
         <button
+          className="notiActionBtn"
           onClick={() => {
             navigate(link);
           }}

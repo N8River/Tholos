@@ -8,13 +8,17 @@ import FriendsHeader from "../../components/friendsHeader/friendsHeader";
 import FollowSuggestion from "../../components/followSuggestion/followSuggestion";
 import Loader from "../../components/loader/loader";
 import { useNavigate } from "react-router-dom";
+import { isTokenExpired } from "../../utils/utils";
+import "./HomePage.css";
+import { MdOutlineRefresh } from "react-icons/md";
+import { useLocation } from "react-router-dom";
+import useResponsive from "../../hooks/useResponsive";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
 function HomePage() {
   const token = localStorage.getItem("token");
-  const headers = {
-    ...JSON_HEADERS,
-    ...AUTH_HEADER(token),
-  };
+
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1); // Current page for pagination
   const [isFetching, setIsFetching] = useState(false);
@@ -22,13 +26,34 @@ function HomePage() {
   const limit = 10; // Number of posts per page
 
   const navigate = useNavigate();
+  const isMobile = useResponsive(1280);
+
+  const { isValid, loading: tokenLoading } = useTokenValidation(token);
 
   useEffect(() => {
-    // If there is no token, redirect to /explore
     if (!token) {
       navigate("/explore");
     }
-  }, [navigate]);
+
+    if (!isValid && !tokenLoading) {
+      localStorage.removeItem("token");
+      navigate("/explore");
+    }
+  }, [isValid, navigate, tokenLoading]);
+
+  // useEffect(() => {
+  //   if (token && isTokenExpired(token)) {
+  //     // Token is expired or invalid
+  //     localStorage.removeItem("token");
+  //     navigate("/");
+  //     window.location.reload(); // Refresh to load the page as an anonymous user
+  //   }
+  // }, [navigate, token]);
+
+  const headers = {
+    ...JSON_HEADERS,
+    ...AUTH_HEADER(token),
+  };
 
   const fetchPosts = async () => {
     if (isFetching || !hasMore) return;
@@ -49,7 +74,7 @@ function HomePage() {
       }
 
       const responseData = await response.json();
-      console.log(responseData);
+      console.log("⚔️⚔️", responseData);
 
       if (responseData.length < limit) {
         setHasMore(false);
@@ -70,8 +95,10 @@ function HomePage() {
   };
 
   useEffect(() => {
-    fetchPosts();
-  }, [page]);
+    if (!tokenLoading && token && isValid) {
+      fetchPosts();
+    }
+  }, [page, tokenLoading, token, isValid]);
 
   const loadMorePosts = () => {
     setPage((prevPage) => prevPage + 1); // Increment page to load more posts
@@ -80,13 +107,35 @@ function HomePage() {
   return (
     <>
       <HeaderSidebarSwitch />
-      <FriendsHeader />
+      {token && <FriendsHeader />}
+
       {isFetching && posts.length === 0 ? ( // If fetching and no posts, show full page loader
         <Loader />
       ) : (
         <>
-          <Feed posts={posts} loadMorePosts={loadMorePosts} />
-          {isFetching && <Loader />} <FollowSuggestion />
+          {posts.length === 0 ? ( // Check if there are no posts and show a message
+            <div className="noPostsMessage">
+              <div className="followPeopleRefreshMessageWrapper">
+                <p className="followPeopleRefreshMessage">
+                  Follow some people and refresh to see posts in your feed!
+                </p>
+              </div>
+              <button
+                className="refreshBtn"
+                onClick={() => window.location.reload()}
+              >
+                Refresh feed <MdOutlineRefresh />
+              </button>
+              {token && <FollowSuggestion noFollowing={true} />}
+              {/* Show follow suggestions */}
+            </div>
+          ) : (
+            <>
+              <Feed posts={posts} loadMorePosts={loadMorePosts} />
+              {isFetching && <Loader />}
+              {!isMobile && token && <FollowSuggestion />}
+            </>
+          )}
         </>
       )}
     </>

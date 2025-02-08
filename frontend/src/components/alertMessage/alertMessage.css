@@ -1,9 +1,23 @@
+.alertMessage,
+.alertMessageOverlay {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s; /* Fade-in effect */
+}
+.alertMessage.show,
+.alertMessageOverlay.show {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease-in-out; /* Fade-out effect */
+}
+
 .alertMessage {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
-  padding: var(--margin-m);
+  padding-block: var(--margin-xs);
+  padding-inline: var(--margin-s);
   background-color: var(--white);
   border: 1px solid;
   border-radius: 0.5rem;
@@ -15,39 +29,21 @@
   transition: var(--transition-out);
   gap: var(--margin-s);
 }
-
-.alertMessage,
-.alertMessageOverlay {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s; /* Fade-in effect */
-}
-
-.alertMessage.show,
-.alertMessageOverlay.show {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.3s ease-in-out; /* Fade-out effect */
-}
-
 .alertMessage--error {
   border-color: var(--error-text);
   background-color: var(--error-background);
   color: var(--error-text);
 }
-
 .alertMessage--success {
   border-color: var(--success-text);
   background-color: var(--success-background);
   color: var(--success-text);
 }
-
 .alertMessage--info {
   border-color: var(--info-text);
   background-color: var(--info-background);
   color: var(--info-text);
 }
-
 .alertMessage button {
   background: none;
   border: none;
@@ -55,9 +51,11 @@
   color: var(--grey10);
   cursor: pointer;
 }
-
 .alertMessage button:hover {
   color: var(--black);
+}
+.alertMessage p {
+  font-size: var(--fs-small-ui);
 }
 
 .alertMessageOverlay {

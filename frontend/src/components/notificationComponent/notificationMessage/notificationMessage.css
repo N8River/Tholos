@@ -1,12 +1,75 @@
 .notificationMessage {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: 100%;
+  cursor: pointer;
+  padding-block: var(--margin-s);
+  border-radius: 0.75rem;
+  transition: var(--transition-out);
+}
+.notificationMessage:hover .notificationUser .notificationUserAvatar {
+  border: 1px solid var(--grey10);
+  transition: var(--transition-in);
+}
+body.dark-mode .notificationMessage:hover {
+  background-color: var(--grey70);
+  transition: var(--transition-in);
+}
+.notificationMessage .notificationUser {
+  display: flex;
+  align-items: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-right: var(--margin-xs);
+}
+.notificationMessage .notificationUser .notificationUserAvatar {
+  display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  height: 2.5rem;
+  width: 2.5rem;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px solid var(--grey50);
 }
-.notificationMessage p {
-  font-size: var(--fs-p);
+.notificationMessage .notificationUser .notificationUserAvatar img {
+  height: 100%;
+  width: auto;
+}
+.notificationMessage .notificationMessageText {
+  display: flex;
+  margin-right: var(--margin-xs);
+}
+.notificationMessage .notificationMessageText p {
+  font-size: var(--fs-small-ui);
+  color: var(--grey30);
+  text-overflow: ellipsis;
+}
+.notificationMessage .notificationMessageText p strong {
+  color: var(--black);
+}
+.notificationMessage .notiActionBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: var(--primary-color);
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  color: var(--background-color);
+  font-weight: 600;
+  font-size: var(--fs-small-ui);
+  text-wrap: wrap;
+  margin-block: auto;
+  min-width: 6rem;
+  transition: var(--transition-out);
+  border-radius: 0.33rem;
+}
+.notificationMessage .notiActionBtn:hover {
+  background-color: var(--black);
+  transition: var(--transition-in);
 }
 .notificationMessage button {
   border: none;
@@ -20,20 +83,65 @@
 }
 .notificationMessage .followRequestButtons {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--margin-s);
 }
 .notificationMessage .followRequestButtons .approveRequestBtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--primary-color);
-  padding-inline: var(--margin-xxs);
-  font-weight: 400;
+  height: -moz-fit-content;
+  height: fit-content;
+  background-color: var(--primary-color);
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  color: var(--background-color);
+  font-weight: 600;
+  font-size: var(--fs-small-ui);
+  border-radius: 0.33rem;
+  transition: var(--transition-out);
+}
+.notificationMessage .followRequestButtons .approveRequestBtn:hover {
+  background-color: var(--black);
+  transition: var(--transition-in);
 }
 .notificationMessage .followRequestButtons .rejectRequestBtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--accent-color);
-  font-weight: 400;
+  height: -moz-fit-content;
+  height: fit-content;
+  color: var(--black);
+  padding-inline: var(--margin-xs);
+  padding-block: var(--margin-xxs);
+  background-color: var(--grey90);
+  font-weight: 600;
+  font-size: var(--fs-small-ui);
+  border-radius: 0.33rem;
+  transition: var(--transition-out);
+}
+.notificationMessage .followRequestButtons .rejectRequestBtn:hover {
+  background-color: var(--grey70);
+  transition: var(--transition-in);
+}
+
+@media (max-width: 768px) {
+  .notificationMessage {
+    padding-block: var(--margin-xs);
+  }
+  .notificationMessage .notificationUser .notificationUserAvatar {
+    height: 3rem;
+    min-width: 3rem;
+    max-width: 3rem;
+  }
+  .notificationMessage .notificationMessageText {
+    align-items: center;
+  }
+  .notificationMessage .notificationMessageText p strong {
+    margin-right: var(--margin-xxs);
+  }
+  .notificationMessage .notiActionBtn {
+    margin-left: auto;
+  }
 }/*# sourceMappingURL=notificationMessage.css.map */

@@ -7,3 +7,7 @@ export const JSON_HEADERS = {
 export const AUTH_HEADER = (token) => ({
   Authorization: `Bearer ${token}`,
 });
+
+export const MAX_POST_IMAGES = 5; // Maximum number of images a user can add
+
+export const MAX_COMMENT_SIZE = 500;

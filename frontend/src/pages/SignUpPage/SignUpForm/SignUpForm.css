@@ -2,35 +2,131 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: clamp(19rem, 100vw, 50rem);
-  margin-inline: auto;
+  height: 35rem;
+  border: 1px solid var(--grey70);
+  padding: var(--margin-xl);
 }
-.signUpForm h2 {
-  text-align: center;
-  font-size: clamp(var(--fs-h5), 5vw, var(--fs-h2));
-  margin-bottom: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+.signUpForm .signupFormLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--ff-logo);
+  font-size: var(--fs-h2);
+  color: var(--accent-color);
+  font-weight: 900;
+  padding-bottom: var(--margin-xl);
 }
 .signUpForm input {
-  width: 50%;
-  min-width: 19rem;
-  margin-bottom: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
-  padding-block: var(--margin-xxs);
-  padding-inline: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
+  width: 100%;
+  border: 1px solid var(--grey90);
+  border-radius: 0.33rem;
+  font-size: var(--fs-small-ui);
+  color: var(--grey10);
+  padding-block: var(--margin-xs);
+  padding-inline: var(--margin-s);
+  background-color: var(--grey90);
+  margin-bottom: var(--margin-xs);
 }
-.signUpForm button {
-  width: 50%;
-  min-width: 19rem;
-  padding-block: var(--margin-xxs);
-  padding-inline: clamp(var(--margin-xs), 2vw, var(--margin-m));
-  font-size: clamp(var(--fs-small), 2vw, var(--fs-big));
+.signUpForm input:focus {
+  outline: none;
 }
-.signUpForm div {
-  display: flex;
-  gap: clamp(var(--margin-xxs), 1vw, var(--margin-xs));
-  margin-top: var(--margin-xxs);
+.signUpForm input::-moz-placeholder {
+  font-size: var(--fs-small-ui);
+  color: var(--grey30);
 }
-.signUpForm div p {
-  margin-top: 0;
-  border-bottom: 1px solid var(--grey50);
+.signUpForm input::placeholder {
+  font-size: var(--fs-small-ui);
+  color: var(--grey30);
+}
+.signUpForm .signUpBtn {
+  font-family: var(--ff);
+  font-size: var(--fs-small-ui);
   font-weight: 600;
+  border: none;
+  background-color: var(--primary-color);
+  border-radius: 0.33rem;
+  color: var(--background-color);
+  padding-block: var(--margin-xs);
+  padding-inline: var(--margin-s);
+  width: 100%;
+  cursor: pointer;
+  transition: var(--transition-out);
+}
+.signUpForm .signUpBtn:hover {
+  background-color: var(--black);
+  transition: var(--transition-in);
+}
+.signUpForm .loginMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: var(--margin-l);
+  margin-top: var(--margin-l);
+  position: relative;
+  font-size: var(--fs-small-ui);
+  text-wrap: nowrap;
+}
+.signUpForm .loginMessage::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px; /* The height of the border-bottom */
+  background: linear-gradient(45deg, var(--background-color) 0%, var(--grey90) 10%, var(--grey70) 50%, var(--grey90) 90%, var(--background-color) 100%);
+}
+.signUpForm .loginMessage p {
+  cursor: pointer;
+  font-size: var(--fs-small-ui);
+  font-weight: 600;
+  margin-left: var(--margin-xxs);
+  color: var(--primary-color);
+  transition: var(--transition-out);
+}
+.signUpForm .loginMessage p:hover {
+  color: var(--black);
+  transition: var(--transition-in);
+}
+.signUpForm .getTheApp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: auto;
+  padding: var(--margin-s);
+  margin-bottom: var(--margin-xxs);
+  width: 100%;
+}
+.signUpForm .getTheApp .getTheAppText {
+  font-size: var(--fs-small-ui);
+  margin-bottom: var(--margin-xs);
+}
+.signUpForm .getTheApp .getTheAppWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: var(--margin-xxs);
+}
+.signUpForm .getTheApp .getTheAppWrapper .getTheAppBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 8rem;
+  font-size: var(--fs-p-ui);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+.signUpForm .getTheApp .getTheAppWrapper .getTheAppBtn:nth-child(2) svg {
+  margin-left: 1px;
+}
+.signUpForm .getTheApp .getTheAppWrapper .getTheAppBtn:hover {
+  color: var(--primary-color);
+  transition: 0.15s ease;
+}
+.signUpForm .getTheApp .getTheAppWrapper .getTheAppBtn svg {
+  font-size: var(--fs-big-ui);
+  height: 1.25rem;
+  width: 1.25rem;
 }/*# sourceMappingURL=SignUpForm.css.map */

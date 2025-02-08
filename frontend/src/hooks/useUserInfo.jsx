@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
 import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../config/config";
+import useTokenVerification from "./useTokenVerification";
+import { useNavigate } from "react-router-dom";
+import useTokenValidation from "./useTokenVerification";
 
 const useUserInfo = (username) => {
+  // console.log(username);
+
   const [user, setUser] = useState(null);
+  const [postCount, setPostCount] = useState(0);
+
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
+
   const headers = token
     ? { ...JSON_HEADERS, ...AUTH_HEADER(token) }
     : { ...JSON_HEADERS };
@@ -40,8 +48,10 @@ const useUserInfo = (username) => {
 
         const responseData = await response.json();
 
-        setUser(responseData);
-        console.log("🔴 Logged in User", responseData);
+        // console.log(responseData);
+        setUser(responseData.user);
+        setPostCount(responseData.postCount);
+        // console.log("🔴 Logged in User", responseData);
       } catch (error) {
         setError(error.message);
         console.log("Error fetching user info:", error);
@@ -52,7 +62,7 @@ const useUserInfo = (username) => {
     fetchUserInfo();
   }, [username]);
 
-  return { user, error, loading };
+  return { user, postCount, error, loading };
 };
 
 export default useUserInfo;

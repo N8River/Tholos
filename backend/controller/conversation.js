@@ -38,19 +38,32 @@ exports.getConversations = async (req, res, next) => {
       participants: { $in: [userId] },
     }).populate("participants", "userName avatar");
 
-    // Fetch the last message for each conversation
+    // REMOVE or SKIP BROKEN CONVERSATIONS
+    const validConversations = conversations.filter((convo) => {
+      // e.g. skip any conversation that has a null participant or fewer than 2
+      if (!convo.participants || convo.participants.length < 2) {
+        return false;
+      }
+      // If any participant is null or missing fields
+      if (convo.participants.some((p) => p === null)) {
+        return false;
+      }
+      return true;
+    });
+
+    // Then fetch lastMessage for each validated conversation
     const conversationsWithLastMessage = await Promise.all(
-      conversations.map(async (conversation) => {
+      validConversations.map(async (conversation) => {
         const lastMessage = await Message.findOne({
           conversationId: conversation._id,
         })
           .sort({ createdAt: -1 })
-          .select("text createdAt"); // Select the text and createdAt fields
+          .select("text createdAt");
 
         return {
           ...conversation.toObject(),
           lastMessage: lastMessage ? lastMessage.text : "",
-          lastMessageTimestamp: lastMessage ? lastMessage.createdAt : null, // Include the timestamp
+          lastMessageTimestamp: lastMessage ? lastMessage.createdAt : null,
         };
       })
     );
@@ -79,3 +92,4 @@ exports.getConversationByParticipants = async (req, res) => {
 
   res.status(200).json({ conversationId: conversation._id });
 };
+

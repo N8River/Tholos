@@ -1,22 +1,37 @@
 .comment {
   display: flex;
-  align-items: center;
-  margin-block: var(--margin-xs);
-  margin-inline: var(--margin-xs);
-  gap: var(--margin-xs);
+  margin-block: var(--margin-s);
+  margin-inline: var(--margin-m);
+  gap: var(--margin-m);
   height: -moz-fit-content;
   height: fit-content;
 }
 .comment .commentUserAvatar {
-  height: 2rem;
-  width: 2rem;
+  height: 2.2rem;
+  min-width: 2.2rem;
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 1px solid var(--grey70);
+  border: 2px solid var(--grey30);
+  cursor: pointer;
+  transition: var(--transition-out);
+}
+.comment .commentUserAvatar:hover {
+  border: 2px solid var(--primary-color);
+  transition: var(--transition-in);
 }
 .comment .commentUserAvatar img {
   height: 100%;
+}
+.comment .inline-block {
+  font-size: var(--fs-small-ui);
+  line-height: 1.6;
+}
+.comment .inline-block strong {
+  display: inline-block;
+  margin-right: var(--margin-xs);
+  color: var(--grey10);
+  cursor: pointer;
 }/*# sourceMappingURL=comment.css.map */

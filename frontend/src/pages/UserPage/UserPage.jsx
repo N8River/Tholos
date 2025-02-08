@@ -11,9 +11,12 @@ import PostModal from "../../components/postModal/postModal";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import Loader from "../../components/loader/loader";
 
+import { isTokenExpired } from "../../utils/utils";
+import useTokenValidation from "../../hooks/useTokenVerification";
+
 function UserPage() {
   const { username, postId } = useParams();
-  const { user, error, loading } = useUserInfo(username);
+  const { user, postCount, error, loading } = useUserInfo(username);
   const navigate = useNavigate();
 
   // const [user, setUser] = useState({});
@@ -22,14 +25,70 @@ function UserPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [mutualFollowers, setMutualFollowers] = useState([]);
 
   const token = localStorage.getItem("token");
+
+  // const decodedToken = token && jwtDecode(token);
+
+  const {
+    decodedToken,
+    isValid,
+    loading: tokenLoading,
+  } = useTokenValidation(token);
+
   const headers = token
     ? {
         ...JSON_HEADERS,
         ...AUTH_HEADER(token),
       }
     : JSON_HEADERS;
+
+  useEffect(() => {
+    // Only redirect if the token is explicitly invalid, not missing
+    if (!tokenLoading && token && !isValid) {
+      localStorage.removeItem("token");
+      navigate("/login"); // Redirect if token is invalid
+    }
+  }, [isValid, tokenLoading, token, navigate]);
+
+  useEffect(() => {
+    if (decodedToken && user) {
+      console.log(decodedToken);
+      setIsOwner(decodedToken.userName === username);
+      console.log(isOwner);
+    } else {
+      setIsOwner(false); // Ensure isOwner is false when logged out
+    }
+  }, [decodedToken, user, username]);
+
+  // Token is expired or invalid
+  useEffect(() => {
+    // Check if the token is valid or expired
+    if (token && isTokenExpired(token)) {
+      localStorage.removeItem("token");
+      navigate("/explore");
+      window.location.reload(); // Refresh to load the page as an anonymous user
+    }
+  }, [navigate, token]);
+
+  const getMutualFollowers = async () => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/user/profile/${username}/mutual-followers`,
+        { headers }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch mutual followers");
+      }
+
+      const data = await response.json();
+      setMutualFollowers(data.mutualFollowers);
+    } catch (error) {
+      console.error("Error fetching mutual followers:", error);
+    }
+  };
 
   useEffect(() => {
     if (postId) {
@@ -65,13 +124,11 @@ function UserPage() {
 
   useEffect(() => {
     if (user) {
-      console.log("🔴 Fetched user", user);
+      // console.log("🔴 Fetched user", user);
       if (token) {
         try {
-          const decodedToken = jwtDecode(token);
-          // console.log(decodedToken);
           setIsLoggedIn(true);
-          setIsOwner(decodedToken.userName === username); // Check if current user is the owner
+          // setIsOwner(decodedToken.userName === username); // Check if current user is the owner
 
           // Fetch follow status
           const checkFollowStatus = async () => {
@@ -100,10 +157,12 @@ function UserPage() {
     }
   }, [username, user]);
 
-  const handleLogOut = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
+  // Fetch mutual followers only if the user is logged in
+  useEffect(() => {
+    if (user && isValid) {
+      getMutualFollowers();
+    }
+  }, [user, isValid]);
 
   // If user is not found (404 error), render the NotFoundPage
   if (error === "User not found") {
@@ -111,14 +170,20 @@ function UserPage() {
   }
 
   // If the data is still loading, you can display a loader or placeholder
-  if (loading) {
-    return <Loader />;
-  }
+  // if (loading || tokenLoading) {
+  //   return <Loader />;
+  // }
 
   return (
     <>
-      <HeaderSidebarSwitch />
-      <Profile isOwner={isOwner} user={user} handleLogOut={handleLogOut} />
+      {user && <HeaderSidebarSwitch />}
+
+      <Profile
+        isOwner={isOwner}
+        user={user}
+        postCount={postCount}
+        mutualFollowers={mutualFollowers}
+      />
 
       {postId && post && (
         <PostModal

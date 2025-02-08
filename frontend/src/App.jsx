@@ -1,4 +1,5 @@
 import "./App.css";
+import "./index.css";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -23,13 +24,6 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="/:username" element={<UserPage />} />
-
-            {/* <Route
-              path="/:username/edit"
-              element={<PrivateRoute element={EditProfilepage} />}
-            />
-            <Route path="/messages/" element={<MessagesPage />} />
-            <Route path="/messages/:otherpersonId" element={<ChatPage />} /> */}
 
             <Route path="/:username/p/:postId" element={<UserPage />} />
             <Route path="/explore" element={<ExplorePage />} />

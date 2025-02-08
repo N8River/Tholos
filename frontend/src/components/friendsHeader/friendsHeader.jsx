@@ -2,11 +2,26 @@ import { useEffect, useState } from "react";
 import "./friendsHeader.css";
 import { AUTH_HEADER, BACKEND_URL, JSON_HEADERS } from "../../config/config";
 import { useNavigate } from "react-router-dom";
-
-const token = localStorage.getItem("token");
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
 function FriendsHeader() {
+  const token = localStorage.getItem("token");
+
+  const { isValid, loading: tokenLoading } = useTokenValidation(token);
+
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!tokenLoading) {
+      if (!isValid) {
+        localStorage.removeItem(token);
+        navigate("/explore");
+      }
+    }
+  }, [navigate, isValid, tokenLoading]);
+
+  // useTokenVerification();
+
   const [followingUsers, setFollowingUser] = useState([]);
 
   useEffect(() => {

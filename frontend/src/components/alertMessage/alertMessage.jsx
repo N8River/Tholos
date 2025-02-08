@@ -5,7 +5,9 @@ function AlertMessage({ message, type = "info", onClose }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    setVisible(true);
+    setTimeout(() => {
+      setVisible(true);
+    }, 1);
 
     const timer = setTimeout(() => {
       setVisible(false);

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../../config/config";
 import "./startChatModal.css";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
 function StartChatModal({ onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -9,6 +11,16 @@ function StartChatModal({ onClose }) {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
+
+  const { isValid, loading: tokenLoading } = useTokenValidation(token);
+
+  useEffect(() => {
+    if (!isValid && tokenLoading) {
+      localStorage.removeItem("token");
+      navigate("/explore");
+    }
+  }, [navigate, isValid, tokenLoading]);
+
   const headers = {
     ...JSON_HEADERS,
     ...AUTH_HEADER(token),

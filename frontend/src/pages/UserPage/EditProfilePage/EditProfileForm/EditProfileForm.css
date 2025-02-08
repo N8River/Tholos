@@ -1,69 +1,333 @@
 .editProfileForm {
   display: flex;
   justify-content: center;
-  width: clamp(19rem, 100vw, 60rem);
-  padding-block: var(--margin-m);
-  margin: auto;
-}
-.editProfileForm form {
-  display: flex;
   flex-direction: column;
-  width: 100%;
-  gap: var(--margin-xxs);
+  width: clamp(19rem, 100vw, 40rem);
+  padding-block: var(--margin-m);
+  padding-top: var(--margin-xs);
+  margin: auto;
+  gap: var(--margin-m);
 }
-.editProfileForm form .inputContainer {
+body.dark-mode .editProfileForm .label {
+  color: var(--grey10);
+}
+body.dark-mode .editProfileForm .inputWrapper input {
+  background-color: var(--grey70);
+  border: 1px solid var(--grey70);
+  color: var(--black);
+}
+body.dark-mode .editProfileForm .inputWrapper p {
+  color: var(--grey30);
+}
+body.dark-mode .editProfileForm input {
+  background-color: var(--grey70);
+  border: 1px solid var(--grey70);
+  color: var(--black);
+}
+body.dark-mode .editProfileForm .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption p {
+  color: var(--grey10);
+}
+body.dark-mode .editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption input[type=radio] {
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(135deg, var(--grey30), var(--grey30), var(--grey30)) border-box;
+  border: solid 2px transparent;
+}
+body.dark-mode .editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption input[type=radio]:checked {
+  background: linear-gradient(transparent, transparent) padding-box, linear-gradient(135deg, var(--secondary-color1), var(--secondary-color2)) border-box;
+  border: solid 2px transparent;
+}
+.editProfileForm .editProfileUserHeader {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
+  gap: var(--margin-m);
 }
-.editProfileForm form .inputContainer .label {
-  width: 20%;
-}
-.editProfileForm form .inputContainer .avatarLabel {
+.editProfileForm .editProfileUserHeader .editProfileAvatar {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 15rem;
-  height: 15rem;
+  height: 3.5rem;
+  width: 3.5rem;
+  aspect-ratio: 1/1;
   overflow: hidden;
-  border: 1px solid var(--grey70);
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(45deg, var(--secondary-color1), var(--primary-color), var(--secondary-color2)) border-box;
+  border: solid 2px transparent;
   border-radius: 50%;
 }
-.editProfileForm form .inputContainer .avatarLabel img {
-  width: auto;
+.editProfileForm .editProfileUserHeader .editProfileAvatar img {
   height: 100%;
 }
-.editProfileForm form .inputContainer input {
-  max-width: 100%;
-  min-width: 50%;
+.editProfileForm .editProfileUserHeader .editProfileUserName {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 75%;
+}
+.editProfileForm .editProfileUserHeader .editProfileUserName p {
+  display: flex;
+  font-weight: 600;
+}
+.editProfileForm .editProfileUserHeader .editProfileUserName p.changeProfilePhotoBtn {
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: var(--transition-out);
+}
+.editProfileForm .editProfileUserHeader .editProfileUserName p.changeProfilePhotoBtn:hover {
+  color: var(--black);
+  transition: var(--transition-in);
+}
+.editProfileForm .inputContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--margin-m);
+}
+.editProfileForm .inputContainer input {
+  width: 75%;
+  border: 1px solid var(--grey50);
+  border-radius: 0.33rem;
+  color: var(--grey30);
+  padding-inline: var(--margin-xs);
+  padding-block: 2px;
+}
+.editProfileForm .inputContainer input::-moz-placeholder {
+  color: var(--grey30);
+}
+.editProfileForm .inputContainer input::placeholder {
+  color: var(--grey30);
+}
+.editProfileForm .inputContainer .label {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-wrap: wrap;
+  font-weight: 600;
 }
-.editProfileForm form .changeVisibility {
+.editProfileForm .inputContainer .inputWrapper {
+  width: 75%;
+}
+.editProfileForm .inputContainer .inputWrapper input {
+  width: 100%;
+  border: 1px solid var(--grey50);
+  color: var(--grey30);
+}
+.editProfileForm .inputContainer .inputWrapper input::-moz-placeholder {
+  color: var(--grey30);
+}
+.editProfileForm .inputContainer .inputWrapper input::placeholder {
+  color: var(--grey30);
+}
+.editProfileForm .inputContainer .inputWrapper p {
+  margin-top: var(--margin-xs);
+  color: var(--grey30);
+  font-size: var(--fs-small);
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper {
+  width: 75%;
   display: flex;
   flex-direction: column;
 }
-.editProfileForm form .changeVisibility big {
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions {
+  display: flex;
+  gap: var(--margin-s);
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--margin-xxs);
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption input[type=radio] {
+  display: flex;
+  justify-self: center;
+  align-self: center;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  height: 1rem;
+  width: 1rem;
+  padding: 0;
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(135deg, var(--grey50), var(--grey50), var(--grey50)) border-box;
+  border: solid 2px transparent;
+  border-radius: 50%;
+  outline: none;
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption input[type=radio]:checked {
+  background: linear-gradient(transparent, transparent) padding-box, linear-gradient(135deg, var(--secondary-color1), var(--secondary-color2)) border-box;
+  border: solid 2px transparent;
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption svg {
+  display: flex;
+  height: -moz-fit-content;
+  height: fit-content;
+  font-size: var(--fs-h3);
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper .profileVisibilityOptions .profileVisibilityOption p {
+  margin-top: 0;
+  color: var(--grey30);
   font-size: var(--fs-p);
 }
-.editProfileForm form .changeVisibility .profileVisibilityOption {
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper p {
   display: flex;
-  gap: var(--margin-xxs);
-  padding-left: var(--margin-xs);
+  flex-direction: column;
+  justify-content: center;
+  margin-top: var(--margin-xs);
+  color: var(--grey30);
+  font-size: var(--fs-small);
 }
-.editProfileForm form .btn {
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper p span {
+  display: flex;
+  align-items: center;
+}
+.editProfileForm .inputContainer .profileVisibilityOptionWrapper p span svg {
+  font-size: var(--fs-small);
+  margin-right: var(--margin-xxs);
+}
+.editProfileForm .btn {
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   padding-block: var(--margin-xxs);
   padding-inline: var(--margin-s);
+  margin-block: var(--margin-xxl);
   border-radius: 1rem;
   margin-inline: auto;
   width: -moz-fit-content;
   width: fit-content;
   font-size: var(--fs-p);
+  border: none;
+  background-color: var(--primary-color);
+  font-weight: 600;
+}
+.editProfileForm .btn:hover {
+  border: none;
+}
+
+.editProfileHeader {
+  text-align: center;
+  width: clamp(19rem, 100vw, 40rem);
+  padding-block: var(--margin-m);
+  margin-inline: auto;
+}
+
+.avatarInputModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 1005;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background-color);
+  width: clamp(19rem, 95vw, 30rem);
+  padding-block: var(--margin-xs);
+  border-radius: 1rem;
+  animation: fadeIn 0.3s ease-in-out;
+  opacity: 1;
+}
+body.dark-mode .avatarInputModal {
+  box-shadow: 0px 0px 15px var(--white);
+}
+body.dark-mode .avatarInputModal .avatarInputModalHeader {
+  border-bottom: 1px solid var(--grey70);
+}
+body.dark-mode .avatarInputModal .avatarInputModalHeader button.submitAvatar {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+body.dark-mode .avatarInputModal .avatarInputModalHeader button svg {
+  display: flex;
+  color: var(--black);
+  font-size: var(--fs-h5);
+}
+body.dark-mode .avatarInputModal .avatarInputWrapper .avatarInput input {
+  background-color: var(--grey70);
+  border: 1px solid var(--grey70);
+  color: var(--black);
+}
+body.dark-mode .avatarInputModal .avatarInputWrapper small {
+  color: var(--grey30);
+}
+.avatarInputModal .avatarInputModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: var(--margin-m);
+  padding-bottom: var(--margin-xs);
+  border-bottom: 1px solid var(--grey70);
+}
+.avatarInputModal .avatarInputModalHeader button {
+  border: none;
+  background-color: transparent;
+  font-family: var(--ff);
+  font-size: var(--fs-p);
+  cursor: pointer;
+}
+.avatarInputModal .avatarInputModalHeader button.submitAvatar {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+.avatarInputModal .avatarInputModalHeader button svg {
+  display: flex;
+  font-size: var(--fs-h5);
+}
+.avatarInputModal .avatarInputModalHeader p {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 600;
+}
+.avatarInputModal .avatarInputWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-top: var(--margin-m);
+}
+.avatarInputModal .avatarInputWrapper .avatarInputImgPreview {
+  width: 25rem;
+  height: 25rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  margin-bottom: var(--margin-s);
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(45deg, var(--secondary-color1), var(--primary-color), var(--secondary-color2)) border-box;
+  border: solid 4px transparent;
+}
+.avatarInputModal .avatarInputWrapper .avatarInputImgPreview img {
+  height: 100%;
+}
+.avatarInputModal .avatarInputWrapper .avatarInput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-inline: var(--margin-m);
+}
+.avatarInputModal .avatarInputWrapper .avatarInput input {
+  width: 100%;
+  border-radius: 0.33rem;
+  font-size: var(--fs-p);
+  padding-inline: var(--margin-xs);
+  padding-block: 2px;
+  border: 1px solid var(--grey50);
+  color: var(--grey30);
+}
+.avatarInputModal .avatarInputWrapper small {
+  font-size: var(--fs-small);
+  margin-top: var(--margin-xxs);
+  color: var(--grey10);
+}
+
+.avatarInputModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: hsla(0, 0%, 0%, 0.8);
+  z-index: 1004;
+  animation: fadeIn 0.3s ease-in-out;
+  opacity: 1;
 }/*# sourceMappingURL=EditProfileForm.css.map */

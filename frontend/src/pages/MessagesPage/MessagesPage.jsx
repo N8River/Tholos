@@ -7,6 +7,10 @@ import { AUTH_HEADER, JSON_HEADERS, BACKEND_URL } from "../../config/config";
 import { jwtDecode } from "jwt-decode";
 import { RiChatNewFill } from "react-icons/ri";
 import Loader from "../../components/loader/loader";
+import { TbMessagePlus } from "react-icons/tb";
+import { useFeedback } from "../../context/feedbackContext";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
 
 const formatTimestamp = (timestamp) => {
   const now = new Date();
@@ -55,9 +59,20 @@ function MessagesPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingFollowing, setIsLoadingFollowing] = useState(false);
 
+  const { showFeedback } = useFeedback();
+
   const token = localStorage.getItem("token");
-  const decodedToken = token && jwtDecode(token);
-  const userId = token && decodedToken.userId;
+
+  const { isValid, loading: tokenLoading } = useTokenValidation(token);
+
+  useEffect(() => {
+    if (!isValid && !tokenLoading) {
+      navigate("/explore");
+      localStorage.removeItem("token");
+    }
+  }, [navigate, isValid, tokenLoading]);
+
+  const userId = token && jwtDecode(token).userId;
   const headers = token
     ? {
         ...JSON_HEADERS,
@@ -74,54 +89,63 @@ function MessagesPage() {
   }, [navigate]);
 
   useEffect(() => {
-    const fetchConversations = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          `${BACKEND_URL}/api/conversation/conversations`,
-          {
-            method: "GET",
-            headers: headers,
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch conversations");
-        }
-
-        const responseData = await response.json();
-        setConversations(responseData);
-      } catch (error) {
-        console.log("Error fetching conversations:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const fetchFollowing = async () => {
-      setIsLoadingFollowing(true);
-      try {
-        const response = await fetch(`${BACKEND_URL}/api/user/following`, {
-          method: "GET",
-          headers: headers,
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch following users");
-        }
-
-        const responseData = await response.json();
-        setFollowing(responseData.following);
-      } catch (error) {
-        console.log("Error fetching following users:", error);
-      } finally {
-        setIsLoadingFollowing(false);
-      }
-    };
-
     fetchConversations();
     fetchFollowing();
   }, []);
+
+  useEffect(() => {
+    console.log("Updated conversations:", conversations);
+  }, [conversations]);
+
+  const fetchConversations = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/conversation/conversations`,
+        {
+          method: "GET",
+          headers: headers,
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch conversations");
+      }
+
+      const responseData = await response.json();
+      // console.log(responseData);
+      // console.log(responseData[0]);
+      // console.log(responseData[0]._id);
+
+      setConversations(responseData);
+      // console.log(conversations);
+    } catch (error) {
+      console.log("Error fetching conversations:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchFollowing = async () => {
+    setIsLoadingFollowing(true);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/user/following`, {
+        method: "GET",
+        headers: headers,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch following users");
+      }
+
+      const responseData = await response.json();
+      setFollowing(responseData.following);
+    } catch (error) {
+      console.log("Error fetching following users:", error);
+    } finally {
+      setIsLoadingFollowing(false);
+    }
+  };
 
   const handleStartConversation = async (otherPersonId) => {
     try {
@@ -153,6 +177,7 @@ function MessagesPage() {
       navigate(`/messages/${otherPersonId}`);
     } catch (error) {
       console.error("Error starting conversation:", error);
+      showFeedback("Error starting conversation", "error");
     }
   };
 
@@ -236,7 +261,9 @@ function MessagesPage() {
         )}
 
         <div className="newConversationTab">
-          <big>Start new conversation</big>
+          <big>
+            Start new conversation <TbMessagePlus />
+          </big>
           {isLoadingFollowing ? (
             <Loader />
           ) : (

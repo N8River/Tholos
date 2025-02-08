@@ -1,0 +1,57 @@
+.tholosPreview {
+  display: flex;
+  justify-content: flex-end;
+  margin-inline: var(--margin-xl);
+  position: relative;
+  width: 22.5rem;
+}
+.tholosPreview .tholosPreviewImgWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 35rem;
+  width: 17.5rem;
+  overflow: hidden;
+  position: absolute;
+  transform: translateX(-30%) translateY(-2%);
+}
+.tholosPreview .tholosPreviewImgWrapper .staticImageTholosPreview {
+  height: 100%;
+}
+.tholosPreview .tholosPreviewSlideshowWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 35rem;
+  width: 17.5rem;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.15s ease-in-out;
+  /* Stack the slideshow images on top of each other */
+  /* Fading in the current image */
+  /* Fading out the previous image */
+}
+.tholosPreview .tholosPreviewSlideshowWrapper .slideshowTholosPreview {
+  height: 100%;
+  opacity: 0;
+  position: absolute;
+  transition: opacity 1s ease-in-out; /* Smooth crossfade */
+}
+.tholosPreview .tholosPreviewSlideshowWrapper .fade-in {
+  opacity: 1;
+  z-index: 1;
+}
+.tholosPreview .tholosPreviewSlideshowWrapper .fade-out {
+  opacity: 0;
+  z-index: 0;
+}
+
+@media (max-width: 768px) {
+  .tholosPreview {
+    display: none;
+  }
+}/*# sourceMappingURL=tholosPreview.css.map */

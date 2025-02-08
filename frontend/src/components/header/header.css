@@ -47,4 +47,40 @@
 .header .login:hover {
   color: var(--accent-color);
   transition: var(--transition-in);
+}
+
+@media (max-width: 768px) {
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    padding-block: var(--margin-s);
+    background-color: var(--background-color);
+    display: flex;
+    align-items: center;
+    height: 70px;
+  }
+  .header .logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--ff-logo);
+    font-weight: 900;
+    font-size: var(--fs-h4);
+  }
+  .header .signUp {
+    font-size: var(--fs-small-ui);
+    font-weight: 600;
+    padding-block: var(--margin-xs);
+    padding-inline: var(--margin-s);
+    margin-right: var(--margin-m);
+    border: none;
+  }
+  .header .login {
+    font-size: var(--fs-small-ui);
+    font-weight: 600;
+    padding-block: var(--margin-xs);
+    padding-inline: var(--margin-s);
+  }
 }/*# sourceMappingURL=header.css.map */

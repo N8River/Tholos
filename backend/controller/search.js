@@ -2,7 +2,8 @@ const User = require("../model/user");
 const Post = require("../model/post");
 
 exports.search = async (req, res, next) => {
-  const { query, currentUserId } = req.query;
+  const { query } = req.query;
+  const currentUserId = req.user.userId;
   const limit = 10;
 
   try {

@@ -1,12 +1,16 @@
 .postCard {
-  width: 30rem;
+  width: clamp(20rem, 100vw, 30rem);
   display: flex;
   flex-direction: column;
-  padding: var(--margin-xs);
+  padding-block: var(--margin-s);
+  border-bottom: 1px solid var(--grey90);
+}
+body.dark-mode .postCard .postCardHeader .postUserInfo .postUserAvatar {
+  border: 2px solid var(--grey30);
 }
 .postCard .postCardHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin-bottom: var(--margin-xs);
 }
 .postCard .postCardHeader .postUserInfo {
@@ -16,81 +20,142 @@
   cursor: pointer;
 }
 .postCard .postCardHeader .postUserInfo:hover .postUserAvatar {
-  border: 1px solid var(--grey10);
+  border: 2px solid var(--primary-color);
   transition: var(--transition-out);
 }
 .postCard .postCardHeader .postUserInfo:hover .postUserAvatar img {
   transition: var(--transition-out);
 }
 .postCard .postCardHeader .postUserInfo:hover .postUserName {
-  color: var(--grey50);
+  color: var(--primary-color);
   transition: var(--transition-out);
 }
 .postCard .postCardHeader .postUserInfo .postUserAvatar {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2.75rem;
+  width: 2.75rem;
   overflow: hidden;
   border-radius: 50%;
-  border: 1px solid var(--grey50);
+  border: 2px solid var(--grey30);
   transition: var(--transition-in);
+  aspect-ratio: 1/1;
 }
 .postCard .postCardHeader .postUserInfo .postUserAvatar img {
-  width: 100%;
-  height: auto;
+  height: 100%;
   transition: var(--transition-in);
 }
 .postCard .postCardHeader .postUserInfo .postUserName {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: 600;
-  font-size: var(--fs-p);
+  height: 100%;
+  font-weight: 500;
+  font-size: clamp(var(--fs-small), 3.25vw, var(--fs-p));
   transition: var(--transition-in);
+}
+.postCard .postCardHeader .postUserInfo .postCardTimestamp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-small-ui);
+  height: 100%;
+  color: var(--grey30);
 }
 .postCard .postCardHeader .postMenuBtn {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: var(--margin-xs);
+  margin-left: auto;
+  cursor: pointer;
+}
+.postCard .postCardHeader .postMenuBtn:hover svg {
+  transform: scale(1.1);
+  transition: var(--transition-in);
 }
 .postCard .postCardHeader .postMenuBtn svg {
-  font-size: var(--fs-h5);
+  font-size: clamp(var(--fs-p), 5vw, var(--fs-big));
+  transition: var(--transition-out);
 }
 .postCard .postImages {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: var(--margin-xs);
   background-color: var(--background-color);
 }
 .postCard .postImages .carousel-root {
   width: 100%;
 }
+.postCard .postImages .carousel-root .carousel-slider .control-dots {
+  margin-block: var(--margin-xxs);
+}
+.postCard .postImages .carousel-root .carousel-slider .control-dots .dot {
+  border: 1px solid var(--grey30);
+  background-color: var(--background-color);
+  height: 0.65rem;
+  width: 0.65rem;
+}
+.postCard .postImages .carousel-root .carousel-slider .slider-wrapper .postImagesWrapper {
+  background: linear-gradient(to bottom, var(--background-color-light) 20%, var(--background-color-dark) 80%);
+}
+.postCard .postImages .carousel-root .custom-prev-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: transparent;
+  background-color: transparent;
+  color: var(--white);
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 1000; /* Ensuring the button stays on top */
+  padding-left: var(--margin-xs);
+}
+.postCard .postImages .carousel-root .custom-prev-arrow svg {
+  font-size: var(--fs-h3);
+  stroke: var(--black);
+  stroke-width: 0.2px;
+}
+.postCard .postImages .carousel-root .custom-next-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: transparent;
+  background-color: transparent;
+  color: var(--white);
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 1000; /* Ensuring the button stays on top */
+  padding-right: var(--margin-xs);
+}
+.postCard .postImages .carousel-root .custom-next-arrow svg {
+  font-size: var(--fs-h3);
+  stroke: var(--black);
+  stroke-width: 0.2px;
+}
 .postCard .postImages .carousel-root .slide.selected {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: radial-gradient(ellipse at center, transparent 0%, var(--grey90) 100%);
 }
 .postCard .postImages .carousel-root .slide.previous {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: radial-gradient(circle at center, transparent, var(--grey90));
 }
 .postCard .postImages .postImagesWrapper {
   width: 100%;
-  position: relative;
-  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .postCard .postImages .postImagesWrapper img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
@@ -105,16 +170,18 @@
 .postCard .postToolBar {
   display: flex;
   align-items: center;
-  gap: var(--margin-xs);
+  gap: var(--margin-s);
+  margin-block: var(--margin-xs);
 }
 .postCard .postToolBar .postLikeBtn {
   display: flex;
   align-items: center;
-  font-size: var(--fs-h4);
   cursor: pointer;
 }
 .postCard .postToolBar .postLikeBtn svg {
   transition: var(--transition-out);
+  height: var(--fs-h4);
+  width: var(--fs-h4);
 }
 .postCard .postToolBar .postLikeBtn svg:hover {
   color: var(--primary-color);
@@ -123,14 +190,17 @@
   color: var(--primary-color);
   transition: var(--transition-in);
 }
-.postCard .postToolBar .postLikeBtn svg g path {
+.postCard .postToolBar .postLikeBtn svg path {
   stroke-width: 0.5px;
 }
 .postCard .postToolBar .postCommentBtn {
   display: flex;
   align-items: center;
-  font-size: var(--fs-h5);
   cursor: pointer;
+}
+.postCard .postToolBar .postCommentBtn svg {
+  height: var(--fs-h4);
+  width: var(--fs-h4);
 }
 .postCard .postToolBar .postCommentBtn svg path {
   stroke-width: 0.15px;
@@ -139,32 +209,88 @@
   display: flex;
   align-items: center;
   margin-left: auto;
-  font-size: var(--fs-h5);
   cursor: pointer;
 }
+.postCard .postToolBar .postShareBtn svg {
+  height: var(--fs-h4);
+  width: var(--fs-h4);
+}
 .postCard .postToolBar .postShareBtn svg path {
-  stroke-width: 1px;
+  stroke-width: 1.5px;
 }
 .postCard .likeInteractions {
   display: flex;
   height: -moz-fit-content;
   height: fit-content;
-  padding-left: var(--margin-xxs);
+  margin-bottom: var(--margin-xxs);
 }
 .postCard .likeInteractions small {
   font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--grey30);
 }
 .postCard .postCaption {
-  display: flex;
+  display: inline-block;
+  font-size: var(--fs-small-ui);
 }
 .postCard .postCaption strong {
   margin-right: var(--margin-xxs);
+  font-size: var(--fs-small-ui);
 }
 .postCard .commentInteractions {
   display: flex;
   font-size: var(--fs-p);
   color: var(--grey30);
-  margin-block: var(--margin-xxs);
+  margin-top: var(--margin-xxs);
+}
+.postCard .commentInteractions small {
+  font-size: var(--fs-small);
+}
+
+@keyframes likeBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes likeBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes unlikeShrink {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.postLikeBtn svg.liked {
+  color: var(--primary-color);
+  animation: likeBounce 0.3s ease-in-out;
+}
+
+.postLikeBtn svg.unliked {
+  color: var(--grey10); /* Slight fade-out color */
+  animation: unlikeShrink 0.4s ease-in-out;
 }
 
 @keyframes likeAnimation {
@@ -179,5 +305,34 @@
   }
   100% {
     font-size: var(--fs-h4);
+  }
+}
+@media (max-width: 480px) {
+  .postCard {
+    padding-inline: 0;
+  }
+  body.dark-mode .postCard {
+    border-bottom: 1px solid var(--grey70);
+  }
+  .postCard .postCardHeader {
+    padding-inline: var(--margin-xs);
+  }
+  .postCard .postCardHeader .postUserInfo {
+    gap: 0rem;
+  }
+  .postCard .postCardHeader .postUserInfo .postUserAvatar {
+    margin-right: var(--margin-xs);
+  }
+  .postCard .postToolBar {
+    padding-inline: var(--margin-xs);
+  }
+  .postCard .likeInteractions {
+    padding-inline: var(--margin-xs);
+  }
+  .postCard .postCaption {
+    padding-inline: var(--margin-xs);
+  }
+  .postCard .commentInteractions {
+    padding-inline: var(--margin-xs);
   }
 }/*# sourceMappingURL=postCard.css.map */

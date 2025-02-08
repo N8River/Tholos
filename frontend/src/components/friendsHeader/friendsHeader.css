@@ -4,10 +4,25 @@
   align-items: center;
   position: relative;
   top: 0;
-  width: 35rem;
+  width: clamp(20rem, 100vw, 35rem);
   margin-inline: auto;
-  padding-block: var(--margin-xs);
-  gap: var(--margin-xxs);
+  padding-block: var(--margin-s);
+  padding-top: var(--margin-m);
+  gap: var(--margin-s);
+  overflow-x: auto;
+}
+.friendsHeader::-webkit-scrollbar {
+  width: 0.15rem;
+  height: 0.15rem;
+}
+.friendsHeader::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.friendsHeader::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, transparent 0%, var(--grey90) 50%, transparent 100%);
+}
+.friendsHeader::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, transparent 0%, var(--grey70) 50%, transparent 100%);
 }
 .friendsHeader .followingUserIcon {
   display: flex;
@@ -15,13 +30,15 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  width: 4rem;
 }
 .friendsHeader .followingUserIcon:hover .followingUserAvatar {
-  border: 1px solid var(--primary-color);
+  border: 2px solid var(--primary-color);
   transition: var(--transition-in);
 }
 .friendsHeader .followingUserIcon:hover .followingUserUserName p {
-  color: var(--grey50);
+  font-size: var(--fs-small-ui);
+  color: var(--primary-color);
   transition: var(--transition-in);
 }
 .friendsHeader .followingUserIcon .followingUserAvatar {
@@ -32,18 +49,35 @@
   height: 3rem;
   width: 3rem;
   overflow: hidden;
-  border: 1px solid var(--grey50);
+  border: 2px solid var(--grey30);
   transition: var(--transition-out);
+  margin-bottom: var(--margin-xxs);
+  aspect-ratio: 1/1;
 }
 .friendsHeader .followingUserIcon .followingUserAvatar img {
   height: 100%;
 }
 .friendsHeader .followingUserIcon .followingUserUserName {
   display: flex;
-  justify-content: center;
   align-items: center;
+  width: 4rem;
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: hidden; /* Hide the overflowed text */
+  text-overflow: ellipsis; /* Display "..." for overflowed text */
 }
 .friendsHeader .followingUserIcon .followingUserUserName p {
-  font-size: var(--fs-small);
+  font-size: var(--fs-small-ui);
+  color: var(--grey30);
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
   transition: var(--transition-out);
+}
+
+@media (max-width: 768px) {
+  .friendsHeader {
+    margin-top: 70px;
+    width: clamp(20rem, 100vw, 35rem);
+    padding-inline: var(--margin-s);
+  }
 }/*# sourceMappingURL=friendsHeader.css.map */

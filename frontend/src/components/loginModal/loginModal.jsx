@@ -43,7 +43,7 @@ function LoginModal({ user }) {
               <div className="loginModalUserAvatar">
                 <img src={user.avatar} alt="" />
               </div>
-              <big>See more from {user.userName}</big>
+              <big className="loginUserText">See more from {user.userName}</big>
               <p>
                 Log in to see posts from friends and discover other accounts
                 you'll love.
@@ -51,8 +51,9 @@ function LoginModal({ user }) {
             </>
           ) : (
             <>
-              <big>Log in to explore more posts</big>
-              <p>Log in to interact with posts and see more content.</p>
+              <big className="loginNoUser">
+                Log in to interact with posts and see more content.
+              </big>
             </>
           )}
         </div>
@@ -61,14 +62,14 @@ function LoginModal({ user }) {
             type="text"
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="EMAIL OR USERNAME"
+            placeholder="Email or Username"
             required
           />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="PASSWORD"
+            placeholder="Password"
             required
           />
           <div className="loginModalFormSubmitBtn" onClick={handleLogin}>
@@ -77,9 +78,14 @@ function LoginModal({ user }) {
         </div>
         <div className="loginModalFooter">
           <p>Don't have an account?</p>
-          <p className="peePoo" onClick={()=>{
-            navigate('/signup')
-          }}>Sign Up</p>
+          <p
+            className="peePoo"
+            onClick={() => {
+              navigate("/signup");
+            }}
+          >
+            Sign Up
+          </p>
         </div>
       </div>
     </>

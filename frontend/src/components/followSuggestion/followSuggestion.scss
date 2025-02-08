@@ -18,11 +18,21 @@
 
   border-radius: 1rem;
 
+  .loader {
+    height: min-content;
+    margin-block: var(--margin-m);
+
+    p {
+      display: none;
+    }
+  }
+
   p {
     display: flex;
 
     font-size: var(--fs-p);
     color: var(--grey30);
+    font-weight: 600;
 
     margin-bottom: var(--margin-xs);
   }
@@ -36,8 +46,10 @@
       display: flex;
       width: 100%;
       align-items: center;
+      justify-content: center;
 
       padding-block: var(--margin-xxs);
+      margin-bottom: var(--margin-xxs);
 
       cursor: pointer;
 
@@ -52,16 +64,21 @@
       }
 
       .followSuggestionUserAvatar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         height: 2.25rem;
         width: 2.25rem;
         border-radius: 50%;
 
-        margin-right: var(--margin-xs);
+        margin-right: var(--margin-s);
 
         border: 1px solid var(--grey50);
 
         overflow: hidden;
         transition: var(--transition-out);
+
         img {
           height: 100%;
           width: auto;
@@ -91,30 +108,75 @@
         align-items: center;
 
         margin-left: auto;
+        margin-block: auto;
 
         button {
           border: none;
           background-color: transparent;
 
-          font-size: var(--fs-small);
-          font-family: var(--ff);
+          padding-block: var(--margin-xs);
+          padding-inline: var(--margin-s);
 
-          padding-block: var(--margin-xxs);
-          padding-inline: var(--margin-xs);
-
-          font-weight: 600;
-
-          color: var(--primary-color);
           transition: var(--transition-out);
 
           cursor: pointer;
 
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           &:hover {
-            color: var(--accent-color);
-            transition: var(--transition-in);
+            p {
+              color: var(--black);
+              transition: var(--transition-in);
+            }
+          }
+
+          p {
+            font-weight: 600;
+
+            color: var(--primary-color);
+            font-size: var(--fs-small);
+            font-family: var(--ff);
+
+            margin: 0rem;
+            padding: 0rem;
+          }
+
+          .following {
+            color: var(--grey30);
           }
         }
       }
     }
+  }
+}
+
+.followSuggestion.noFollowing {
+  right: 50%;
+  transform: translateX(50%);
+  margin: 0;
+  top: 12.5%;
+}
+
+@media (max-width: 1280px) {
+  .followSuggestion {
+    display: none;
+  }
+
+  .followSuggestion.noFollowing {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .followSuggestion.noFollowing {
+    top: 20%;
+  }
+}
+
+@media (max-width: 497px) {
+  .followSuggestion.noFollowing {
+    top: 22.5%;
   }
 }

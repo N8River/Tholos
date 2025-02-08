@@ -68,6 +68,7 @@ exports.fetchPublicPosts = async (req, res, next) => {
 exports.fetchPostsByFollowing = async (req, res, next) => {
   try {
     const userId = req.user.userId;
+    console.log("😵😵", userId);
 
     // Pagination parameters
     const page = parseInt(req.query.page) || 1;
@@ -114,7 +115,7 @@ exports.fetchUserPosts = async (req, res, next) => {
     if (isOwner) {
       const userPosts = await Post.find({ user: user._id })
         .populate("user", "userName avatar")
-        .sort({ createdAt: -1 })
+        .sort({ createdAt: -1, _id: -1 }) // Secondary sort by _id to guarantee stability
         .skip(skip) // Skip documents for pagination
         .limit(limit); // Limit the number of posts
 
@@ -133,9 +134,12 @@ exports.fetchUserPosts = async (req, res, next) => {
 
     const userPosts = await Post.find({ user: user._id })
       .populate("user", "userName avatar")
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: -1, _id: -1 }) // Secondary sort by _id to guarantee stability
       .skip(skip) // Skip documents for pagination
       .limit(limit); // Limit the number of posts
+
+    console.log("🔴 USER POSTS", userPosts.length);
+    console.log(`Fetched ${userPosts.length} posts for page ${page}`);
 
     res.status(200).json(userPosts);
   } catch (error) {
@@ -149,7 +153,7 @@ exports.fetchUserPosts = async (req, res, next) => {
 exports.fetchPostById = async (req, res, next) => {
   try {
     const { postId } = req.params;
-    const loggedInUserId = req.user?.userId; // This will be available if the user is authenticated
+    const loggedInUserId = req.user?.userId; // Get the logged-in user ID if authenticated
 
     const post = await Post.findById(postId).populate(
       "user",
@@ -161,10 +165,16 @@ exports.fetchPostById = async (req, res, next) => {
     }
 
     const postOwner = await User.findById(post.user._id);
-    console.log("🔴 postOwner", postOwner);
+
+    // Check if the logged-in user is the owner of the post
+    const isOwner = postOwner._id.toString() === loggedInUserId;
+
     if (postOwner.profileVisibility === "Private") {
-      // If the user is not logged in or not following
-      if (!loggedInUserId || !postOwner.followers.includes(loggedInUserId)) {
+      // If the user is not the owner and not following
+      if (
+        !isOwner &&
+        (!loggedInUserId || !postOwner.followers.includes(loggedInUserId))
+      ) {
         return res.status(403).json({ message: "This post is private." });
       }
     }
@@ -178,7 +188,6 @@ exports.fetchPostById = async (req, res, next) => {
   }
 };
 
-// exports.addComment = async (req, res, next) => {
 exports.toggleLike = async (req, res, next) => {
   try {
     const userId = req.user.userId;
@@ -209,7 +218,7 @@ exports.toggleLike = async (req, res, next) => {
         user: post.user, // Post owner
         sender: user,
         type: "like",
-        message: `User ${user.userName} liked your post.`,
+        message: `liked your post.`,
         post: postId, // Optionally link the post
       });
 
@@ -233,41 +242,6 @@ exports.toggleLike = async (req, res, next) => {
       .json({ message: "Failed to toggle like", error: error.message });
   }
 };
-//   try {
-//     const userId = req.user.userId;
-
-//     const user = await User.findById(userId);
-
-//     const { postId } = req.params;
-//     const { comment } = req.body;
-//     // console.log("🔴 postId", comment);
-//     const post = await Post.findById(postId);
-//     if (!post) {
-//       return res.status(404).json({ message: "Post not found" });
-//     }
-
-//     post.comments.push({
-//       user: user._id,
-//       text: comment,
-//     });
-
-//     await post.save();
-
-//     const populatedPost = await Post.findById(postId)
-//       .populate("user") // Populate post's user
-//       .populate("comments.user");
-
-//     res.status(200).json({
-//       message: "Comment added successfully",
-//       comment: populatedPost.comments[populatedPost.comments.length - 1],
-//     });
-//   } catch (error) {
-//     console.error("Error commenting:", error);
-//     res
-//       .status(500)
-//       .json({ message: "Failed to comment", error: error.message });
-//   }
-// };
 
 exports.addComment = async (req, res, next) => {
   try {
@@ -296,7 +270,7 @@ exports.addComment = async (req, res, next) => {
       user: post.user, // Post owner
       type: "comment",
       sender: user,
-      message: `User ${user.userName} commented on your post.`,
+      message: `commented on your post.`,
       post: postId,
     });
 

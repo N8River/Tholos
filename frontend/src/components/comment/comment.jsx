@@ -1,16 +1,32 @@
+import { useNavigate } from "react-router-dom";
 import "./comment.css";
 
 function Comment({ comment }) {
-  console.log("🔴 Comment", comment);
+  // console.log("🔴 Comment", comment);
+  const navigate = useNavigate();
 
   return (
     <>
       <div className="comment">
-        <div className="commentUserAvatar">
+        <div
+          className="commentUserAvatar"
+          onClick={() => {
+            navigate(`/${comment.user.userName}`);
+          }}
+        >
           <img src={comment.user.avatar} alt="" />
         </div>
-        <strong>{comment.user.userName}</strong>
-        <p>{comment.text}</p>
+
+        <div className="inline-block">
+          <strong
+            onClick={() => {
+              navigate(`/${comment.user.userName}`);
+            }}
+          >
+            {comment.user.userName}
+          </strong>
+          {comment.text}
+        </div>
       </div>
     </>
   );

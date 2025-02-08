@@ -4,15 +4,37 @@ import { BACKEND_URL, JSON_HEADERS, AUTH_HEADER } from "../../config/config";
 import "./notificationComponent.css";
 import { jwtDecode } from "jwt-decode";
 import NotificationMessage from "./notificationMessage/notificationMessage";
-
-const token = localStorage.getItem("token");
-const socket = token
-  ? io(BACKEND_URL, {
-      query: { userId: jwtDecode(token).userId },
-    })
-  : null;
+import { FaRegSmileBeam } from "react-icons/fa";
+import useTokenVerification from "../../hooks/useTokenVerification";
+import useTokenValidation from "../../hooks/useTokenVerification";
+import { useNavigate } from "react-router-dom";
 
 function NotificationComponent({ setUnreadCount }) {
+  const token = localStorage.getItem("token");
+
+  const {
+    decodedToken,
+    isValid,
+    loading: tokenLoading,
+  } = useTokenValidation(token);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!tokenLoading) {
+      if (!isValid) {
+        localStorage.removeItem(token);
+        navigate("/explore");
+      }
+    }
+  }, [navigate, isValid, tokenLoading, decodedToken]);
+
+  const socket = token
+    ? io(BACKEND_URL, {
+        query: { userId: jwtDecode(token).userId },
+      })
+    : null;
+
   // Take the setUnreadCount as a prop
   const [notifications, setNotifications] = useState([]);
 
@@ -61,28 +83,22 @@ function NotificationComponent({ setUnreadCount }) {
       const notification = notifications.find((n) => n._id === notificationId);
       if (notification.isRead) return; // Prevent multiple clicks
 
+      // Remove the notification from the UI **immediately** for smooth UX
+      setNotifications((prevNotifications) =>
+        prevNotifications.filter((n) => n._id !== notificationId)
+      );
+
+      // Decrease unread count
+      setUnreadCount((prevCount) => Math.max(0, prevCount - 1));
+
       // Make API call to mark the notification as read
-      const response = await fetch(
+      await fetch(
         `${BACKEND_URL}/api/notification/mark-as-read/${notificationId}`,
         {
           method: "PATCH",
           headers,
         }
       );
-
-      if (response.ok) {
-        // Update the notifications state to mark the notification as read
-        setNotifications((prevNotifications) =>
-          prevNotifications.map((notification) =>
-            notification._id === notificationId
-              ? { ...notification, isRead: true }
-              : notification
-          )
-        );
-
-        // Decrease unread count
-        setUnreadCount((prevCount) => prevCount - 1);
-      }
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
@@ -123,27 +139,24 @@ function NotificationComponent({ setUnreadCount }) {
   };
 
   return (
-    <div className="notificationDropdownComponent">
+    <div className="notificationSidebarComponent">
       {notifications.length > 0 ? (
         notifications.map((notification) => (
-          <div
+          <NotificationMessage
+            handleNotificationClick={handleNotificationClick}
             key={notification._id}
-            className={`notificationItem ${
-              notification.isRead ? "read" : "unread"
-            }`}
-            onClick={() =>
-              handleNotificationClick(notification._id, notification.type)
-            } // Mark as read on click
-          >
-            <NotificationMessage
-              notification={notification}
-              handleApproveRequest={handleApproveRequest}
-              handleRejectRequest={handleRejectRequest}
-            />
-          </div>
+            isRead={notification.isRead}
+            notification={notification}
+            handleApproveRequest={handleApproveRequest}
+            handleRejectRequest={handleRejectRequest}
+          />
         ))
       ) : (
-        <p>No new notifications</p>
+        <p className="noNewNoti">
+          {" "}
+          <FaRegSmileBeam />
+          You're all caught up!
+        </p>
       )}
     </div>
   );

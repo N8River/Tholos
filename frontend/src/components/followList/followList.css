@@ -1,0 +1,190 @@
+.followList {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  padding-bottom: var(--margin-xs);
+  background-color: var(--background-color);
+  width: 22.5rem;
+  border-radius: 1rem;
+  z-index: 1005;
+}
+body.dark-mode .followList {
+  box-shadow: 0px 0px 10px var(--white);
+}
+body.dark-mode .followList .followUsersList .followUser .followUserAvatar {
+  border: 2px solid var(--grey50);
+}
+.followList .followListHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-inline: var(--margin-s);
+  padding-top: var(--margin-xxs);
+  padding-bottom: var(--margin-xxs);
+  margin-bottom: var(--margin-xxs);
+  border-bottom: 1px solid var(--grey70);
+}
+.followList .followListHeader p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+.followList .followListHeader button {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--margin-s);
+  border: none;
+  background-color: transparent;
+  color: var(--black);
+}
+.followList .followListHeader button svg {
+  font-size: var(--fs-h5);
+}
+.followList .followUsersList {
+  display: flex;
+  flex-direction: column;
+  padding-top: 0rem;
+  padding: var(--margin-xs);
+  margin-right: var(--margin-xxs);
+  width: 100%;
+  height: 17.5rem;
+  overflow-y: auto;
+  gap: var(--margin-xs);
+}
+.followList .followUsersList::-webkit-scrollbar {
+  width: 0.15rem;
+  height: 0.15rem;
+}
+.followList .followUsersList::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.followList .followUsersList::-webkit-scrollbar-thumb {
+  background: linear-gradient(0deg, transparent 0%, var(--grey90) 50%, transparent 100%);
+}
+.followList .followUsersList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, transparent 0%, var(--grey70) 50%, transparent 100%);
+}
+.followList .followUsersList .followUser {
+  display: flex;
+  align-items: center;
+  padding: var(--margin-xxs);
+}
+.followList .followUsersList .followUser .followUserAvatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  min-width: 3rem;
+  max-width: 3rem;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  border: 2px solid var(--grey50);
+  overflow: hidden;
+  aspect-ratio: 1/1;
+  margin-right: var(--margin-s);
+}
+.followList .followUsersList .followUser .followUserAvatar img {
+  height: 100%;
+}
+.followList .followUsersList .followUser .followUserInfo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.followList .followUsersList .followUser .followUserInfo p {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: var(--fs-small-ui);
+}
+.followList .followUsersList .followUser .followUserInfo p.grey {
+  font-weight: 400;
+  color: var(--grey30);
+}
+.followList .followUsersList .followUser .followUserBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 5rem;
+  border: none;
+  padding-block: var(--margin-xxs);
+  background-color: var(--primary-color);
+  border-radius: 0.5rem;
+}
+.followList .followUsersList .followUser .followUserBtn.following {
+  background-color: transparent;
+}
+.followList .followUsersList .followUser .followUserBtn.following p {
+  font-family: var(--ff);
+  font-size: var(--fs-small-ui);
+  font-weight: 600;
+  color: var(--primary-color);
+}
+.followList .followUsersList .followUser .followUserBtn p {
+  font-family: var(--ff);
+  color: var(--background-color);
+  font-size: var(--fs-small-ui);
+  font-weight: 600;
+}
+.followList .followUsersList .emptyFollowListMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-inline: var(--margin-xxs);
+  padding-bottom: var(--margin-xs);
+}
+.followList .followUsersList .emptyFollowListMessage p {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--grey10);
+}
+
+.followListOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: hsla(0, 0%, 0%, 0.8);
+  z-index: 1004;
+}
+body.dark-mode .followListOverlay {
+  background-color: hsla(0, 0%, 0%, 0.9);
+}
+
+@media (max-width: 475px) {
+  .followList {
+    width: clamp(19rem, 95vw, 25rem);
+  }
+  .followList .followListHeader p {
+    font-size: var(--fs-p);
+  }
+  .followList .followUsersList .emptyFollowListMessage p {
+    font-size: clamp(var(--fs-small), 3.5vw, var(--fs-p));
+  }
+  .followList .followUsersList .followUser .followUserAvatar {
+    height: clamp(2.5rem, 11vw, 3rem);
+    min-width: clamp(2.5rem, 11vw, 3rem);
+  }
+  .followList .followUsersList .followUser .followUserInfo p {
+    font-size: var(--fs-small-ui);
+  }
+  .followList .followUsersList .followUser .followUserBtn p {
+    font-size: var(--fs-small-ui);
+  }
+  .followList .followUsersList .followUser .followUserBtn p.following {
+    font-size: var(--fs-small-ui);
+  }
+}/*# sourceMappingURL=followList.css.map */

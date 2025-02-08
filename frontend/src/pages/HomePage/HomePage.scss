@@ -1,0 +1,77 @@
+.noPostsMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  margin-bottom: var(--margin-m);
+
+  .followPeopleRefreshMessageWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+
+    text-wrap: wrap;
+
+    .followPeopleRefreshMessage {
+      font-size: var(--fs-big);
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+
+  .refreshBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: transparent;
+    border: none;
+
+    font-family: var(--ff);
+    color: var(--primary-color);
+
+    font-weight: 600;
+    font-size: var(--fs-small-ui);
+
+    padding-block: var(--margin-xxs);
+
+    gap: var(--margin-xxs);
+
+    cursor: pointer;
+
+    &:hover {
+      svg {
+        transform: rotate(360deg);
+
+        transition: transform 0.4s ease-in-out;
+      }
+    }
+
+    svg {
+      font-size: var(--fs-big);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .noPostsMessage {
+    .followPeopleRefreshMessageWrapper {
+      padding-inline: var(--margin-m);
+      .followPeopleRefreshMessage {
+        font-size: var(--fs-p);
+      }
+    }
+  }
+}
+
+@media (max-width: 497px) {
+  .noPostsMessage {
+    .followPeopleRefreshMessageWrapper {
+      .followPeopleRefreshMessage {
+        font-size: var(--fs-p);
+      }
+    }
+  }
+}

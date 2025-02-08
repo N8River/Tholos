@@ -1,0 +1,61 @@
+@mixin custom-scrollbar(
+  $thumb-color,
+  $track-color,
+  $hover-color,
+  $width: 0.2rem,
+  $height: 0.2rem
+) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $height;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: $hover-color;
+  }
+}
+
+@mixin linear-gradient-bkg($direction, $color1, $color2, $color3: null) {
+  @if $color3 {
+    background: linear-gradient($direction, $color1, $color2, $color3);
+  } @else {
+    background: linear-gradient($direction, $color1, $color2);
+  }
+}
+
+@mixin linear-gradient-color($direction, $color1, $color2, $color3: null) {
+  @if $color3 {
+    color: linear-gradient($direction, $color1, $color2, $color3);
+  } @else {
+    color: linear-gradient($direction, $color1, $color2);
+  }
+}
+
+@mixin gradient-border(
+  $background-color,
+  $gradient-angle,
+  $border-width,
+  $color1,
+  $color2,
+  $color3: null
+) {
+  @if ($color3) {
+    background: linear-gradient($background-color, $background-color)
+        padding-box,
+      linear-gradient($gradient-angle, $color1, $color2, $color3) border-box;
+    border: solid $border-width transparent;
+  } @else {
+    background: linear-gradient($background-color, $background-color)
+        padding-box,
+      linear-gradient($gradient-angle, $color1, $color2) border-box;
+    border: solid $border-width transparent;
+  }
+}

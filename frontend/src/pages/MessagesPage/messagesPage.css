@@ -1,18 +1,49 @@
 .messagesPage {
   display: flex;
   flex-direction: column;
-  width: 40rem;
+  width: clamp(20rem, 95vw, 38rem);
   margin-inline: auto;
   height: 100vh;
   padding-block: var(--margin-m);
+  padding-top: var(--margin-l);
+}
+body.dark-mode .messagesPage .conversationsList .conversationItem {
+  border: 1px solid var(--grey50);
+}
+body.dark-mode .messagesPage .conversationsList .conversationItem .conversationUserImgWrapper {
+  border: 1px solid var(--grey50);
+}
+body.dark-mode .messagesPage .conversationsList .conversationItem .conversationUserInfo .lastMessage {
+  color: var(--grey10);
+}
+body.dark-mode .messagesPage .conversationsList .conversationItem .conversationTimestamp .lastMessageTimestamp {
+  display: inline-block;
+  color: var(--grey30);
+}
+body.dark-mode .messagesPage .newConversationTab big {
+  color: var(--grey10);
+}
+body.dark-mode .messagesPage .newConversationTab big svg {
+  color: var(--grey10);
+}
+body.dark-mode .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserAvatar {
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(135deg, var(--grey30), var(--grey30), var(--grey30)) border-box;
+  border: solid 2px transparent;
+}
+body.dark-mode .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserAvatar:hover {
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(135deg, var(--secondary-color1), var(--primary-color), var(--secondary-color2)) border-box;
+  border: solid 2px transparent;
+}
+body.dark-mode .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserName p {
+  color: var(--grey10);
 }
 .messagesPage .messagesPageHeader {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--margin-xs);
+  margin-bottom: var(--margin-s);
 }
 .messagesPage .messagesPageHeader h2 {
-  font-size: var(--fs-h4);
+  font-size: clamp(var(--fs-big), 5vw, var(--fs-h5));
 }
 .messagesPage .messagesPageHeader .btn {
   display: flex;
@@ -34,14 +65,33 @@
   color: var(--white);
   font-size: var(--fs-p);
 }
+.messagesPage .conversationsList {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: var(--margin-s);
+}
+.messagesPage .conversationsList::-webkit-scrollbar {
+  width: 0.2rem;
+  height: 0.2rem;
+}
+.messagesPage .conversationsList::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.messagesPage .conversationsList::-webkit-scrollbar-thumb {
+  background: linear-gradient(0deg, transparent 0%, var(--grey90) 10%, var(--grey70) 50%, var(--grey90) 90%, transparent 100%);
+}
+.messagesPage .conversationsList::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, transparent 0%, var(--grey70) 10%, var(--grey70) 50%, var(--grey70) 90%, transparent 100%);
+}
 .messagesPage .conversationsList .conversationItem {
   display: flex;
   align-items: center;
-  gap: var(--margin-s);
-  padding: var(--margin-xs);
+  gap: clamp(var(--margin-xxs), 3vw, var(--margin-s));
+  padding-inline: var(--margin-xs);
   padding-block: var(--margin-xs);
+  padding-right: var(--margin-m);
   margin-block: var(--margin-xs);
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
   border: 1px solid var(--grey70);
   cursor: pointer;
   transition: var(--transition-out);
@@ -59,10 +109,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--grey70);
+  border: 1px solid var(--grey50);
   border-radius: 50%;
   height: 3rem;
-  width: 3rem;
+  min-width: 3rem;
+  max-width: 3rem;
+  aspect-ratio: 1/1;
   overflow: hidden;
   transition: var(--transition-out);
 }
@@ -74,42 +126,88 @@
   display: flex;
   width: 100%;
 }
+.messagesPage .conversationsList .conversationItem .conversationInfo .conversationUserInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+}
+.messagesPage .conversationsList .conversationItem .conversationInfo .conversationUserInfo h4 {
+  display: flex;
+  font-size: var(--fs-small-ui);
+  font-weight: 600;
+}
+.messagesPage .conversationsList .conversationItem .conversationInfo .conversationUserInfo p {
+  display: flex;
+  font-size: var(--fs-p-ui);
+  font-weight: 400;
+  color: var(--grey30);
+  text-overflow: ellipsis;
+}
 .messagesPage .conversationsList .conversationItem .conversationInfo .conversationTimestamp {
   display: flex;
   margin-left: auto;
 }
 .messagesPage .conversationsList .conversationItem .conversationInfo .conversationTimestamp small {
   color: var(--grey50);
-}
-.messagesPage .conversationsList .conversationItem .conversationInfo h4 {
-  display: flex;
-  font-size: var(--fs-p);
-  font-weight: 600;
-}
-.messagesPage .conversationsList .conversationItem .conversationInfo p {
-  display: flex;
-  font-size: var(--fs-p);
-  font-weight: 400;
-  color: var(--grey30);
+  font-size: var(--fs-small-ui);
 }
 .messagesPage .newConversationTab {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 12rem;
   margin-top: auto;
+  position: relative;
+  overflow-x: auto;
+}
+.messagesPage .newConversationTab::-webkit-scrollbar {
+  width: 0.1rem;
+  height: 0.1rem;
+}
+.messagesPage .newConversationTab::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.messagesPage .newConversationTab::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, transparent 0%, var(--grey90) 10%, var(--grey70) 50%, var(--grey90) 90%, transparent 100%);
+}
+.messagesPage .newConversationTab::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, transparent 0%, var(--grey70) 10%, var(--grey70) 50%, var(--grey70) 90%, transparent 100%);
+}
+.messagesPage .newConversationTab::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px; /* The height of the border-bottom */
+  background: linear-gradient(45deg, var(--background-color) 0%, var(--grey90) 10%, var(--grey70) 50%, var(--grey90) 90%, var(--background-color) 100%);
 }
 .messagesPage .newConversationTab big {
-  font-size: var(--fs-p);
+  font-size: clamp(var(--fs-p), 3.5vw, var(--fs-big));
   font-weight: 600;
+  padding-top: var(--margin-xs);
   padding-bottom: var(--margin-xxs);
   width: 100%;
   text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--margin-xs);
+}
+.messagesPage .newConversationTab big svg {
+  font-size: var(--fs-h5);
 }
 .messagesPage .newConversationTab .newConversationList {
   display: flex;
+  justify-content: flex-start;
   width: 100%;
-  gap: var(--margin-xs);
+  gap: var(--margin-s);
+  margin-top: var(--margin-s);
+  padding-bottom: var(--margin-xs);
 }
 .messagesPage .newConversationTab .newConversationList .newConversationUser {
   display: flex;
@@ -119,14 +217,15 @@
   width: fit-content;
   flex-direction: column;
   cursor: pointer;
+  width: 4rem;
 }
 .messagesPage .newConversationTab .newConversationList .newConversationUser:hover .newConversationUserAvatar {
-  border: 2px solid var(--primary-color);
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(135deg, var(--secondary-color1), var(--primary-color), var(--secondary-color2)) border-box;
+  border: solid 2px transparent;
   transition: var(--transition-in);
 }
 .messagesPage .newConversationTab .newConversationList .newConversationUser:hover .newConversationUserName p {
   transition: var(--transition-in);
-  color: var(--grey30);
 }
 .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserAvatar {
   display: flex;
@@ -135,15 +234,45 @@
   height: 3rem;
   width: 3rem;
   overflow: hidden;
+  aspect-ratio: 1/1;
   border-radius: 50%;
-  border: 2px solid var(--grey50);
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(0deg, var(--grey50), var(--grey50), var(--grey50)) border-box;
+  border: solid 2px transparent;
   transition: var(--transition-out);
 }
 .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserAvatar img {
   height: 100%;
   width: auto;
 }
+.messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserName {
+  display: flex;
+  margin-top: var(--margin-xxs);
+  width: 4rem;
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: hidden; /* Hide the overflowed text */
+  text-overflow: ellipsis; /* Display "..." for overflowed text */
+}
 .messagesPage .newConversationTab .newConversationList .newConversationUser .newConversationUserName p {
-  font-size: var(--fs-p);
+  font-size: var(--fs-small-ui);
   transition: var(--transition-in);
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .messagesPage {
+    padding-top: calc(70px + var(--margin-m));
+    padding-bottom: calc(49px + var(--margin-xs));
+    width: clamp(20rem, 95vw, 46rem);
+  }
+  .messagesPage .messagesPageHeader {
+    justify-content: center;
+  }
+  .messagesPage .messagesPageHeader h2 {
+    font-weight: 600;
+    font-size: clamp(var(--fs-big), 4vw, var(--fs-h5));
+  }
+  .messagesPage .conversationsList .conversationItem .conversationInfo .conversationTimestamp .lastMessageTimestamp {
+    text-wrap: nowrap;
+  }
 }/*# sourceMappingURL=messagesPage.css.map */

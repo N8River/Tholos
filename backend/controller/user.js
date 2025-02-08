@@ -1,13 +1,18 @@
 const User = require("../model/user");
 const Notification = require("../model/notification");
+const Post = require("../model/post");
 
 exports.fetchUserInfo = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    console.log(userId);
+    // console.log(userId);
 
     const user = await User.findById(userId, "-password");
-    console.log(user);
+    // console.log(user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json(user);
   } catch (error) {
@@ -22,7 +27,11 @@ exports.fetchUserProfileByUserId = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const user = await User.findOne({ _id: userId }, "-password");
-    console.log("🔴 user", user);
+    // console.log("🔴 user", user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     res.status(200).json(user);
   } catch (error) {
@@ -43,7 +52,10 @@ exports.fetchUserProfileByUsername = async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    // Fetch the count of posts the user has
+    const postCount = await Post.countDocuments({ user: user._id });
+
+    res.status(200).json({ user, postCount });
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res
@@ -100,12 +112,12 @@ exports.searchUsers = async (req, res, next) => {
 
 exports.followUser = async (req, res, next) => {
   const { userId } = req.params;
-  console.log("🔴 userId:", userId);
+  // console.log("🔴 userId:", userId);
 
   const currentUserId = req.user.userId; // logged-in user's id
-  const user = await User.findOne({ _id: currentUserId });
+  // const user = await User.findOne({ _id: currentUserId });
 
-  console.log("🔴 currentUserId:", currentUserId);
+  // console.log("🔴 currentUserId:", currentUserId);
 
   try {
     const user = await User.findOne({ _id: currentUserId });
@@ -129,7 +141,7 @@ exports.followUser = async (req, res, next) => {
         user: userId, // The user being requested to follow
         type: "follow-request",
         sender: user,
-        message: `User ${user.userName} requested to follow you.`,
+        message: `requested to follow you.`,
       });
 
       await notification.save();
@@ -154,14 +166,18 @@ exports.followUser = async (req, res, next) => {
       user: userId, // The user being followed
       type: "follow",
       sender: user,
-      message: `User ${user.userName} started following you.`,
+      message: `started following you.`,
     });
 
     await notification.save();
+    const io = req.app.locals.io;
     io.to(userId.toString()).emit("notification", notification);
+
+    console.log("FOLLOW SUCCESSFULL");
 
     res.status(200).json({ message: "Followed user successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Error following user" });
   }
 };
@@ -239,7 +255,7 @@ exports.approveFollowRequest = async (req, res, next) => {
       user: userId, // The user who requested to follow
       type: "follow-accept",
       sender: user,
-      message: `${user.userName} accepted your follow request.`,
+      message: `accepted your follow request.`,
     });
 
     await notification.save();
@@ -327,5 +343,168 @@ exports.suggestUsers = async (req, res, next) => {
   } catch (error) {
     console.error("Error fetching user suggestions:", error);
     res.status(500).json({ message: "Failed to fetch user suggestions" });
+  }
+};
+
+exports.getMutualFollowers = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const currentUserId = req.user.userId;
+    // console.log(currentUserId);
+
+    // Fetch the user profile
+    const user = await User.findOne({ userName: username }).populate(
+      "followers following",
+      "userName fullName avatar"
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    let mutualFollowers = [];
+
+    if (currentUserId) {
+      const currentUser = await User.findById(currentUserId);
+
+      // Find mutual followers
+      mutualFollowers = user.followers.filter((followerId) =>
+        currentUser.following.includes(followerId._id)
+      );
+
+      // Limit the number of mutual followers returned (e.g., 3)
+      // mutualFollowers = mutualFollowers.slice(0, 3);
+    }
+
+    return res.status(200).json({ mutualFollowers });
+  } catch (error) {
+    console.error("Error fetching mutual followers:", error);
+    res.status(500).json({ message: "Failed to fetch mutual followers" });
+  }
+};
+
+// Fetch the list of followers with detailed user information
+exports.getFollowers = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const currentUserId = req.user.userId;
+    const maxMutuals = parseInt(req.query.maxMutuals);
+    const maxOtherFollowers = parseInt(req.query.maxOtherFollowers);
+
+    // Find the user and populate followers with the required fields
+    const user = await User.findById(userId)
+      .populate("followers", "userName fullName avatar")
+      .exec();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if current user follows these users
+    const currentUser = await User.findById(currentUserId);
+
+    // Find mutual followers
+    const mutualFollowers = user.followers
+      .filter((follower) => currentUser.following.includes(follower._id))
+      .slice(0, maxMutuals); // Limit mutual followers
+
+    // Filter out mutual followers and the logged-in user from the other followers
+    const otherFollowers = user.followers
+      .filter(
+        (follower) =>
+          !currentUser.following.includes(follower._id) && // Not mutuals
+          follower._id.toString() !== currentUserId // Not the logged-in user
+      )
+      .slice(0, maxOtherFollowers); // Limit other followers
+
+    const followers = [
+      ...mutualFollowers.map((follower) => ({
+        ...follower._doc,
+        isMutual: true,
+        isFollowing: currentUser.following.includes(follower._id),
+      })),
+      ...otherFollowers.map((follower) => ({
+        ...follower._doc,
+        isMutual: false,
+        isFollowing: currentUser.following.includes(follower._id),
+      })),
+    ];
+
+    res.status(200).json(followers);
+  } catch (error) {
+    console.error("Error fetching followers:", error);
+    res.status(500).json({ message: "Failed to fetch followers" });
+  }
+};
+
+// Fetch the list of following with detailed user information
+exports.getFollowing = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const currentUserId = req.user.userId;
+    const maxMutuals = parseInt(req.query.maxMutuals);
+    const maxOtherFollowing = parseInt(req.query.maxOtherFollowing);
+
+    // Find the user and populate following with the required fields
+    const user = await User.findById(userId)
+      .populate("following", "userName fullName avatar")
+      .exec();
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if current user follows these users
+    const currentUser = await User.findById(currentUserId);
+
+    // Find mutual following
+    const mutualFollowing = user.following
+      .filter((followingUser) =>
+        currentUser.following.includes(followingUser._id)
+      )
+      .slice(0, maxMutuals); // Limit mutual following
+
+    // Filter out mutuals and the logged-in user from the other following
+    const otherFollowing = user.following
+      .filter(
+        (followingUser) =>
+          !currentUser.following.includes(followingUser._id) && // Not mutuals
+          followingUser._id.toString() !== currentUserId // Not the logged-in user
+      )
+      .slice(0, maxOtherFollowing); // Limit other following
+
+    const following = [
+      ...mutualFollowing.map((followingUser) => ({
+        ...followingUser._doc,
+        isMutual: true,
+        isFollowing: currentUser.following.includes(followingUser._id),
+      })),
+      ...otherFollowing.map((followingUser) => ({
+        ...followingUser._doc,
+        isMutual: false,
+        isFollowing: currentUser.following.includes(followingUser._id),
+      })),
+    ];
+
+    res.status(200).json(following);
+  } catch (error) {
+    console.error("Error fetching following:", error);
+    res.status(500).json({ message: "Failed to fetch following" });
+  }
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const { userId } = req.user; // Extracted from verified token
+    const user = await User.findById(userId).select("userName email");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    res.status(500).json({ message: "Failed to fetch user info", error: error.message });
   }
 };

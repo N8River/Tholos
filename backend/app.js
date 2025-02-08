@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const http = require("http");
 const { Server } = require("socket.io");
+const rateLimit = require("express-rate-limit");
+const helmet = require("helmet");
 
 const app = express();
 
@@ -21,6 +23,22 @@ const Message = require("./model/message");
 const Conversation = require("./model/conversation");
 const Notification = require("./model/notification");
 const User = require("./model/user");
+
+if (process.env.NODE_ENV === "production") {
+  console.log = () => {}; // Disable all logs in production
+  console.error = () => {}; // Optional: Disable error logs too
+}
+
+const limiter = rateLimit({
+  windowMs: process.env.RATE_LIMIT_WINDOW
+    ? parseInt(process.env.RATE_LIMIT_WINDOW)
+    : 15 * 60 * 1000, // Default: 15 minutes
+  max: process.env.RATE_LIMIT_MAX ? parseInt(process.env.RATE_LIMIT_MAX) : 100, // Default: 100 requests per window
+  message: "Too many requests, please try again later.",
+});
+
+app.use(limiter);
+app.use(helmet());
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -71,40 +89,46 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", async ({ conversationId, senderId, text }) => {
-    const userSender = await User.findOne({ _id: senderId });
-    // Save message to database
+    // 1. Save the new message
     const message = new Message({
       conversationId,
       sender: senderId,
       text,
     });
+    const savedMessage = await message.save();
 
-    await message.save();
+    // 2. Populate the sender field, so we get userName and avatar
+    await savedMessage.populate("sender", "userName avatar");
 
-    // Find the conversation participants
+    // 3. Emit the *fully populated* message, including createdAt
+    io.to(conversationId).emit("message", {
+      _id: savedMessage._id,
+      conversationId: savedMessage.conversationId,
+      createdAt: savedMessage.createdAt, // fix "Invalid Date"
+      text: savedMessage.text,
+      read: savedMessage.read,
+      sender: {
+        _id: savedMessage.sender._id,
+        userName: savedMessage.sender.userName,
+        avatar: savedMessage.sender.avatar,
+      },
+    });
+
+    // 4. Notification logic (unchanged)
+    const userSender = await User.findOne({ _id: senderId });
     const conversation = await Conversation.findById(conversationId);
     const otherParticipant = conversation.participants.find(
       (p) => p.toString() !== senderId
     );
 
-    // Emit the message to the room (conversation)
-    io.to(conversationId).emit("message", {
-      conversationId,
-      sender: senderId,
-      text,
-    });
-
-    // Create and save a notification for the other user
     const notification = new Notification({
       user: otherParticipant,
       type: "message",
       sender: userSender,
       conversation: conversation,
-      message: `You have a new message from ${userSender.userName}`,
+      message: `sent you a message`,
     });
     await notification.save();
-
-    // Emit notification event to the other user
     io.to(otherParticipant.toString()).emit("notification", notification);
   });
 
@@ -124,12 +148,12 @@ io.on("connection", (socket) => {
 
   // Handle typing event
   socket.on("typing", ({ conversationId, senderId }) => {
-    socket.to(conversationId).emit("typing", { senderId });
+    socket.to(conversationId).volatile.emit("typing", { senderId });
   });
 
   // Handle stop typing event
   socket.on("stopTyping", ({ conversationId, senderId }) => {
-    socket.to(conversationId).emit("stopTyping", { senderId });
+    socket.to(conversationId).volatile.emit("stopTyping", { senderId });
   });
 
   socket.on("disconnect", () => {

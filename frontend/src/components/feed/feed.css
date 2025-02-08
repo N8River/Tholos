@@ -2,13 +2,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: absolute;
   margin-inline: auto;
-  width: 100%;
+  width: clamp(20rem, 100vw, 30rem);
 }
 .feed .postList {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .feed {
+    margin-bottom: 50px;
+  }
+  .exploreFeed {
+    margin-top: 70px;
+  }
 }/*# sourceMappingURL=feed.css.map */

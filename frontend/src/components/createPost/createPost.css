@@ -1,23 +1,47 @@
 .createPost {
-  position: absolute;
-  z-index: 1001;
+  position: fixed;
+  z-index: 1004;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
   box-shadow: 0px 0px 10px var(--grey50);
   border-radius: 1rem;
   padding-top: 0rem;
-  height: 40rem;
-  width: 50%;
+  width: 48rem;
   display: none;
   flex-direction: column;
   background-color: var(--background-color);
+  opacity: 0;
+  animation: fadeIn 0.25s forwards;
+  --desat-primary-color: hsl(5, 66%, 69%);
 }
 body.dark-mode .createPost {
   box-shadow: 0px 0px 5px var(--white);
 }
 body.dark-mode .createPost .createPostHeader .btn.close {
   color: var(--black);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput {
+  background-color: var(--grey70);
+  border: var(--grey70);
+  color: var(--black);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput::-moz-placeholder {
+  color: var(--grey30);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput::placeholder {
+  color: var(--grey30);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .captionInput input {
+  background-color: var(--grey70);
+  border: var(--grey70);
+  color: var(--black);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .captionInput input::-moz-placeholder {
+  color: var(--grey30);
+}
+body.dark-mode .createPost .createPostForm .createPostFormRight .postInput .captionInput input::placeholder {
+  color: var(--grey30);
 }
 .createPost.show {
   display: flex;
@@ -26,12 +50,12 @@ body.dark-mode .createPost .createPostHeader .btn.close {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-block: var(--margin-xxs);
-  padding-inline: var(--margin-s);
+  padding-block: var(--margin-xs);
+  padding-top: var(--margin-xs);
+  padding-inline: var(--margin-m);
   border-bottom: 1px solid var(--grey70);
 }
 .createPost .createPostHeader .btn {
-  height: 100%;
   display: flex;
   align-items: center;
 }
@@ -48,7 +72,9 @@ body.dark-mode .createPost .createPostHeader .btn.close {
   font-size: var(--fs-h5);
 }
 .createPost .createPostHeader p {
-  text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-weight: 600;
 }
 .createPost .createPostForm {
@@ -61,15 +87,84 @@ body.dark-mode .createPost .createPostHeader .btn.close {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-block: var(--margin-xxl);
+  padding-block: var(--margin-m);
+  padding-right: var(--margin-m);
 }
-.createPost .createPostForm .createPostFormLeft .imgPreviewWrapper {
+.createPost .createPostForm .createPostFormLeft .currentImgPreview {
   display: flex;
   justify-content: center;
+  align-items: center;
   overflow: hidden;
   width: 100%;
-  margin-bottom: var(--margin-s);
-  margin-bottom: auto;
+  margin-bottom: var(--margin-m);
+  border: 2px solid transparent;
+  background: linear-gradient(var(--background-color), var(--background-color)) padding-box, linear-gradient(45deg, var(--secondary-color1) 0%, var(--primary-color) 50%, var(--secondary-color2) 100%) border-box;
+  width: 27rem;
+  height: 27rem;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview svg {
+  margin: auto;
+  color: var(--grey30);
+  font-size: 10rem;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper.aspect-ratio-1-1 img {
+  width: 100%;
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper.aspect-ratio-3-4 img {
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper.aspect-ratio-4-3 img {
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper.aspect-ratio-16-9 img {
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper.aspect-ratio-9-16 img {
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList {
+  display: flex;
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 0.5rem;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--grey70);
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small.aspect-ratio-1-1 img {
+  width: 100%;
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small.aspect-ratio-3-4 img {
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small.aspect-ratio-4-3 img {
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small.aspect-ratio-16-9 img {
+  width: 100%;
+}
+.createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small.aspect-ratio-9-16 img {
+  height: 100%;
 }
 .createPost .createPostForm .createPostFormLeft svg {
   font-size: 5rem;
@@ -93,15 +188,112 @@ body.dark-mode .createPost .createPostHeader .btn.close {
   width: 30%;
   display: flex;
   flex-direction: column;
+  border-left: 1px solid var(--grey90);
+  padding-left: var(--margin-m);
   padding-block: var(--margin-xs);
+  padding-top: var(--margin-m);
 }
-.createPost .createPostForm .createPostFormRight input {
+.createPost .createPostForm .createPostFormRight .postInput {
+  height: 100%;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--margin-xs);
+  min-height: 5rem;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .maxImageMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5rem;
   font-size: var(--fs-p);
-  margin-bottom: var(--margin-xxs);
+  font-weight: 500;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput {
+  border: 1px solid var(--grey50);
+  border-radius: 0.5rem;
+  padding-block: var(--margin-xxs);
+  padding-inline: var(--margin-xs);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput::-moz-placeholder {
+  color: var(--grey30);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput::placeholder {
+  color: var(--grey30);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput.inactive {
+  border: 1px solid var(--grey50);
+  background-color: var(--grey70);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput.inactive::-moz-placeholder {
+  color: var(--grey10);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgInput.inactive::placeholder {
+  color: var(--grey10);
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgBtn {
+  border: none;
+  background-color: var(--primary-color);
+  font-family: var(--ff);
+  font-size: var(--fs-small-ui);
+  font-weight: 600;
+  color: var(--background-color);
+  width: -moz-fit-content;
+  width: fit-content;
+  margin-inline: auto;
+  padding-block: var(--margin-xs);
+  padding-inline: var(--margin-s);
+  border-radius: 0.5rem;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgBtn.on {
+  background: linear-gradient(var(--primary-color), var(--primary-color)) padding-box, linear-gradient(45deg, var(--secondary-color2), var(--secondary-color1)) border-box;
+  border: solid 2px transparent;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .addImgBtn.off {
+  background: linear-gradient(var(--desat-primary-color), var(--desat-primary-color)) padding-box, linear-gradient(45deg, var(--secondary-color2), var(--secondary-color1)) border-box;
+  border: solid 2px transparent;
+}
+.createPost .createPostForm .createPostFormRight .postInput .imageInput .errorMessageImagePost {
+  color: var(--error-text);
+  margin-top: var(--margin-xxs);
+  animation: highFreqShake 0.6s ease; /* Apply the bounce animation */
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput {
+  margin-top: var(--margin-m);
+  border-top: 1px solid var(--grey90);
+  padding-top: var(--margin-m);
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput input {
+  width: 100%;
+  border: 1px solid var(--grey90);
+  background-color: var(--grey90);
+  color: var(--grey30);
+  border-radius: 0.33rem;
+  overflow-wrap: wrap;
+  font-size: var(--fs-small-ui);
+  padding-block: var(--margin-xxs);
+  padding-inline: var(--margin-xs);
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput input::-moz-placeholder {
+  font-size: var(--fs-small-ui);
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput input::placeholder {
+  font-size: var(--fs-small-ui);
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput .charCount {
+  text-align: end;
+  font-size: var(--fs-small);
+}
+.createPost .createPostForm .createPostFormRight .postInput .captionInput .errorMessageCaption {
+  color: var(--error-text);
+  margin-top: var(--margin-xxs);
+  animation: highFreqShake 0.6s ease;
 }
 .createPost .createPostForm .createPostFormRight p {
-  text-align: right;
+  text-align: center;
   font-size: var(--fs-small);
+  color: var(--grey30);
 }
 
 .createPostOverlay {
@@ -113,6 +305,9 @@ body.dark-mode .createPost .createPostHeader .btn.close {
   z-index: 1000;
   background-color: hsla(0, 0%, 10%, 0.5);
   display: none;
+  opacity: 0;
+  animation: fadeIn 0.25s forwards;
+  z-index: 1003;
 }
 body.dark-mode .createPostOverlay {
   background-color: hsla(0, 0%, 0%, 0.8);
@@ -121,72 +316,100 @@ body.dark-mode .createPostOverlay {
   display: flex;
 }
 
-.createPost .createPostForm {
-  display: flex;
-  height: 100%;
-  padding-inline: var(--margin-m);
+@media (max-width: 768px) {
+  .createPost {
+    width: clamp(20rem, 95vw, 46rem);
+    border-radius: clamp(0.5rem, 2.1vw, 1rem);
+  }
+  .createPost .createPostHeader {
+    padding-inline: clamp(var(--margin-xxs), 1.7vw, var(--margin-s));
+  }
+  .createPost .createPostForm {
+    padding-inline: clamp(var(--margin-xxs), 1.7vw, var(--margin-s));
+  }
+  .createPost .createPostForm .createPostFormLeft {
+    width: 70%;
+    padding-block: clamp(var(--margin-xxs), 2.5vw, var(--margin-m));
+    padding-right: clamp(var(--margin-xxs), 2.2vw, var(--margin-s));
+  }
+  .createPost .createPostForm .createPostFormLeft .currentImgPreview {
+    width: 100%;
+    height: auto;
+    min-height: clamp(10rem, 65vw, 29rem);
+    aspect-ratio: 1/1;
+  }
+  .createPost .createPostForm .createPostFormLeft .currentImgPreview .imgPreviewWrapper svg {
+    font-size: clamp(5rem, 25vw, 10rem);
+  }
+  .createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList {
+    gap: 0;
+  }
+  .createPost .createPostForm .createPostFormLeft .imgPreviewList .imageList .imgPreviewWrapper-small {
+    width: clamp(3rem, 12vw, 5rem);
+    height: clamp(3rem, 12vw, 5rem);
+    margin-inline: auto;
+  }
+  .createPost .createPostForm .createPostFormRight {
+    width: 30%;
+    padding-block: clamp(var(--margin-xxs), 2.5vw, var(--margin-m));
+    padding-left: clamp(var(--margin-xxs), 2.2vw, var(--margin-s));
+  }
+  .createPost .createPostForm .createPostFormRight .postInput .imageInput input {
+    font-size: clamp(var(--fs-small), 3vw, var(--fs-p));
+    border-radius: 0.5rem;
+  }
+  .createPost .createPostForm .createPostFormRight .postInput .imageInput button {
+    width: 100%;
+    font-size: clamp(var(--fs-small), 3vw, var(--fs-p));
+    text-wrap: wrap;
+    border-radius: 0.5rem;
+  }
+  .createPost .createPostForm .createPostFormRight .postInput .captionInput {
+    margin-top: clamp(var(--margin-xxs), 1.5vw, var(--margin-s));
+  }
+  .createPost .createPostForm .createPostFormRight .postInput .captionInput input {
+    font-size: clamp(var(--fs-small), 3vw, var(--fs-p));
+    border-radius: 0.33rem;
+    margin-bottom: var(--margin-xxs);
+  }
 }
-.createPost .createPostForm .createPostFormLeft {
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-block: var(--margin-xxl);
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }
-.createPost .createPostForm .createPostFormLeft .imgPreviewWrapper {
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-  width: 100%;
-  margin-bottom: auto;
-}
-.createPost .createPostForm .createPostFormLeft .imgPreviewWrapper img {
-  max-height: 100%;
-  max-width: 100%;
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-.createPost .createPostForm .createPostFormRight {
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  padding-block: var(--margin-xs);
-}
-.createPost .createPostForm .createPostFormRight .imageList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--margin-xxs);
-}
-.createPost .createPostForm .createPostFormRight .imageList .imageItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: var(--margin-xxs);
-}
-.createPost .createPostForm .createPostFormRight .imageList .imageItem img {
-  width: 4rem;
-  height: 4rem;
-  -o-object-fit: cover;
-     object-fit: cover;
-  cursor: pointer;
-  margin-bottom: var(--margin-xxs);
-}
-.createPost .createPostForm .createPostFormRight .imageList .imageItem input {
-  width: 100%;
-}
-.createPost .createPostForm .createPostFormRight .imageList button {
-  font-size: 2rem;
-  color: var(--primary-color);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-.createPost .createPostForm .createPostFormRight input {
-  font-size: var(--fs-p);
-  margin-bottom: var(--margin-xxs);
-}
-.createPost .createPostForm .createPostFormRight p {
-  text-align: right;
-  font-size: var(--fs-small);
+@keyframes highFreqShake {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(-2px);
+  }
+  20% {
+    transform: translateX(2px);
+  }
+  30% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  50% {
+    transform: translateX(-2px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+  70% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  90% {
+    transform: translateX(-2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }/*# sourceMappingURL=createPost.css.map */

@@ -1,0 +1,9 @@
+.loginPageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}/*# sourceMappingURL=LoginPage.css.map */
