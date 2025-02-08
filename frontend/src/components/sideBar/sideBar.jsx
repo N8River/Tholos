@@ -13,7 +13,7 @@ import { HiOutlineBuildingLibrary } from "react-icons/hi2";
 
 import { useEffect, useState, useLayoutEffect } from "react";
 
-import "./SideBar.css";
+import "./sideBar.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreatePost from "../createPost/createPost";
 import NotificationComponent from "../notificationComponent/notificationComponent";
