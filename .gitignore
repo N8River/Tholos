@@ -1,3 +1,5 @@
 .env
 node_modules
 /backend/scripts
+gpt.txt
+plan.txt
