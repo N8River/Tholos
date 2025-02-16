@@ -93,3 +93,9 @@ A real-time social media platform built for scalability and engagement, featurin
 🔗 **Live Demo:** [Tholos](https://tholos-ashen.vercel.app/)
 
 **Want access?** Public sign-ins are restricted to prevent spam. Contact me for test credentials.
+
+## **More Projects & Contact**
+
+**Check out my full portfolio:** [Portfolio](https://dhimananiket.vercel.app/)
+
+---
