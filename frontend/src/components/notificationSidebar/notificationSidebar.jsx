@@ -11,7 +11,6 @@ function NotificationSidebar({
   mobileIsVisible,
   handleMobileNotificationSidebar,
 }) {
-  // console.log("oOOOOOOOOOOOOOOOOOOO");
   const isMobile = useResponsive(768);
   console.log(!isMobile);
 

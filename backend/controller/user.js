@@ -5,10 +5,8 @@ const Post = require("../model/post");
 exports.fetchUserInfo = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    // console.log(userId);
 
     const user = await User.findById(userId, "-password");
-    // console.log(user);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -27,7 +25,6 @@ exports.fetchUserProfileByUserId = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const user = await User.findOne({ _id: userId }, "-password");
-    // console.log("🔴 user", user);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -112,12 +109,8 @@ exports.searchUsers = async (req, res, next) => {
 
 exports.followUser = async (req, res, next) => {
   const { userId } = req.params;
-  // console.log("🔴 userId:", userId);
 
   const currentUserId = req.user.userId; // logged-in user's id
-  // const user = await User.findOne({ _id: currentUserId });
-
-  // console.log("🔴 currentUserId:", currentUserId);
 
   try {
     const user = await User.findOne({ _id: currentUserId });
@@ -204,9 +197,6 @@ exports.isFollowing = async (req, res, next) => {
   const { userId } = req.params;
   const currentUserId = req.user.userId;
 
-  // console.log("🔴 userId", userId);
-  // console.log("🔴 currentUserId", currentUserId);
-
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -215,7 +205,7 @@ exports.isFollowing = async (req, res, next) => {
 
     const isFollowing = user.followers.includes(currentUserId);
     const followRequestPending = user.followRequests.includes(currentUserId);
-    // console.log("🔴 isFollowing", isFollowing);
+
     res.status(200).json({ isFollowing, followRequestPending });
   } catch (error) {
     res.status(500).json({ error: "Error checking follow status" });
@@ -350,7 +340,6 @@ exports.getMutualFollowers = async (req, res, next) => {
   try {
     const { username } = req.params;
     const currentUserId = req.user.userId;
-    // console.log(currentUserId);
 
     // Fetch the user profile
     const user = await User.findOne({ userName: username }).populate(
@@ -505,6 +494,8 @@ exports.getCurrentUser = async (req, res) => {
     res.status(200).json(user);
   } catch (error) {
     console.error("Error fetching current user:", error);
-    res.status(500).json({ message: "Failed to fetch user info", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch user info", error: error.message });
   }
 };

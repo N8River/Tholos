@@ -20,8 +20,6 @@ function FriendsHeader() {
     }
   }, [navigate, isValid, tokenLoading]);
 
-  // useTokenVerification();
-
   const [followingUsers, setFollowingUser] = useState([]);
 
   useEffect(() => {

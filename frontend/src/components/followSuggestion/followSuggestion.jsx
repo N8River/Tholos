@@ -12,8 +12,6 @@ import useTokenValidation from "../../hooks/useTokenVerification";
 function FollowSuggestion({ noFollowing }) {
   const token = localStorage.getItem("token");
 
-  // useTokenVerification();
-
   const { isValid, loading: tokenLoading } = useTokenValidation(token);
 
   const navigate = useNavigate();

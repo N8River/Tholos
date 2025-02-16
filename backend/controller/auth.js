@@ -13,8 +13,6 @@ exports.signUp = async (req, res, next) => {
 
     const { fullName, userName, email, password } = req.body;
 
-    // console.log(firstName, lastName, email, password);
-
     const existingEmail = await User.findOne({ email });
     if (existingEmail) {
       return res.status(409).json({ message: "Email already exists" });
@@ -35,8 +33,6 @@ exports.signUp = async (req, res, next) => {
     });
 
     const savedUser = await user.save();
-    // console.log(savedUser);
-
     res
       .status(201)
       .json({ message: "User created successfully", user: savedUser });
@@ -67,9 +63,6 @@ exports.login = async (req, res, next) => {
       const allowedUsers = process.env.ALLOWED_USERS
         ? process.env.ALLOWED_USERS.split(",")
         : [];
-
-      console.log("Trying to log in:", user.email, user.userName);
-      console.log("Allowed Users List:", allowedUsers);
 
       // Check if the user is in the allowed list
       if (

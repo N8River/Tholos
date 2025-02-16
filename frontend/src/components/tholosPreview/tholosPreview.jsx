@@ -28,7 +28,7 @@ function TholosPreview() {
         );
         setFadeIn(true); // Fade back in with the new image
       }, 750); // Image change after the fade-out
-    }, 5000); // 3.5 seconds before switching images
+    }, 5000); // 5 seconds before switching images
 
     return () => clearInterval(interval);
   }, []);

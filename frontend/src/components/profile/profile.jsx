@@ -21,9 +21,6 @@ import useTokenValidation from "../../hooks/useTokenVerification";
 import ProfileSkeleton from "./profileSkeleton";
 
 function Profile({ isOwner, user, postCount, mutualFollowers }) {
-  // console.log("🔴 User", user);
-  // console.log("IS OWNER", isOwner);
-  // console.log("🔴 MUTUAL FOLLOWERS", mutualFollowers);
   const isMobileProfileDetails = useResponsive(640);
 
   const navigate = useNavigate();
@@ -80,6 +77,14 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    // Reset posts and pagination when user changes
+    setUserPosts([]);
+    setPage(1);
+    setHasMore(true);
+    setProfilePrivateError(false);
+  }, [user?.userName]); // Reset when username changes
+
   const isLoading =
     tokenLoading || isFollowingLoading || !user || !user.userName;
 
@@ -93,7 +98,6 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
       );
       url.searchParams.append("isOwner", isOwner);
 
-      // Add `currentUserId` only if the user is logged in
       if (loggedInUserId) {
         url.searchParams.append("currentUserId", loggedInUserId);
       }
@@ -102,19 +106,17 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
       url.searchParams.append("limit", limit);
 
       const response = await fetch(url.toString(), { headers });
+      const responseData = await response.json();
 
-      if (!response.ok) {
-        if (response.status === 403) {
-          const errorData = await response.json();
-          // console.log(errorData);
-          setProfilePrivateError(true);
-          // Don't throw an error here to avoid redundant logs
-          return;
-        }
-        throw new Error("Failed to fetch user posts");
+      // Check if the response indicates a private profile.
+      if (responseData.isPrivate) {
+        setProfilePrivateError(true);
+        return;
       }
 
-      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to fetch user posts");
+      }
 
       if (responseData.length < limit) {
         setHasMore(false);
@@ -129,9 +131,7 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
 
       setProfilePrivateError(false);
     } catch (error) {
-      if (error.message !== "This account is private.") {
-        console.error("Error fetching user's post:", error);
-      }
+      console.error("Error fetching user's post:", error);
     } finally {
       setIsFetching(false);
     }
@@ -169,16 +169,19 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
 
   useEffect(() => {
     if (user && user.userName) {
+      // Reset posts when fetching new user's data
+      setUserPosts([]);
+      setPage(1);
+      setHasMore(true);
+
       checkFollowStatus();
-      fetchUserPosts(); // Load the first batch of posts on mount
+      fetchUserPosts();
     }
   }, [user, token, isOwner, loggedInUserId]);
 
   useEffect(() => {
     if (page > 1) fetchUserPosts(); // Fetch posts when page changes
   }, [page]);
-
-  // console.log("🧑🏽‍🦱 USER", user);
 
   const handleFollow = async () => {
     if (!token) {
@@ -225,14 +228,6 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
       if (!response.ok) {
         throw new Error("Failed to unfollow the user");
       }
-
-      // Update the local user state to reflect the new follower count
-      // setCurrentUser((prevUser) => ({
-      //   ...prevUser,
-      //   followers: prevUser.followers.filter(
-      //     (followerId) => followerId !== loggedInUserId // Remove the current logged-in user's ID from the followers list
-      //   ),
-      // }));
 
       setIsFollowing(false);
     } catch (error) {
@@ -319,9 +314,6 @@ function Profile({ isOwner, user, postCount, mutualFollowers }) {
     setShowLoginModal(false);
     setShowFollowList(false);
     setFollowList(false);
-
-    // Optional: disconnect socket or other connections if applicable
-    // socket.disconnect(); // Uncomment if socket is used in this component
 
     // Navigate to the home page or reload
     if (window.location.pathname === "/") {

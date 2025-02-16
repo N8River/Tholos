@@ -48,10 +48,8 @@ const useUserInfo = (username) => {
 
         const responseData = await response.json();
 
-        // console.log(responseData);
         setUser(responseData.user);
         setPostCount(responseData.postCount);
-        // console.log("🔴 Logged in User", responseData);
       } catch (error) {
         setError(error.message);
         console.log("Error fetching user info:", error);

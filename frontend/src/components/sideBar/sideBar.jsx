@@ -30,7 +30,6 @@ import useTokenVerification from "../../hooks/useTokenVerification";
 import useTokenValidation from "../../hooks/useTokenVerification";
 
 function SideBar({ user }) {
-  // console.log("💀💀💀💀💀", user);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -42,8 +41,6 @@ function SideBar({ user }) {
       localStorage.removeItem("token");
     }
   }, [navigate, isValid, tokenLoading]);
-
-  // useTokenVerification();
 
   const userId = token ? jwtDecode(token).userId : null;
   const socket = io(BACKEND_URL, {
@@ -70,8 +67,6 @@ function SideBar({ user }) {
 
   const [settingsMobileVisibility, setSettingsMobileVisibility] =
     useState(false);
-
-  // const [sidebarIsCollapsed, setSidebarIsCollapsed] = useState(false);
 
   const headers = {
     ...JSON_HEADERS,
@@ -101,13 +96,6 @@ function SideBar({ user }) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (!showNotificationSidebar && !searchSidebarVisibility) {
-  //     // If both sidebars are closed, collapse on larger screens
-  //     setSidebarIsCollapsed(!(window.innerWidth >= 1280));
-  //   }
-  // }, [showNotificationSidebar, searchSidebarVisibility]);
 
   useEffect(() => {
     if (!showNotificationSidebar && !searchSidebarVisibility) {
@@ -224,8 +212,6 @@ function SideBar({ user }) {
     const theme = isDarkModeEnabled ? "dark-mode" : "light-mode";
     localStorage.setItem("theme", theme);
   };
-
-  // console.log(location.pathname);
 
   return (
     <>
@@ -423,19 +409,6 @@ function SideBar({ user }) {
             </div>
             <big>Profile</big>
           </div>
-
-          {/* <div className="feedbackBtn sidebarBtn" onClick={triggerFeedbackAlert}>
-          <big>Trigger Feedback</big>
-        </div> */}
-
-          {/* <div
-          className="sidebarBtn"
-          onClick={() => {
-            setSidebarIsCollapsed(!sidebarIsCollapsed);
-          }}
-        >
-          <IoAlarm />
-        </div> */}
 
           <div className="darkModeToggle sidebarBtn" onClick={toggleDarkMode}>
             {isDarkMode ? <MdOutlineLightMode /> : <MdDarkMode />}{" "}

@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import "./comment.css";
 
 function Comment({ comment }) {
-  // console.log("🔴 Comment", comment);
   const navigate = useNavigate();
 
   return (

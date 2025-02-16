@@ -33,8 +33,6 @@ function CreatePost({ isVisible, handleCreatePostVisibilty }) {
     }
   }, [isValid, tokenLoading]);
 
-  // useTokenVerification();
-
   const [loading, setLoading] = useState(false);
 
   const [captionError, setCaptionError] = useState("");

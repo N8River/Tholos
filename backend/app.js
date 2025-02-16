@@ -26,7 +26,7 @@ const User = require("./model/user");
 
 if (process.env.NODE_ENV === "production") {
   console.log = () => {}; // Disable all logs in production
-  console.error = () => {}; // Optional: Disable error logs too
+  console.error = () => {}; // Disable error logs too
 }
 
 const limiter = rateLimit({

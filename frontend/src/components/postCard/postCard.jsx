@@ -91,37 +91,6 @@ function PostCard({ post }) {
     };
   }, [showLoginModal]);
 
-  // const handleToggleLike = async () => {
-  //   if (!token) {
-  //     setShowLoginModal(true);
-  //     console.log("☄️☄️☄️☄️☄️☄️");
-
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch(`${BACKEND_URL}/api/post/${post._id}/like`, {
-  //       method: "POST",
-  //       headers: headers,
-  //       body: JSON.stringify({
-  //         postId: post._id,
-  //       }),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error("Failed to like/dislike the post");
-  //     }
-
-  //     const responseData = await response.json();
-  //     console.log(responseData);
-
-  //     setHasLiked(!hasLiked);
-  //     setLikes(responseData.likes);
-  //   } catch (error) {
-  //     console.log("Error liking/disliking the post:", error);
-  //   }
-  // };
-
   const handleToggleLike = async () => {
     if (!token) {
       setShowPostModal(true);

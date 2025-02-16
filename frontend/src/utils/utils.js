@@ -1,21 +1,5 @@
 import { jwtDecode } from "jwt-decode";
 
-// export function getAspectRatioClass(width, height) {
-//   const aspectRatio = width / height;
-
-//   if (aspectRatio === 1) {
-//     return "aspect-ratio-1-1"; // Square
-//   } else if (aspectRatio > 1.7) {
-//     return "aspect-ratio-16-9"; // Landscape 16:9
-//   } else if (aspectRatio > 1.3) {
-//     return "aspect-ratio-4-3"; // Landscape 4:3
-//   } else if (aspectRatio < 0.7) {
-//     return "aspect-ratio-9-16"; // Tall Portrait 9:16
-//   } else {
-//     return "aspect-ratio-3-4"; // Portrait 3:4
-//   }
-// }
-
 export function getAspectRatioClass(width, height) {
   const aspectRatio = width / height;
   const tolerance = 0.05; // 5% tolerance for considering as square

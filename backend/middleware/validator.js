@@ -117,19 +117,6 @@ exports.validatePagination = [
     .withMessage("Limit must be a positive integer"),
 ];
 
-// exports.validateUserPosts = [
-//   param("userName").isString().withMessage("Username must be a valid string"),
-//   query("isOwner")
-//     .optional()
-//     .isBoolean()
-//     .withMessage("isOwner must be a boolean value"),
-//   query("currentUserId")
-//     .optional()
-//     .isMongoId()
-//     .withMessage("currentUserId must be a valid user ID"),
-//   ...exports.validatePagination,
-// ];
-
 exports.validateUserPosts = [
   param("userName").isString().withMessage("Username must be a valid string"),
   query("isOwner")
@@ -142,7 +129,6 @@ exports.validateUserPosts = [
     .withMessage("currentUserId must be a valid user ID"),
   ...exports.validatePagination,
 ];
-
 
 exports.commentValidator = [
   body("comment")

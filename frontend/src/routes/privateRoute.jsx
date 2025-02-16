@@ -1,15 +1,12 @@
 import { Navigate, useParams } from "react-router-dom";
 import { isTokenExpired } from "../utils/utils";
-import useTokenVerification from "../hooks/useTokenVerification";
+import { jwtDecode } from "jwt-decode";
 
 function PrivateRoute({ element: Component, ...rest }) {
   const token = localStorage.getItem("token");
 
-  // useTokenVerification();
-
-  // If no token or token is expired, redirect to login with a session expiration message
   if (!token || isTokenExpired(token)) {
-    localStorage.removeItem("token"); // Remove token if it's expired
+    localStorage.removeItem("token");
     return (
       <Navigate
         to="/login"
@@ -18,8 +15,15 @@ function PrivateRoute({ element: Component, ...rest }) {
     );
   }
 
-  // Pass params and other props
+  // Decode the token to get the authenticated username
+  const decodedToken = jwtDecode(token);
   const params = useParams();
+
+  // Only check if a username param exists in the URL
+  if (params.username && params.username !== decodedToken.userName) {
+    return <Navigate to={`/${decodedToken.userName}/edit`} />;
+  }
+
   return <Component {...rest} params={params} />;
 }
 

@@ -71,7 +71,7 @@ function Chat() {
     }
   }, [messages]);
 
-  // --- NEW: Smooth scroll logic for typing bubble appear/disappear
+  // Smooth scroll logic for typing bubble appear/disappear
   useEffect(() => {
     if (!chatContainerRef.current) return;
 
@@ -97,7 +97,7 @@ function Chat() {
     previousTypingState.current = isOtherTyping;
   }, [isOtherTyping]);
 
-  // NEW: Fetch the other user’s data for their avatar (if needed)
+  // Fetch the other user’s data for their avatar (if needed)
   useEffect(() => {
     const fetchOtherUser = async () => {
       try {

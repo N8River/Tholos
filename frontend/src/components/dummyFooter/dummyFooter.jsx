@@ -33,7 +33,7 @@ function DummyFooter() {
         <span>
           English <span className="arrow">▼</span>
         </span>
-        <span>&copy; 2024 Tholos.</span>
+        <span>&copy; 2025 Tholos.</span>
       </div>
     </div>
   );

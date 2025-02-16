@@ -14,10 +14,7 @@ function FollowList({
   toggleVisibility,
   totalFollowers,
   totalFollowing,
-  // user,
 }) {
-  // console.log(user);
-
   const [followUsersState, setFollowUsersState] = useState(followUsers);
   const token = localStorage.getItem("token");
 
@@ -107,10 +104,6 @@ function FollowList({
       console.error("Error following user:", error);
     }
   };
-
-  // if (tokenLoading) {
-  //   return <Loader />;
-  // }
 
   return (
     <>

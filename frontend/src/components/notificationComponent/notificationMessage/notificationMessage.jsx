@@ -14,7 +14,6 @@ function NotificationMessage({
   handleNotificationClick,
   isRead,
 }) {
-  console.log("🔴 NOTIFICATION", notification);
   let link;
   let btnText;
   const navigate = useNavigate();

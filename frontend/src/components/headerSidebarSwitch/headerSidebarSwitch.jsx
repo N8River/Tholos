@@ -31,8 +31,6 @@ function HeaderSidebarSwitch() {
     }
   }, [navigate, tokenLoading, isValid]);
 
-  // const decodedToken = token ? jwtDecode(token) : null;
-
   const username = decodedToken ? decodedToken.userName : null;
 
   const isLoggedIn = !!username;

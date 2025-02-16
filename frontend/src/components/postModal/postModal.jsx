@@ -38,14 +38,6 @@ function PostModal({
   hasLiked,
   setHasLiked,
 }) {
-  console.log("1️⃣ post:", post);
-  console.log("2️⃣ isOpen:", isOpen);
-  console.log("3️⃣ onClose:", onClose);
-  console.log("4️⃣ likes:", likes);
-  console.log("5️⃣ setLikes:", setLikes);
-  console.log("6️⃣ hasLiked:", hasLiked);
-  console.log("7️⃣ setHasLiked:", setHasLiked);
-
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState(post.comments || []);
   const [showPostModal, setShowPostModal] = useState(false);
@@ -130,7 +122,6 @@ function PostModal({
       const responseData = await response.json();
 
       setComments([...comments, responseData.comment]);
-      console.log("🔴 comments", comments);
 
       setCommentInput("");
     } catch (error) {

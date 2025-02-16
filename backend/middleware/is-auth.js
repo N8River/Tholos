@@ -20,7 +20,6 @@ exports.authMiddleware = (req, res, next) => {
   }
 };
 
-
 exports.optionalAuthMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 

@@ -49,10 +49,11 @@ exports.fetchPublicPosts = async (req, res, next) => {
       .populate({
         path: "user",
         match: { profileVisibility: "Public" },
+        select: "userName avatar fullName bio", // only these fields will be included
       })
       .sort({ createdAt: -1 })
-      .skip(skip) // Skip documents for pagination
-      .limit(limit); // Limit the number of posts
+      .skip(skip)
+      .limit(limit);
 
     const filteredPosts = publicPosts.filter((post) => post.user !== null);
 
@@ -68,7 +69,6 @@ exports.fetchPublicPosts = async (req, res, next) => {
 exports.fetchPostsByFollowing = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    console.log("😵😵", userId);
 
     // Pagination parameters
     const page = parseInt(req.query.page) || 1;
@@ -81,6 +81,7 @@ exports.fetchPostsByFollowing = async (req, res, next) => {
     const posts = await Post.find({ user: { $in: user.following } })
       .populate({
         path: "user",
+        select: "userName avatar fullName bio", // only include these fields
       })
       .sort({ createdAt: -1 })
       .skip(skip) // Skip documents for pagination
@@ -128,7 +129,8 @@ exports.fetchUserPosts = async (req, res, next) => {
       );
 
       if (!isFollowing) {
-        return res.status(403).json({ message: "This account is private." });
+        // Instead of returning a 403 error, return a successful response with a flag.
+        return res.status(200).json({ isPrivate: true, posts: [] });
       }
     }
 
@@ -137,9 +139,6 @@ exports.fetchUserPosts = async (req, res, next) => {
       .sort({ createdAt: -1, _id: -1 }) // Secondary sort by _id to guarantee stability
       .skip(skip) // Skip documents for pagination
       .limit(limit); // Limit the number of posts
-
-    console.log("🔴 USER POSTS", userPosts.length);
-    console.log(`Fetched ${userPosts.length} posts for page ${page}`);
 
     res.status(200).json(userPosts);
   } catch (error) {
@@ -191,16 +190,12 @@ exports.fetchPostById = async (req, res, next) => {
 exports.toggleLike = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    // console.log("🔴 userId", userId);
 
     const user = await User.findOne({ _id: userId });
-    // console.log("🔴 user", user);
 
     const postId = req.body.postId;
-    // console.log(postId);
 
     const post = await Post.findOne({ _id: postId });
-    // console.log("🔴", post);
 
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
