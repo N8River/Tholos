@@ -43,26 +43,30 @@ exports.fetchPublicPosts = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    const query = loggedInUserId ? { user: { $ne: loggedInUserId } } : {};
+    // Step 1: Fetch only public users first
+    const publicUsers = await User.find({ profileVisibility: "Public" }).select(
+      "_id"
+    );
+    const publicUserIds = publicUsers.map((user) => user._id);
+
+    // Step 2: Fetch only posts from these public users (excluding logged-in user)
+    const query = {
+      user: { $in: publicUserIds, $ne: loggedInUserId },
+    };
 
     const publicPosts = await Post.find(query)
       .populate({
         path: "user",
-        match: { profileVisibility: "Public" },
         select: "userName avatar fullName bio", // only these fields will be included
       })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const filteredPosts = publicPosts.filter((post) => post.user !== null);
-
-    res.status(200).json(filteredPosts);
+    res.status(200).json(publicPosts);
   } catch (error) {
     console.error("Error fetching public posts:", error);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch public posts", error: error.message });
+    res.status(500).json({ message: "Failed to fetch public posts" });
   }
 };
 

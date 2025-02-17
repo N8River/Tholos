@@ -26,7 +26,6 @@ import useTokenValidation from "../../hooks/useTokenVerification";
 
 function PostCard({ post }) {
   const navigate = useNavigate();
-  console.log(post);
 
   const token = localStorage.getItem("token");
 
